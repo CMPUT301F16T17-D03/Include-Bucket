@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenuActivity">
+
+    <Button
+        android:text="Rider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="84dp"
+        android:id="@+id/Rider" />
+
+    <Button
+        android:text="New"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Rider"
+        android:layout_alignEnd="@+id/Rider"
+        android:layout_marginEnd="29dp"
+        android:id="@+id/New" />
+
+    <Button
+        android:text="My Requests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:id="@+id/MyRequests"
+        android:layout_alignBaseline="@+id/New"
+        android:layout_alignBottom="@+id/New"
+        android:layout_alignStart="@+id/Rider" />
+
+    <Button
+        android:text="Driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/New"
+        android:layout_alignStart="@+id/Rider"
+        android:layout_marginTop="113dp"
+        android:id="@+id/Driver" />
+
+    <Button
+        android:text="Current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Driver"
+        android:layout_toEndOf="@+id/Browse"
+        android:id="@+id/Current" />
+
+    <Button
+        android:text="Logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/Logout" />
+
+    <Button
+        android:text="Account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/Account" />
+
+    <Button
+        android:text="Browse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Browse"
+        android:layout_alignBaseline="@+id/Current"
+        android:layout_alignBottom="@+id/Current"
+        android:layout_alignEnd="@+id/New" />
+</RelativeLayout>
