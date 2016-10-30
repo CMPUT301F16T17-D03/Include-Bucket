@@ -105,7 +105,7 @@ public class UserAccount {
     }
 
     public boolean isLoggedIn() {
-        return false;
+        return Boolean.FALSE;
     }
 
 }

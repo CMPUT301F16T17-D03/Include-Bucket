@@ -14,9 +14,8 @@ import java.util.Collection;
  */
 public class LoginActivity extends MainMenuActivity {
 
-    private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
-    private UserList userList = new UserList();
-    private UserListController userListController = new UserListController();
+    // EditText userLogin will be used to find whether the username is in the elasticsearch database...
+    //private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +28,6 @@ public class LoginActivity extends MainMenuActivity {
 
                 setResult(RESULT_OK);
 
-                userList = userListController.getUserList();
-
-                //if (userList.contains(userLogin.getText().toString())) {}
-
                 Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
                 startActivity(intent);
             }
@@ -44,15 +39,9 @@ public class LoginActivity extends MainMenuActivity {
 
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
                 startActivity(intent);
             }
         });
-    }
-
-    public void loginAction(View v) {
-
-
-
     }
 }
