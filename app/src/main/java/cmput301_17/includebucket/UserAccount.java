@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 /**
  * Created by Owner on 10/20/2016.
- * testing
  */
 
 public class UserAccount {
@@ -19,6 +18,7 @@ public class UserAccount {
     // -change contact info
     // -stays logged in
     // - save in file for offline
+
     private String uniqueUserName;
     private String email;
     private String phoneNumber;
@@ -104,9 +104,8 @@ public class UserAccount {
         this.uid = uid;
     }
 
-
-
-
-
+    public boolean isLoggedIn() {
+        return false;
+    }
 
 }
