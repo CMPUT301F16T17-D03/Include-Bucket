@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cmput301f16t17_d03.includebucket.EditUserDataActivity"
+    tools:context="cmput301_17.includebucket.EditUserDataActivity"
     tools:showIn="@layout/activity_edit_user_data">
 
 </RelativeLayout>
