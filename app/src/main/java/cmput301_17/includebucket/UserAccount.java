@@ -19,15 +19,25 @@ public class UserAccount {
     // -stays logged in
     // - save in file for offline
 
-    private String uniqueUserName;
-    private String email;
-    private String phoneNumber;
+    private long uid = 0;
+    private String uniqueUserName, name, email, phoneNumber;
     private ArrayList<UberRequest> riderRequests;
     private ArrayList<UberRequest> driverRequests;
-    private long uid;
 
-    public UserAccount(long id){
+    public UserAccount(long id, String u, String n, String e, String p) {
         this.uid = id;
+        this.uniqueUserName = u;
+        this.name = n;
+        this.email = e;
+        this.phoneNumber = p;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
     }
 
     public String getUniqueUserName() {
@@ -94,14 +104,6 @@ public class UserAccount {
             request.removeDriver(this.getUniqueUserName());
         }
         return;
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public void setUid(long uid) {
-        this.uid = uid;
     }
 
     public boolean isLoggedIn() {

@@ -12,7 +12,7 @@ import android.os.Bundle;
 This class is the first activity called when the application starts.
 It has no UI (as stated in the AndroidManifest.xml file on line 27).
 It is the activity class that decides whether LoginActivity or
-MainMenuActivity is opened after checking the login state of the user.
+MainMenuActivity is viewed after checking the login state of the user.
 If the user is logged in, it will switch directly to MainMenuActivity.
 If the user is not logged in, it will switch directly to LoginActivity.
 */
@@ -27,7 +27,7 @@ public class LauncherActivity extends Activity {
         // All users should be in the elasticsearch database
         // We would have to find a way to query whether or not a username is in the elasticsearch
         //     database based on the text input in LoginActivity
-        UserAccount newUser = new UserAccount(1);
+        UserAccount newUser = new UserAccount(1,"Jimmeh","Jimmy John","jemm@idk.com","null");
 
         Intent intent;
         if (!newUser.isLoggedIn()){

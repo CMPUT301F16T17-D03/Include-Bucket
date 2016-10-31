@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +16,8 @@ import java.util.Collection;
 public class LoginActivity extends MainMenuActivity {
 
     // EditText userLogin will be used to find whether the username is in the elasticsearch database...
-    //private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
+    // private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
+    private EditText userLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,12 @@ public class LoginActivity extends MainMenuActivity {
 
                 setResult(RESULT_OK);
 
+                /*
+                    - search for username in elasticsearch database
+                    - create condition where, if the username is not in the database, automatically
+                      switch to RegisterActivity, otherwise login
+                */
+
                 Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
                 startActivity(intent);
             }
@@ -39,9 +47,19 @@ public class LoginActivity extends MainMenuActivity {
 
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
             }
         });
+
+        Intent intent = getIntent();
+
+        String str = intent.getStringExtra("user_login");
+
+        userLogin = (EditText) findViewById(R.id.loginTextField);
+
+        userLogin.clearComposingText();
+
+        userLogin.setText(str);
     }
 }
