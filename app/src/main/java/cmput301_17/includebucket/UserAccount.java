@@ -3,7 +3,9 @@ package cmput301_17.includebucket;
 import java.util.ArrayList;
 
 /**
- * Created by Owner on 10/20/2016.
+ * This is the UserAccount clas
+ *
+ * It holds and controls the information that is attached to the user's profile.
  */
 
 public class UserAccount {

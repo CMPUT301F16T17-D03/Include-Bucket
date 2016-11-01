@@ -9,6 +9,8 @@ package cmput301_17.includebucket;
         import android.widget.Button;
 
 /**
+ * The view for the main menu
+ *
  * Created by Duncan on 10/22/2016.
  */
 
