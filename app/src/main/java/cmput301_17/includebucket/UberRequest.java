@@ -7,15 +7,16 @@ import java.util.ArrayList;
  */
 
 public class UberRequest {
-
-    //Request
-    // start location
-    // end location
-    // rider
-    // fare/fare calc 0-1
-    // drivers
-    // bool driveraccpeted
-    // bool rider accept driver can be canceled can be completed story add list of keywords derived from story search by keyword in story date?
+/**
+ * Request
+ * start location
+ * end location
+ * rider
+ * fare/fare calc 0-1
+ * drivers
+ * bool driveraccpeted
+ *
+ */
 
     private String startLocation;
     private String endLocation;

@@ -5,6 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+/**
+ * User data controller?
+ *
+ */
+
 public class EditUserDataActivity extends AppCompatActivity {
 
     @Override

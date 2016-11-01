@@ -6,6 +6,8 @@ package cmput301_17.includebucket;
         import android.view.View;
 
 /**
+ * The view for the main menu
+ *
  * Created by Duncan on 10/22/2016.
  */
 
