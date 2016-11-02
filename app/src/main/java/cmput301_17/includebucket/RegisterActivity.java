@@ -65,22 +65,17 @@ public class RegisterActivity extends MainMenuActivity {
 
     /**
      * When a user clicks the Accept button, a new UserAccount instance is created
-     * with a unique ID number of long type
     */
     public void createUser() {
-
-        // http://stackoverflow.com/questions/5887709/getting-random-numbers-in-java
-        // Accessed: October 31, 2016
-        // Author: zengr
-        int id = (int) Math.random() * 100000 + 10001;    // Generates a random five digit ID number
-                                                          // between 10001 and 110001. It can be
-                                                          // longer of course...
 
         String login = userLogin.getText().toString();
         String name  = userName.getText().toString();
         String email = userEmail.getText().toString();
         String phone = userPhone.getText().toString();
 
-        UserAccount user = new UserAccount(id, login, name, email, phone);
+        UserAccount user = new UserAccount(login, name, email, phone);
+
+        ElasticsearchUserAccountController.CreateUserTask createUserTask = new ElasticsearchUserAccountController.CreateUserTask();
+        createUserTask.execute(user);
     }
 }

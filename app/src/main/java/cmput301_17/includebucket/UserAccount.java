@@ -2,13 +2,15 @@ package cmput301_17.includebucket;
 
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * This is the UserAccount class
  *
  * It holds and controls the information that is attached to the user's profile.
  */
 
-public class UserAccount {
+public class UserAccount implements UserAccountInterface {
 
     /**
      * User
@@ -25,28 +27,11 @@ public class UserAccount {
      *
      */
 
-    private long uid = 0;
-    private String uniqueUserName, name, email, phoneNumber;
-    private ArrayList<UberRequest> riderRequests;
-    private ArrayList<UberRequest> driverRequests;
-
-    /**
-     * This is the constructor that creates a user with an id.
-     * @param id
-     */
-    public UserAccount(long id, String u, String n, String e, String p) {
-        this.uid = id;
-        this.uniqueUserName = u;
-        this.name = n;
-        this.email = e;
-        this.phoneNumber = p;
-    }
-
     /**
      * This returns the user id
      * @return
      */
-    public long getUid() {
+    public String getUid() {
         return uid;
     }
 
@@ -54,9 +39,26 @@ public class UserAccount {
      * this sets the user id.
      * @param uid
      */
-    public void setUid(long uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
+
+    @JestId
+    private String uid, uniqueUserName, name, email, phoneNumber;
+    private ArrayList<UberRequest> riderRequests;
+    private ArrayList<UberRequest> driverRequests;
+
+    /**
+     * This is the constructor that creates a user with an id.
+     * @param
+     */
+    public UserAccount(String userLogin, String userName, String userEmail, String userPhone) {
+        this.uniqueUserName = userLogin;
+        this.name = userName;
+        this.email = userEmail;
+        this.phoneNumber = userPhone;
+    }
+
 
     public String getUniqueUserName() {
         return uniqueUserName;

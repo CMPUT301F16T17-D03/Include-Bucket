@@ -27,7 +27,7 @@ public class LauncherActivity extends Activity {
         // All users should be in the elasticsearch database
         // We would have to find a way to query whether or not a username is in the elasticsearch
         //     database based on the text input in LoginActivity
-        UserAccount newUser = new UserAccount(1,"Jimmeh","Jimmy John","jemm@idk.com","null");
+        UserAccount newUser = new UserAccount("Jimmeh","Jimmy John","jemm@idk.com","null");
 
         Intent intent;
         if (!newUser.isLoggedIn()){
