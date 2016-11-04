@@ -45,8 +45,8 @@ public class UserAccount implements UserAccountInterface {
 
     @JestId
     private String uid, uniqueUserName, name, email, phoneNumber;
-    private ArrayList<UberRequest> riderRequests;
-    private ArrayList<UberRequest> driverRequests;
+    private ArrayList<UserRequest> riderRequests;
+    private ArrayList<UserRequest> driverRequests;
 
     /**
      * This is the constructor that creates a user with an id.
@@ -115,7 +115,7 @@ public class UserAccount implements UserAccountInterface {
      * This returns the rider request list.
      * @return
      */
-    public ArrayList<UberRequest> getRiderRequests() {
+    public ArrayList<UserRequest> getRiderRequests() {
         return riderRequests;
     }
 
@@ -123,7 +123,7 @@ public class UserAccount implements UserAccountInterface {
      * This sets the sets the list of requests.
      * @param riderRequests
      */
-    public void setRiderRequests(ArrayList<UberRequest> riderRequests) {
+    public void setRiderRequests(ArrayList<UserRequest> riderRequests) {
         this.riderRequests = riderRequests;
     }
 
@@ -131,7 +131,7 @@ public class UserAccount implements UserAccountInterface {
      * This adds a new request for a rider to the list
      * @param request
      */
-    public void addRiderRequest(UberRequest request){
+    public void addRiderRequest(UserRequest request){
         this.riderRequests.add(request);
     }
 
@@ -139,7 +139,7 @@ public class UserAccount implements UserAccountInterface {
      * Tgis returns the list of requests
      * @return
      */
-    public ArrayList<UberRequest> getDriverRequests() {
+    public ArrayList<UserRequest> getDriverRequests() {
         return driverRequests;
     }
 
@@ -147,7 +147,7 @@ public class UserAccount implements UserAccountInterface {
      * This sets the driver requests list.
      * @param driverRequests
      */
-    public void setDriverRequests(ArrayList<UberRequest> driverRequests) {
+    public void setDriverRequests(ArrayList<UserRequest> driverRequests) {
         this.driverRequests = driverRequests;
     }
 
@@ -156,7 +156,7 @@ public class UserAccount implements UserAccountInterface {
      * @param request
      */
 
-    public void addDriverRequest(UberRequest request){
+    public void addDriverRequest(UserRequest request){
         if (this.driverRequests.contains(request)){
             return;
         }
@@ -168,7 +168,7 @@ public class UserAccount implements UserAccountInterface {
      * This cancels the request.
      * @param request
      */
-    public void cancelDriverRequest(UberRequest request){
+    public void cancelDriverRequest(UserRequest request){
         if (this.driverRequests.contains(request)){
             this.driverRequests.remove(request);
             request.removeDriver(this.getUniqueUserName());

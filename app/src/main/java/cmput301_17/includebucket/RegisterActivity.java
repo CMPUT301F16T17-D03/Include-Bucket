@@ -14,10 +14,6 @@ import android.widget.TextView;
 public class RegisterActivity extends MainMenuActivity {
 
     private EditText userLogin, userName, userEmail, userPhone;
-    final String LOGIN = "Login";
-    final String NAME  = "Name";
-    final String EMAIL = "Email";
-    final String PHONE = "Phone";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +37,7 @@ public class RegisterActivity extends MainMenuActivity {
 
         // When the user presses the Accept button, they are directed back into the login activity
         // Here they will be prompted for their login that they just created
-        // This is a way of verifying to the user that there account registration was successful
+        // This is a way of verifying to the user that their account registration was successful
         //     the string of their unique username will be automatically filled in the text box,
         //     so that they do not have to retype it.
         Button registerButton = (Button) findViewById(R.id.acceptButton);
@@ -75,7 +71,8 @@ public class RegisterActivity extends MainMenuActivity {
 
         UserAccount user = new UserAccount(login, name, email, phone);
 
-        ElasticsearchUserAccountController.CreateUserTask createUserTask = new ElasticsearchUserAccountController.CreateUserTask();
+        ElasticsearchUserAccountController.CreateUserTask createUserTask;
+        createUserTask = new ElasticsearchUserAccountController.CreateUserTask();
         createUserTask.execute(user);
     }
 }

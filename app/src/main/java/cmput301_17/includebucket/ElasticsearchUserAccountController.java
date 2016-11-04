@@ -7,17 +7,16 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
-import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;
 
 /**
  * Created by michelletagarino on 16-11-02.
+ *
+ * This class controls how to UsersAccounts are added and retrieved by way of using
+ *     JestDroidClient library and stores the user data as an index in Elasticsearch.
+ *     Each index will automatically be assigned its own unique ID.
+ *
  */
 public class ElasticsearchUserAccountController {
 
@@ -25,44 +24,36 @@ public class ElasticsearchUserAccountController {
 
     // TODO : This method creates a UserAccount instance
     public static class CreateUserTask extends AsyncTask<UserAccount, Void, Void> {
-
         @Override
         protected Void doInBackground(UserAccount... userList) {
-
             verifySettings();
-
             for (UserAccount user : userList) {
-
                 Index index = new Index.Builder(user).index("testing").type("user").build();
-
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         user.setUid(result.getId());
+                        Log.i("Yay", "User was added!");
                     }
-                    else {
-                        Log.i("Error", "Elastic search was not able to add the user.");
-                    }
+                    else { Log.i("Error", "Elastic search was not able to add the user."); }
                 }
                 catch (Exception e) {
-                    Log.i("Uhoh", "We failed to add a user to elastic search!");
+                    Log.i("Dang, fam", "We failed to add a user to elastic search!");
                     e.printStackTrace();
                 }
-
             }
-
-
             return null;
         }
     }
 
-    // Taken from LonelyTwitter (Lab 7)
+    // Taken from https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
     // Accessed November 2, 2016
     // Author: sromansky
     private static void verifySettings() {
-        // if the client hasn't been initialized then we should make it!
+        // Create the client if it hasn't already been initialized
         if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
+            DroidClientConfig.Builder builder;
+            builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
@@ -70,5 +61,4 @@ public class ElasticsearchUserAccountController {
             client = (JestDroidClient) factory.getObject();
         }
     }
-
 }
