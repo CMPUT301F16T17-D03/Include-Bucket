@@ -49,7 +49,12 @@ public class UserAccount implements UserAccountInterface {
     private ArrayList<UserRequest> driverRequests;
 
     /**
-     * This is the constructor that creates a user with an id.
+     * The initialization constructor (creates an empty user). Will later be filled with values.
+     */
+    public UserAccount() {}
+
+    /**
+     * This is the constructor that creates a user with an id and sets values its values.
      * @param
      */
     public UserAccount(String userLogin, String userName, String userEmail, String userPhone) {

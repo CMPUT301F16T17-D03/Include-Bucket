@@ -13,7 +13,7 @@ import android.widget.TextView;
  */
 public class RegisterActivity extends MainMenuActivity {
 
-    private EditText userLogin, userName, userEmail, userPhone;
+    protected EditText userLogin, userName, userEmail, userPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,13 @@ public class RegisterActivity extends MainMenuActivity {
             }
         });
 
-        // When the user presses the Accept button, they are directed back into the login activity
-        // Here they will be prompted for their login that they just created
-        // This is a way of verifying to the user that their account registration was successful
-        //     the string of their unique username will be automatically filled in the text box,
-        //     so that they do not have to retype it.
+        /**
+         * When the user presses the Accept button, they are directed back into the login activity
+         * Here they will be prompted for their login that they just created
+         * This is a way of verifying to the user that their account registration was successful
+         *     the string of their unique username will be automatically filled in the text box,
+         *     so that they do not have to retype it.
+         */
         Button registerButton = (Button) findViewById(R.id.acceptButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -61,7 +63,7 @@ public class RegisterActivity extends MainMenuActivity {
 
     /**
      * When a user clicks the Accept button, a new UserAccount instance is created
-    */
+     */
     public void createUser() {
 
         String login = userLogin.getText().toString();
