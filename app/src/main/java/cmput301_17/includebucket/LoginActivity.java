@@ -24,17 +24,17 @@ public class LoginActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        /**
+         *  search for username in elasticsearch database
+         *  - create condition where, if the username is not in the database, automatically
+         *  switch to RegisterActivity, otherwise login
+         */
         Button loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 setResult(RESULT_OK);
 
-                /*
-                    - search for username in elasticsearch database
-                    - create condition where, if the username is not in the database, automatically
-                      switch to RegisterActivity, otherwise login
-                */
 
                 Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
                 startActivity(intent);

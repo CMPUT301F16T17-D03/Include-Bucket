@@ -19,5 +19,38 @@ public class MainMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu);
+
+        Button logOutButton = (Button) findViewById(R.id.Logout);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                setResult(RESULT_OK);
+
+                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button riderNewButton = (Button) findViewById(R.id.New);
+        riderNewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                setResult(RESULT_OK);
+
+                Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button riderRequestsButton = (Button) findViewById(R.id.MyRequests);
+        riderRequestsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                setResult(RESULT_OK);
+
+                Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
