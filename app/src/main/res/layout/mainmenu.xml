@@ -18,7 +18,7 @@
         android:text="New"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/New"
+        android:id="@+id/newRequest"
         android:layout_below="@+id/Rider"
         android:layout_alignStart="@+id/Browse" />
 
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="117dp"
         android:id="@+id/Driver"
-        android:layout_below="@+id/New"
+        android:layout_below="@+id/newRequest"
         android:layout_toStartOf="@+id/MyRequests" />
 
     <Button

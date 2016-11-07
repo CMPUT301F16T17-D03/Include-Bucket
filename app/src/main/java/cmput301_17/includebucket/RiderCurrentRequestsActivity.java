@@ -9,7 +9,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //NEED XML
         setContentView(R.layout.mainmenu);
 
     }
-    }
+}
