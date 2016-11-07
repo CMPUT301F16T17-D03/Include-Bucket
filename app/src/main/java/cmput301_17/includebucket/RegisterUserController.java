@@ -13,12 +13,12 @@ import io.searchbox.core.Index;
 /**
  * Created by michelletagarino on 16-11-02.
  *
- * This class controls how UsersAccounts are added and retrieved by way of using
- *     JestDroidClient library and stores the user data as an index in Elasticsearch.
- *     Each index will automatically be assigned its own unique ID.
- *
+ * This class controls how UserAccounts are added by way of using the JestDroidClient
+ *     library. The user and its data is stored as an index ["cmput301f16t17"] in
+ *     Elasticsearch under the type 'user'. Each index will automatically be assigned
+ *     its own elasticsearch ID.
  */
-public class ElasticsearchUserAccountController {
+public class RegisterUserController {
 
     private static JestDroidClient client;
 
