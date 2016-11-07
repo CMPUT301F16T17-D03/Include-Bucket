@@ -83,7 +83,7 @@ public class MainMenuActivity extends Activity {
 
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(MainMenuActivity.this, ViewUserDataActivity.class);
+                Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
                 startActivity(intent);
             }
         });

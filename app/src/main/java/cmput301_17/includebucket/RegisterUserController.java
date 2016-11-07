@@ -18,7 +18,7 @@ import io.searchbox.core.Index;
  *     Each index will automatically be assigned its own unique ID.
  *
  */
-public class ElasticsearchUserAccountController {
+public class RegisterUserController {
 
     private static JestDroidClient client;
 
