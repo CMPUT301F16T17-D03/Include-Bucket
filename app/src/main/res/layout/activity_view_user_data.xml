@@ -9,4 +9,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cmput301_17.includebucket.ViewUserDataActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Email"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Phone"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
