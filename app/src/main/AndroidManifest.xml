@@ -35,6 +35,13 @@
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".NewRiderRequestActivity" />
+        <activity android:name=".DriverCurrentRequestsActivity" />
+        <activity android:name=".DriverBrowseRequestsActivity" />
+        <activity android:name=".DriverSingleRequestActivity" />
+        <activity android:name=".EditUserDataActivity" />
+        <activity android:name=".RiderCurrentRequestsActivity" />
+        <activity android:name=".ViewUserDataActivity" />
 
 
         <!--
