@@ -71,8 +71,8 @@ public class RegisterActivity extends MainMenuActivity {
 
         UserAccount user = new UserAccount(login, name, email, phone);
 
-        RegisterUserController.CreateUserTask createUserTask;
-        createUserTask = new RegisterUserController.CreateUserTask();
+        ElasticsearchController.CreateUserTask createUserTask;
+        createUserTask = new ElasticsearchController.CreateUserTask();
         createUserTask.execute(user);
     }
 }

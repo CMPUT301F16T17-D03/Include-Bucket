@@ -18,7 +18,7 @@ import io.searchbox.core.Index;
  *     Elasticsearch under the type 'user'. Each index will automatically be assigned
  *     its own elasticsearch ID.
  */
-public class RegisterUserController {
+public class ElasticsearchController {
 
     private static JestDroidClient client;
 
@@ -42,6 +42,14 @@ public class RegisterUserController {
                     e.printStackTrace();
                 }
             }
+            return null;
+        }
+    }
+
+    // TODO : This method retrieves a UserAccount
+    public static class RetrieveUserTask extends AsyncTask<UserAccount, Void, Void> {
+        @Override
+        protected Void doInBackground(UserAccount... userList) {
             return null;
         }
     }
