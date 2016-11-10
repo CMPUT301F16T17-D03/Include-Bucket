@@ -2,7 +2,9 @@ package cmput301_17.includebucket;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -31,8 +33,25 @@ public class LoginActivity extends MainMenuActivity {
 
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
-                startActivity(intent);
+                /**
+                 * Check to see if the user is valid (in elasticsearch)
+                 */
+                ElasticsearchController.RetrieveUserTask retrieveUserTask;
+                retrieveUserTask = new ElasticsearchController.RetrieveUserTask();
+                retrieveUserTask.execute("");
+
+                try {
+                    UserAccount foundUser = retrieveUserTask.get();
+                    String foundUserName = foundUser.getUniqueUserName();
+
+                    if ((userLogin.getText().toString()).equals(foundUserName)){
+                        Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
+                        startActivity(intent);
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Failed to get the user out of the async object.");
+                }
             }
         });
 
@@ -47,14 +66,20 @@ public class LoginActivity extends MainMenuActivity {
             }
         });
 
+        /**
+         * Will retrieve the user input login name from RegisterActivity and
+         * put it in the EditText box in the LoginActivity (essentially, the user
+         * will not have to retype the user login name that they just created).
+         */
         Intent intent = getIntent();
-
         String str = intent.getStringExtra("user_login");
-
         userLogin = (EditText) findViewById(R.id.loginTextField);
-
         userLogin.clearComposingText();
-
         userLogin.setText(str);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }

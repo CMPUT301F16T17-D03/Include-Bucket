@@ -7,8 +7,13 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 
 /**
  * Created by michelletagarino on 16-11-02.
@@ -26,14 +31,20 @@ public class ElasticsearchController {
     public static class CreateUserTask extends AsyncTask<UserAccount, Void, Void> {
         @Override
         protected Void doInBackground(UserAccount... userList) {
+
             verifySettings();
+
             for (UserAccount user : userList) {
-                Index index = new Index.Builder(user).index("cmput301f16t17").type("user").build();
+                Index index = new Index.Builder(user)
+                        .index("cmput301f16t17")
+                        .type("user")
+                        .id(user.getUniqueUserName()).build();
+
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         user.setUid(result.getId());
-                        Log.i("Yay", "User was added!");
+                        Log.i("Yay", "A user was added with ID: " + result.getId());
                     }
                     else { Log.i("Error", "Elastic search was not able to add the user."); }
                 }
@@ -47,10 +58,35 @@ public class ElasticsearchController {
     }
 
     // TODO : This method retrieves a UserAccount
-    public static class RetrieveUserTask extends AsyncTask<UserAccount, Void, Void> {
+    public static class RetrieveUserTask extends AsyncTask<String, Void, UserAccount> {
         @Override
-        protected Void doInBackground(UserAccount... userList) {
-            return null;
+        protected UserAccount doInBackground(String... search_parameters) {
+
+            verifySettings();
+
+            UserAccount newUser = new UserAccount();
+
+            String search_string = "{\"from\": 0, \"size\": 10000}";
+
+            Search search = new Search.Builder(search_string)
+                    .addIndex("cmput301f16t17")
+                    .addType("user")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    UserAccount foundUser = result.getSourceAsObject(UserAccount.class);
+                    newUser = foundUser;
+                }
+                else {
+                    Log.i("Error", "The search query failed to find any tweets that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return newUser;
         }
     }
 
