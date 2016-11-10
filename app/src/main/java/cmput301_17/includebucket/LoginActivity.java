@@ -22,7 +22,7 @@ public class LoginActivity extends MainMenuActivity {
 
         /**
          *  search for username in elasticsearch database
-         *  - create condition where, if the username is not in the database, automatically
+         *  create condition where, if the username is not in the database, automatically
          *  switch to RegisterActivity, otherwise login
          */
         Button loginButton = (Button) findViewById(R.id.loginButton);

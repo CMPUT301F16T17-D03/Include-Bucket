@@ -11,5 +11,4 @@ public class NewRiderRequestActivity extends MainMenuActivity {
         //NEED XML
         setContentView(R.layout.accept_driver);
     }
-
 }
