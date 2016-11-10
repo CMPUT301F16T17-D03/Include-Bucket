@@ -9,6 +9,6 @@ public class NewRiderRequestActivity extends MainMenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //NEED XML
-        setContentView(R.layout.accept_driver);
+        setContentView(R.layout.new_rider_request);
     }
 }
