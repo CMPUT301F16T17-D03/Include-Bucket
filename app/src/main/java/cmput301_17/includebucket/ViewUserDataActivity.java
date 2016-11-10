@@ -33,6 +33,6 @@ public class ViewUserDataActivity extends MainMenuActivity {
     }
 
     /**
-     * Thi si the onBack method. It handles when the user wants to go back.
+     * This is the onBack method. It handles when the user wants to go back.
      */
 }

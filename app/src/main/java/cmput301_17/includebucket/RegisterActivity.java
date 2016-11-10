@@ -1,12 +1,10 @@
 package cmput301_17.includebucket;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 /**
  * Created by michelletagarino on 16-10-29.
@@ -73,8 +71,8 @@ public class RegisterActivity extends MainMenuActivity {
 
         UserAccount user = new UserAccount(login, name, email, phone);
 
-        ElasticsearchUserAccountController.CreateUserTask createUserTask;
-        createUserTask = new ElasticsearchUserAccountController.CreateUserTask();
+        ElasticsearchController.CreateUserTask createUserTask;
+        createUserTask = new ElasticsearchController.CreateUserTask();
         createUserTask.execute(user);
     }
 }
