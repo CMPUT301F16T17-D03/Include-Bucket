@@ -1,6 +1,8 @@
-package cmput301f16t17_d03.includebucket;
+package cmput301_17.includebucket;
 
 import java.util.ArrayList;
+
+import cmput301_17.includebucket.UserAccount;
 
 /**
  * Created by Owner on 10/20/2016.
@@ -14,7 +16,7 @@ public class UberRequest {
     // rider
     // fare/fare calc 0-1
     // drivers
-    // bool driveraccpeted
+    // bool driveraccepted
     // bool rider accept driver can be canceled can be completed story add list of keywords derived from story search by keyword in story date?
 
     private String startLocation;
@@ -105,5 +107,9 @@ public class UberRequest {
 
     public void setRiderAccepted(boolean riderAccepted) {
         this.riderAccepted = riderAccepted;
+    }
+
+    public boolean isCompleted() {
+        return false;
     }
 }
