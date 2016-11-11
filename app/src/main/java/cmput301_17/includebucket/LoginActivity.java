@@ -38,16 +38,17 @@ public class LoginActivity extends MainMenuActivity {
                  */
                 ElasticsearchController.RetrieveUserTask retrieveUserTask;
                 retrieveUserTask = new ElasticsearchController.RetrieveUserTask();
-                retrieveUserTask.execute("");
+                retrieveUserTask.execute(userLogin.getText().toString());
 
                 try {
                     UserAccount foundUser = retrieveUserTask.get();
-                    String foundUserName = foundUser.getUniqueUserName();
 
-                    if ((userLogin.getText().toString()).equals(foundUserName)){
-                        Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
-                        startActivity(intent);
-                    }
+                    String foundUserName = foundUser.getUniqueUserName();
+                    Log.i("Success", "It got a user.");
+                    //if ((userLogin.getText().toString()).equals(foundUserName)){
+                     //   Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
+                       // startActivity(intent);
+                    //}
                 }
                 catch (Exception e) {
                     Log.i("Error", "Failed to get the user out of the async object.");

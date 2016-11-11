@@ -60,13 +60,14 @@ public class ElasticsearchController {
     // TODO : This method retrieves a UserAccount
     public static class RetrieveUserTask extends AsyncTask<String, Void, UserAccount> {
         @Override
-        protected UserAccount doInBackground(String... search_parameters) {
+        protected UserAccount doInBackground(String... userLogin) {
 
             verifySettings();
 
-            UserAccount newUser = new UserAccount();
+            UserAccount foundUser = new UserAccount();
+            String s = "CreatedAUser";
 
-            String search_string = "{\"from\": 0, \"size\": 10000}";
+            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + s + " \" }}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
@@ -76,17 +77,17 @@ public class ElasticsearchController {
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    UserAccount foundUser = result.getSourceAsObject(UserAccount.class);
-                    newUser = foundUser;
+                    foundUser = result.getSourceAsObject(UserAccount.class);
+                    Log.i("Worked", foundUser.getEmail());
                 }
                 else {
                     Log.i("Error", "The search query failed to find any tweets that matched.");
                 }
             }
-            catch (Exception e) {
+                catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return newUser;
+            return foundUser;
         }
     }
 
