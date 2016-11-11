@@ -56,7 +56,6 @@ public class RobotiumTest {
         solo.unlockScreen();
         //might need to change index of the text field and the username
         solo.enterText(0, "Username");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         //create new request
         solo.clickOnButton("New");
