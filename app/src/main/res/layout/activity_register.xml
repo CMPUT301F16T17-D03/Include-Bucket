@@ -9,14 +9,16 @@
         android:id="@+id/loginTextField"
         android:layout_gravity="center_horizontal"
         android:nestedScrollingEnabled="false"
-        android:hint="@string/user_login" />
+        android:hint="@string/user_login"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/nameTextField"
         android:layout_gravity="center_horizontal"
-        android:hint="@string/user_name" />
+        android:hint="@string/user_name"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -24,14 +26,15 @@
         android:id="@+id/emailTextField"
         android:layout_gravity="center_horizontal"
         android:hint="@string/user_email"
-        android:singleLine="false" />
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/phoneTextField"
         android:layout_gravity="center_horizontal"
-        android:hint="@string/user_phone" />
+        android:hint="@string/user_phone"
+        android:singleLine="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
