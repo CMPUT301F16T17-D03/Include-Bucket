@@ -45,6 +45,7 @@ public class UserAccount implements UserAccountInterface {
 
     @JestId
     private String uid, uniqueUserName, name, email, phoneNumber;
+    private Boolean isLoggedIn;
     private ArrayList<UserRequest> riderRequests;
     private ArrayList<UserRequest> driverRequests;
 
@@ -62,6 +63,7 @@ public class UserAccount implements UserAccountInterface {
         this.name = userName;
         this.email = userEmail;
         this.phoneNumber = userPhone;
+        this.isLoggedIn = false;
     }
 
 
@@ -141,7 +143,7 @@ public class UserAccount implements UserAccountInterface {
     }
 
     /**
-     * Tgis returns the list of requests
+     * This returns the list of requests
      * @return
      */
     public ArrayList<UserRequest> getDriverRequests() {
@@ -181,7 +183,16 @@ public class UserAccount implements UserAccountInterface {
         return;
     }
 
-    public boolean isLoggedIn() {
-        return Boolean.FALSE;
-    }
+    /**
+     * This returns the login status of the user
+     * @return isLoggedIn
+     */
+    public boolean getLoginStatus() { return this.isLoggedIn; }
+
+    /**
+     * This changes the user's login status
+     * @param status
+     */
+    public void setLoginStatus(Boolean status) { this.isLoggedIn = status; }
+
 }

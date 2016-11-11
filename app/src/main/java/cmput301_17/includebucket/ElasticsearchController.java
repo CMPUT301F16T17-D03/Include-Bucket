@@ -30,28 +30,55 @@ public class ElasticsearchController {
     // TODO : This method creates a UserAccount instance
     public static class CreateUserTask extends AsyncTask<UserAccount, Void, Void> {
         @Override
-        protected Void doInBackground(UserAccount... userList) {
-
+        protected Void doInBackground(UserAccount... userAccounts) {
             verifySettings();
+            for (UserAccount user : userAccounts) {
+/*
+            UserAccount foundUser = new UserAccount();
 
-            for (UserAccount user : userList) {
-                Index index = new Index.Builder(user)
-                        .index("cmput301f16t17")
-                        .type("user")
-                        .id(user.getUniqueUserName()).build();
+            Boolean isUserNameTaken = true;
 
+                /**
+                 * Check first to see if the username is unique.
+                 * If not taken, isUserNameTaken==FALSE.
+                 */
+/*                String search_string = "{\"query\": { \"match\": { \"_id\": \"" + user.getUniqueUserName() + "\" }}}";
+                Search search = new Search.Builder(search_string)
+                        .addIndex("cmput301f16t17")
+                        .addType("user")
+                        .build();
                 try {
-                    DocumentResult result = client.execute(index);
+                    SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
-                        user.setUid(result.getId());
-                        Log.i("Yay", "A user was added with ID: " + result.getId());
+                        foundUser = result.getSourceAsObject(UserAccount.class);
+                    } else {
+                        isUserNameTaken = false;
+                        Log.i("Error", "The search query failed to find any users that matched.");
                     }
-                    else { Log.i("Error", "Elastic search was not able to add the user."); }
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 }
-                catch (Exception e) {
-                    Log.i("Dang, fam", "We failed to add a user to elastic search!");
-                    e.printStackTrace();
-                }
+*/
+                /**
+                 * If username is not already taken (if isUserNameTaken==FALSE), create a user.
+                 */
+                //if (!isUserNameTaken) {
+                    Index index = new Index.Builder(user)
+                            .index("cmput301f16t17")
+                            .type("user")
+                            .id(user.getUniqueUserName()).build();
+                    try {
+                        DocumentResult result = client.execute(index);
+                        if (result.isSucceeded()) {
+                            user.setUid(result.getId());
+                        } else {
+                            Log.i("Error", "Elastic search was not able to add the user.");
+                        }
+                    } catch(Exception e){
+                        Log.i("Error", "We failed to add a user to elastic search!");
+                        e.printStackTrace();
+                    }
+                //} else Log.i("Error", "Username is taken!");
             }
             return null;
         }
@@ -61,36 +88,60 @@ public class ElasticsearchController {
     public static class RetrieveUserTask extends AsyncTask<String, Void, UserAccount> {
         @Override
         protected UserAccount doInBackground(String... userLogin) {
-
             verifySettings();
 
             UserAccount foundUser = new UserAccount();
-            String s = "CreatedAUser";
-
-            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + s + " \" }}}";
+            /**
+             * This query retrieves one user instance specified by the login input in LoginActivity
+             */
+            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + userLogin[0] + "\" }}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("user")
                     .build();
-
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     foundUser = result.getSourceAsObject(UserAccount.class);
-                    Log.i("Worked", foundUser.getEmail());
+                } else {
+                    Log.i("Error", "The search query failed to find any users that matched.");
                 }
-                else {
-                    Log.i("Error", "The search query failed to find any tweets that matched.");
-                }
-            }
-                catch (Exception e) {
+                return foundUser;
+            } catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return null;
             }
-            return foundUser;
         }
     }
 
+    // TODO : This method retrieves a UserAccount
+    public static class CheckUserTask extends AsyncTask<String, Void, UserAccount> {
+        @Override
+        protected UserAccount doInBackground(String... userLogin) {
+            verifySettings();
+
+            UserAccount foundUser = new UserAccount();
+            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + userLogin[0] + "\" }}}";
+
+            Search search = new Search.Builder(search_string)
+                    .addIndex("cmput301f16t17")
+                    .addType("user")
+                    .build();
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    foundUser = result.getSourceAsObject(UserAccount.class);
+                } else {
+                    Log.i("Error", "The search query failed to find any users that matched.");
+                }
+                return foundUser;
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return null;
+            }
+        }
+    }
     // Taken from https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
     // Accessed November 2, 2016
     // Author: sromansky
