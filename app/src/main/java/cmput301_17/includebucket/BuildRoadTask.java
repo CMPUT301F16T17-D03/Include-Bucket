@@ -29,6 +29,7 @@ public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Polyline
     protected Polyline doInBackground(ArrayList<GeoPoint>... waypoints)
     {   Road road = manager.getRoad(waypoints[0]);
         Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+
         return roadOverlay;
     }
 
@@ -39,5 +40,6 @@ public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Polyline
     protected void onPostExecute(Polyline result) {
         super.onPostExecute(result);
         map.getOverlays().add(result);
+        map.invalidate();
     }
 }
