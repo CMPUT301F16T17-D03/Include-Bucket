@@ -40,7 +40,7 @@ public class Request {
      * @param rider The rider making a request
      */
     public Request(String loc1, String loc2, UserAccount rider) {
-        this. requestID = null;
+        this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
