@@ -1,5 +1,6 @@
 package cmput301_17.includebucket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
@@ -10,7 +11,7 @@ import io.searchbox.annotations.JestId;
  * It holds and controls the information that is attached to the user's profile.
  */
 
-public class UserAccount implements UserAccountInterface {
+public class UserAccount implements Serializable {
 
     /**
      * User
@@ -46,8 +47,8 @@ public class UserAccount implements UserAccountInterface {
     @JestId
     private String uid, uniqueUserName, name, email, phoneNumber;
     private Boolean isLoggedIn;
-    private ArrayList<UserRequest> riderRequests;
-    private ArrayList<UserRequest> driverRequests;
+    private ArrayList<Request> riderRequests;
+    private ArrayList<Request> driverRequests;
 
     /**
      * The initialization constructor (creates an empty user). Will later be filled with values.
@@ -95,7 +96,7 @@ public class UserAccount implements UserAccountInterface {
     }
 
     /**
-     * This sets the emila address.
+     * This sets the email address.
      * @param email
      */
     public void setEmail(String email) {
@@ -122,7 +123,7 @@ public class UserAccount implements UserAccountInterface {
      * This returns the rider request list.
      * @return
      */
-    public ArrayList<UserRequest> getRiderRequests() {
+    public ArrayList<Request> getRiderRequests() {
         return riderRequests;
     }
 
@@ -130,7 +131,7 @@ public class UserAccount implements UserAccountInterface {
      * This sets the sets the list of requests.
      * @param riderRequests
      */
-    public void setRiderRequests(ArrayList<UserRequest> riderRequests) {
+    public void setRiderRequests(ArrayList<Request> riderRequests) {
         this.riderRequests = riderRequests;
     }
 
@@ -138,7 +139,7 @@ public class UserAccount implements UserAccountInterface {
      * This adds a new request for a rider to the list
      * @param request
      */
-    public void addRiderRequest(UserRequest request){
+    public void addRiderRequest(Request request){
         this.riderRequests.add(request);
     }
 
@@ -146,7 +147,7 @@ public class UserAccount implements UserAccountInterface {
      * This returns the list of requests
      * @return
      */
-    public ArrayList<UserRequest> getDriverRequests() {
+    public ArrayList<Request> getDriverRequests() {
         return driverRequests;
     }
 
@@ -154,7 +155,7 @@ public class UserAccount implements UserAccountInterface {
      * This sets the driver requests list.
      * @param driverRequests
      */
-    public void setDriverRequests(ArrayList<UserRequest> driverRequests) {
+    public void setDriverRequests(ArrayList<Request> driverRequests) {
         this.driverRequests = driverRequests;
     }
 
@@ -163,7 +164,7 @@ public class UserAccount implements UserAccountInterface {
      * @param request
      */
 
-    public void addDriverRequest(UserRequest request){
+    public void addDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             return;
         }
@@ -175,7 +176,7 @@ public class UserAccount implements UserAccountInterface {
      * This cancels the request.
      * @param request
      */
-    public void cancelDriverRequest(UserRequest request){
+    public void cancelDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             this.driverRequests.remove(request);
             request.removeDriver(this.getUniqueUserName());

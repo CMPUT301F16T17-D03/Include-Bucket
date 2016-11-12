@@ -1,25 +1,22 @@
 package cmput301_17.includebucket;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 
 import cmput301_17.includebucket.UserAccount;
+import io.searchbox.annotations.JestId;
 
 /**
  * Created by Owner on 10/20/2016.
- */
-
-public class UserRequest {
-
-/**
- * Request
- * start location
- * end location
- * rider
- * fare/fare calc 0-1
- * drivers
- * bool driveraccpeted
  *
+ * This is the Request class. It holds the data that is attached to each request made by a specific
+ * UserAccount.
  */
+public class Request {
+
+    @JestId
+    String requestID;
 
     private String startLocation;
     private String endLocation;
@@ -30,6 +27,43 @@ public class UserRequest {
     private ArrayList<String> drivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
+
+    /**
+     * The empty constructor.
+     */
+    public Request() {}
+
+    /**
+     * Intantiates a new Request.
+     * @param loc1  The start location
+     * @param loc2  The end location
+     * @param rider The rider making a request
+     */
+    public Request(String loc1, String loc2, UserAccount rider) {
+        this.requestID = null;
+        this.startLocation = loc1;
+        this.endLocation = loc2;
+        this.rider = rider;
+    }
+
+    /**
+     * Intantiates a new Request with specified keyword(s).
+     * @param loc1  The start location
+     * @param loc2  The end location
+     * @param rider The rider making a request
+     * @param keys  The keyword
+     */
+    public Request(String loc1, String loc2, UserAccount rider, ArrayList<String> keys) {
+        this.requestID = null;
+        this.startLocation = loc1;
+        this.endLocation = loc2;
+        this.rider = rider;
+        this.keywords = keys;
+    }
+
+    public String getRequestID() {return requestID; }
+
+    public void setRequestID(String requestID) { this.requestID = requestID; }
 
     public String getStartLocation() {
         return startLocation;

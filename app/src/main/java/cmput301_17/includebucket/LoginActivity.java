@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -31,6 +30,8 @@ public class LoginActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
+                String textLogin  = userLogin.getText().toString();
+
                 /**
                  * Checks to see if the user is valid:
                  *     If a user was returned, then the task was successful and thereby the login
@@ -38,18 +39,21 @@ public class LoginActivity extends MainMenuActivity {
                  *     are compared; if equal, the activity will switch to the MainActivity (in other
                  *     words, the user will be logged in).
                  */
-                try {
-                    ElasticsearchController.RetrieveUserTask retrieveUserTask;
-                    retrieveUserTask = new ElasticsearchController.RetrieveUserTask();
-                    retrieveUserTask.execute(userLogin.getText().toString());
+                ElasticsearchUserController.RetrieveUser findUser;
+                findUser = new ElasticsearchUserController.RetrieveUser();
+                findUser.execute(userLogin.getText().toString());
 
-                    UserAccount foundUser = retrieveUserTask.get();
-                    if ((userLogin.getText().toString()).equals(foundUser.getUniqueUserName())){
-                        foundUser.setLoginStatus(Boolean.TRUE);
-                        if (foundUser.getLoginStatus()) {
-                            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                            startActivity(intent);
-                        }
+                try {
+                    UserAccount foundUser = findUser.get();
+                    String foundLogin = foundUser.getUniqueUserName();
+
+                    if (textLogin.equals(foundLogin))
+                    {
+                        Log.i("Success", "User " + textLogin + " was found.");
+
+                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                        intent.putExtra("User", foundUser);
+                        startActivity(intent);
                     }
                 }
                 catch (Exception e) {
