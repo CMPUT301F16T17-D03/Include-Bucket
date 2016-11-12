@@ -19,20 +19,20 @@ import io.searchbox.core.SearchResult;
 /**
  * Created by michelletagarino on 16-11-02.
  *
- * This class controls how UserAccounts are added by way of using the JestDroidClient
- *     library. The user and its data is stored as an index ["cmput301f16t17"] in
- *     Elasticsearch under the type 'user'. Each index will automatically be assigned
- *     its own elasticsearch ID.
+ * This class controls how UserAccounts are added and retrieved in Elasticsearch.
  */
-public class ElasticsearchController {
+public class ElasticsearchUserController {
 
     private static JestDroidClient client;
 
-    // TODO : This method creates a UserAccount instance
-    public static class CreateUserTask extends AsyncTask<UserAccount, Void, Void> {
+    /**
+     * This method creates a UserAccount instance.
+     */
+    public static class CreateUser extends AsyncTask<UserAccount, Void, Void> {
         @Override
         protected Void doInBackground(UserAccount... userAccounts) {
             verifySettings();
+
             for (UserAccount user : userAccounts) {
                     Index index = new Index.Builder(user)
                             .index("cmput301f16t17")
@@ -40,9 +40,13 @@ public class ElasticsearchController {
                             .id(user.getUniqueUserName()).build();
                     try {
                         DocumentResult result = client.execute(index);
-                        if (result.isSucceeded()) {
+
+                        if (result.isSucceeded())
+                        {
                             user.setUid(result.getId());
-                        } else {
+                        }
+                        else
+                        {
                             Log.i("Error", "Elastic search was not able to add the user.");
                         }
                     } catch(Exception e){
@@ -54,13 +58,16 @@ public class ElasticsearchController {
         }
     }
 
-    // TODO : This method retrieves a UserAccount
-    public static class RetrieveUserTask extends AsyncTask<String, Void, UserAccount> {
+    /**
+     * This method retrieves a UserAccount.
+     */
+    public static class RetrieveUser extends AsyncTask<String, Void, UserAccount> {
         @Override
         protected UserAccount doInBackground(String... userLogin) {
             verifySettings();
 
             UserAccount foundUser = new UserAccount();
+
             /**
              * This query retrieves one user instance specified by the login input in LoginActivity
              */
@@ -72,10 +79,14 @@ public class ElasticsearchController {
                     .build();
             try {
                 SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
+
+                if (result.isSucceeded())
+                {
                     foundUser = result.getSourceAsObject(UserAccount.class);
                     foundUser.setLoginStatus(Boolean.TRUE);
-                } else {
+                }
+                else
+                {
                     Log.i("Error", "The search query failed to find any users that matched.");
                 }
                 return foundUser;
@@ -86,12 +97,15 @@ public class ElasticsearchController {
         }
     }
 
-    // Taken from https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
-    // Accessed November 2, 2016
-    // Author: sromansky
+    /**
+     * Taken from https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
+     * Accessed November 2, 2016
+     * Author: sromansky
+     */
     private static void verifySettings() {
         // Create the client if it hasn't already been initialized
-        if (client == null) {
+        if (client == null)
+        {
             DroidClientConfig.Builder builder;
             builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
             DroidClientConfig config = builder.build();

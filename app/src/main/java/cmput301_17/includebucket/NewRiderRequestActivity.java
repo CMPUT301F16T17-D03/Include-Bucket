@@ -32,14 +32,11 @@ import java.util.ArrayList;
 
 /**
  * Created by orlick on 11/7/16.
+ *
+ * In this class, the user should be able to specify the start and end locations by typing in an
+ * address or by clicking on the map (clicking on the map should automatically fill in the start
+ * and end locations). These locations are values for instantiating a new Request.
  */
-//public class NewRiderRequestActivity extends MainMenuActivity {
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.new_rider_request);
-//    }
-//}
-
 public class NewRiderRequestActivity extends Activity implements MapEventsReceiver, LocationListener {
     EditText startEditText;
     EditText endEditText;
@@ -175,7 +172,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             }
         });
 
-        //important! set your user agent to prevent getting banned from the osm servers
+        /**
+         * Important! set your user agent to prevent getting banned from the osm servers
+         */
         org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
