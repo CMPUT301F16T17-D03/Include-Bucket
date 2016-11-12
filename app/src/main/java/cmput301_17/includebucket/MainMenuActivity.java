@@ -1,10 +1,10 @@
 package cmput301_17.includebucket;
 
-        import android.app.Activity;
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.view.View;
-        import android.widget.Button;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * The view for the main menu
@@ -15,10 +15,14 @@ package cmput301_17.includebucket;
 public class MainMenuActivity extends Activity {
    // private Activity activity = this;
 
+    UserAccount user = new UserAccount();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu);
+
+        user = (UserAccount)getIntent().getSerializableExtra("User");
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
@@ -27,6 +31,7 @@ public class MainMenuActivity extends Activity {
                 setResult(RESULT_OK);
 
                 Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
