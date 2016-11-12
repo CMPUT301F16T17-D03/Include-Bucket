@@ -16,14 +16,14 @@ import java.util.ArrayList;
  * Created by Owner on 11/11/2016.
  */
 
-public class OnMarkerDragDrawer implements Marker.OnMarkerDragListener {
+public class OnMarkerDragDrawerold implements Marker.OnMarkerDragListener {
     public ArrayList<GeoPoint> mTrace;
 
     MapView map;
     int flag;
 
     RoadManager roadManager;
-    OnMarkerDragDrawer(MapView passedMap, Marker source, Marker end, RoadManager passedManager) {
+    OnMarkerDragDrawerold(MapView passedMap, Marker source, Marker end, RoadManager passedManager) {
         mTrace = new ArrayList<GeoPoint>(2);
         mTrace.add(source.getPosition());
         mTrace.add(end.getPosition());

@@ -2,13 +2,11 @@ package cmput301_17.includebucket;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by michelletagarino on 16-10-29.
@@ -25,25 +23,44 @@ public class LoginActivity extends MainMenuActivity {
         setContentView(R.layout.activity_login);
 
         /**
-         *  search for username in elasticsearch database
          *  create condition where, if the username is not in the database, automatically
          *  switch to RegisterActivity, otherwise login
          */
         Button loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
-                startActivity(intent);
+                /**
+                 * Checks to see if the user is valid:
+                 *     If a user was returned, then the task was successful and thereby the login
+                 *     name was valid. The user input and the username returned from elasticsearch
+                 *     are compared; if equal, the activity will switch to the MainActivity (in other
+                 *     words, the user will be logged in).
+                 */
+                try {
+                    ElasticsearchController.RetrieveUserTask retrieveUserTask;
+                    retrieveUserTask = new ElasticsearchController.RetrieveUserTask();
+                    retrieveUserTask.execute(userLogin.getText().toString());
+
+                    UserAccount foundUser = retrieveUserTask.get();
+                    if ((userLogin.getText().toString()).equals(foundUser.getUniqueUserName())){
+                        foundUser.setLoginStatus(Boolean.TRUE);
+                        if (foundUser.getLoginStatus()) {
+                            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Failed to get the user out of the async object.");
+                }
             }
         });
 
         Button registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
 
                 Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
@@ -51,14 +68,19 @@ public class LoginActivity extends MainMenuActivity {
             }
         });
 
+        /**
+         * Retrieves user input login name from RegisterActivity and puts it in the EditText field
+         * of the LoginActivity (user does not have to retype the login name they just created).
+         */
         Intent intent = getIntent();
-
         String str = intent.getStringExtra("user_login");
-
         userLogin = (EditText) findViewById(R.id.loginTextField);
-
         userLogin.clearComposingText();
-
         userLogin.setText(str);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }

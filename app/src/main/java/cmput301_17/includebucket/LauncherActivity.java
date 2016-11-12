@@ -30,7 +30,7 @@ public class LauncherActivity extends Activity {
         UserAccount newUser = new UserAccount("Jimmeh","Jimmy John","jemm@idk.com","null");
 
         Intent intent;
-        if (!newUser.isLoggedIn()){
+        if (!newUser.getLoginStatus()){
             intent = new Intent(LauncherActivity.this,LoginActivity.class);
         }
         else {

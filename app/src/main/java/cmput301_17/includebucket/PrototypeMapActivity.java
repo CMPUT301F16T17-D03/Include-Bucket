@@ -9,16 +9,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -49,7 +44,7 @@ public class PrototypeMapActivity extends Activity implements MapEventsReceiver,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.prototypemap);
+        setContentView(R.layout.prototype_map);
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         //Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
 
@@ -111,7 +106,7 @@ public class PrototypeMapActivity extends Activity implements MapEventsReceiver,
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-        map = (MapView) findViewById(R.id.map);
+        map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
@@ -130,7 +125,7 @@ public class PrototypeMapActivity extends Activity implements MapEventsReceiver,
         endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(startMarker);
         map.getOverlays().add(endMarker);
-        OnMarkerDragDrawer dragger = new OnMarkerDragDrawer(map, startMarker, endMarker, roadManager);
+        OnMarkerDragDrawerold dragger = new OnMarkerDragDrawerold(map, startMarker, endMarker, roadManager);
         startMarker.setIcon(getResources().getDrawable(R.mipmap.marker_green));
         endMarker.setIcon(getResources().getDrawable(R.mipmap.marker_red));
         startMarker.setTitle("Start point");
