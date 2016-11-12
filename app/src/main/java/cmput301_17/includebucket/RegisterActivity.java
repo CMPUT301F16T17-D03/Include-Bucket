@@ -50,7 +50,7 @@ public class RegisterActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                Boolean userCreated = null;
+                Boolean userCreated = Boolean.FALSE;
                 try {
                     /**
                      * Check first to see if the username is unique.
@@ -68,13 +68,16 @@ public class RegisterActivity extends MainMenuActivity {
                          * Author: user370305
                          */
                         userLogin.setTextColor(Color.parseColor("#E40000"));
-                        userCreated = Boolean.FALSE;
                     }
                 } catch (Exception e) {
                     createUser();
                     userCreated = Boolean.TRUE;
                 }
 
+                /**
+                 * If a user was created, go back to LoginActivity with the user's new
+                 * uniqueUserName automatically filled in the EditText field.
+                 */
                 if (userCreated) {
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     intent.putExtra("user_login", userLogin.getText().toString());

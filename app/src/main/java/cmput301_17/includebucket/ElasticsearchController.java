@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -33,36 +34,6 @@ public class ElasticsearchController {
         protected Void doInBackground(UserAccount... userAccounts) {
             verifySettings();
             for (UserAccount user : userAccounts) {
-/*
-            UserAccount foundUser = new UserAccount();
-
-            Boolean isUserNameTaken = true;
-
-                /**
-                 * Check first to see if the username is unique.
-                 * If not taken, isUserNameTaken==FALSE.
-                 */
-/*                String search_string = "{\"query\": { \"match\": { \"_id\": \"" + user.getUniqueUserName() + "\" }}}";
-                Search search = new Search.Builder(search_string)
-                        .addIndex("cmput301f16t17")
-                        .addType("user")
-                        .build();
-                try {
-                    SearchResult result = client.execute(search);
-                    if (result.isSucceeded()) {
-                        foundUser = result.getSourceAsObject(UserAccount.class);
-                    } else {
-                        isUserNameTaken = false;
-                        Log.i("Error", "The search query failed to find any users that matched.");
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                }
-*/
-                /**
-                 * If username is not already taken (if isUserNameTaken==FALSE), create a user.
-                 */
-                //if (!isUserNameTaken) {
                     Index index = new Index.Builder(user)
                             .index("cmput301f16t17")
                             .type("user")
@@ -78,7 +49,6 @@ public class ElasticsearchController {
                         Log.i("Error", "We failed to add a user to elastic search!");
                         e.printStackTrace();
                     }
-                //} else Log.i("Error", "Username is taken!");
             }
             return null;
         }
@@ -104,6 +74,7 @@ public class ElasticsearchController {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     foundUser = result.getSourceAsObject(UserAccount.class);
+                    foundUser.setLoginStatus(Boolean.TRUE);
                 } else {
                     Log.i("Error", "The search query failed to find any users that matched.");
                 }
@@ -115,33 +86,6 @@ public class ElasticsearchController {
         }
     }
 
-    // TODO : This method retrieves a UserAccount
-    public static class CheckUserTask extends AsyncTask<String, Void, UserAccount> {
-        @Override
-        protected UserAccount doInBackground(String... userLogin) {
-            verifySettings();
-
-            UserAccount foundUser = new UserAccount();
-            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + userLogin[0] + "\" }}}";
-
-            Search search = new Search.Builder(search_string)
-                    .addIndex("cmput301f16t17")
-                    .addType("user")
-                    .build();
-            try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    foundUser = result.getSourceAsObject(UserAccount.class);
-                } else {
-                    Log.i("Error", "The search query failed to find any users that matched.");
-                }
-                return foundUser;
-            } catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                return null;
-            }
-        }
-    }
     // Taken from https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
     // Accessed November 2, 2016
     // Author: sromansky

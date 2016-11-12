@@ -44,8 +44,7 @@ public class LoginActivity extends MainMenuActivity {
                     retrieveUserTask.execute(userLogin.getText().toString());
 
                     UserAccount foundUser = retrieveUserTask.get();
-                    if ((userLogin.getText().toString()).equals(foundUser.getUniqueUserName())){
-                        foundUser.setLoginStatus(Boolean.TRUE);
+                    if ((userLogin.getText().toString()).equals(foundUser.getUniqueUserName())) {
                         if (foundUser.getLoginStatus()) {
                             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                             startActivity(intent);
