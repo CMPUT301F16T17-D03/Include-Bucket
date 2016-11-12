@@ -131,15 +131,17 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     //This is caused by hitting return or by clicking off the edit text
                     //TODO Should probably give suggestions as to exact address.
                     //assume is in format of lat,long
+                    try {
+                        Double latdub = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
+                        Double lngdub = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
+                        GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
+                        dragger.onMarkerDragStart(startMarker);
+                        startMarker.setPosition(tempGeo);
+                        dragger.onMarkerDragEnd(startMarker);
+                    }
+                    catch(Exception e){
 
-                    Double latdub =(Double.parseDouble(startEditText.getText().toString().split(",")[0]));
-                    Double lngdub =(Double.parseDouble(startEditText.getText().toString().split(",")[1]));
-                    GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
-                    dragger.onMarkerDragStart(startMarker);
-                    startMarker.setPosition(tempGeo);
-                    dragger.onMarkerDragEnd(startMarker);
-
-
+                    }
                 }
             }
         });
@@ -157,14 +159,17 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     //This is caused by hitting return or by clicking off the edit text
                     //TODO Should probably give suggestions as to exact address.
                     //assume is in format of lat,long
+                    try {
+                        Double latdub = (Double.parseDouble(endEditText.getText().toString().split(",")[0]));
+                        Double lngdub = (Double.parseDouble(endEditText.getText().toString().split(",")[1]));
+                        GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
+                        dragger.onMarkerDragStart(endMarker);
+                        endMarker.setPosition(tempGeo);
+                        dragger.onMarkerDragEnd(endMarker);
+                    }
+                    catch(Exception e){
 
-                    Double latdub =(Double.parseDouble(startEditText.getText().toString().split(",")[0]));
-                    Double lngdub =(Double.parseDouble(startEditText.getText().toString().split(",")[1]));
-                    GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
-                    dragger.onMarkerDragStart(endMarker);
-                    endMarker.setPosition(tempGeo);
-                    dragger.onMarkerDragEnd(endMarker);
-
+                    }
 
                 }
             }
