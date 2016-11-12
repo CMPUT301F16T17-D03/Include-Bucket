@@ -39,5 +39,6 @@ public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Polyline
     protected void onPostExecute(Polyline result) {
         super.onPostExecute(result);
         map.getOverlays().add(result);
+        map.invalidate();
     }
 }
