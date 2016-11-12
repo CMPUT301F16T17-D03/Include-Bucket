@@ -28,15 +28,6 @@ public class RegisterActivity extends MainMenuActivity {
         userEmail = (EditText) findViewById(R.id.emailTextField);
         userPhone = (EditText) findViewById(R.id.phoneTextField);
 
-        Button backButton = (Button) findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_OK);
-
-                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                startActivity(intent);
-            }
-        });
 
         /**
          * When the user presses the Accept button, they are directed back into the login activity

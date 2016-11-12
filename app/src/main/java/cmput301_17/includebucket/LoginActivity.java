@@ -11,7 +11,7 @@ import android.widget.EditText;
 /**
  * Created by michelletagarino on 16-10-29.
  */
-public class LoginActivity extends MainMenuActivity {
+public class    LoginActivity extends MainMenuActivity {
 
     // EditText userLogin will be used to find whether the username is in the elasticsearch database...
     // private EditText userLogin = (EditText) findViewById(R.id.loginTextField);

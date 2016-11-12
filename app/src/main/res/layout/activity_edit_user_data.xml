@@ -9,39 +9,43 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cmput301_17.includebucket.ViewUserDataActivity">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Name"
-        android:id="@+id/textView"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText8"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:singleLine="true"
+        android:hint="@string/editUserName" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Email"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/editText10"
+        android:layout_below="@+id/editText8"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText7"
+        android:singleLine="true"
+        android:hint="@string/editUserEmail" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Phone"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true" />
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/editText7"
+        android:layout_below="@+id/editText10"
+        android:layout_alignParentStart="true"
+        android:singleLine="true"
+        android:hint="Phone" />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="YOU CAN EDIT THIS LATER"
-        android:id="@+id/textView14"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:text="Save"
+        android:id="@+id/button7"
+        android:layout_below="@+id/editText7"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

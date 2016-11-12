@@ -30,4 +30,10 @@
 
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_edit_user_data">EditUserDataActivity</string>
+
+    <!-- Strings related to edit -->
+    <string name="editUserName">Name</string>
+    <string name="editUserEmail">Email</string>
+    <string name="editUserPhone">Phone</string>
+    <string name="editUserSaveButton">Save</string>
 </resources>
