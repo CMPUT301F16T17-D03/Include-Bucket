@@ -40,14 +40,6 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/back_button"
-        android:id="@+id/backButton" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/accept_button"
-        android:id="@+id/acceptButton"
-        android:layout_gravity="right" />
+        android:id="@+id/acceptButton" />
 </LinearLayout>
