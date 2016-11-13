@@ -19,17 +19,33 @@ public class EditUserDataActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_data);
 
-        userName  = (EditText) findViewById(R.id.nameTextField);
-        userEmail = (EditText) findViewById(R.id.emailTextField);
-        userPhone = (EditText) findViewById(R.id.phoneTextField);
+        userName  = (EditText) findViewById(R.id.editName);
+        userEmail = (EditText) findViewById(R.id.editEmail);
+        userPhone = (EditText) findViewById(R.id.editPhone);
 
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-
+                editUser();
+                finish();
             }
         });
+    }
+    public void editUser() {
+
+        user = (UserAccount) getIntent().getSerializableExtra("User");
+
+        String login = user.getUniqueUserName();
+        String name  = userName.getText().toString();
+        String email = userEmail.getText().toString();
+        String phone = userPhone.getText().toString();
+
+        UserAccount user = new UserAccount(login, name, email, phone);
+
+        ElasticsearchUserController.CreateUser editUser;
+        editUser = new ElasticsearchUserController.CreateUser();
+        editUser.execute(user);
     }
 }

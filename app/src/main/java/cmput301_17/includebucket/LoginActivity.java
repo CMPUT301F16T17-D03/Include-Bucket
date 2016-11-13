@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by michelletagarino on 16-10-29.
@@ -57,7 +58,7 @@ public class    LoginActivity extends MainMenuActivity {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Failed to get the user out of the async object.");
+                    Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
