@@ -260,7 +260,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
         //DO NOTHING FOR NOW:
         if(dragger.mTrace.get(0).equals(dragger.mTrace.get(1))){
-            dragger.mTrace.remove(0);
+            dragger.onMarkerDragStart(endMarker);
             endMarker.setPosition(p);
             dragger.onMarkerDragEnd(endMarker);
             return true;
@@ -312,7 +312,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         @Override public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
-            map.getOverlays().remove(3);
+
+
             AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(mTrace);
             if (marker.equals(startMarker)){
                 //update start location text
@@ -334,6 +335,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             else{
                 mTrace.remove(1);
             }
+            try{map.getOverlays().remove(3); map.invalidate();} catch(Exception e){}
+
         }
     }
 }
