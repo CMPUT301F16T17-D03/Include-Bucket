@@ -46,7 +46,7 @@ public class UserAccount implements Serializable {
 
     @JestId
     private String uid, uniqueUserName, name, email, phoneNumber;
-    private Boolean isLoggedIn;
+    private Boolean isLoggedIn,isRider;
     private ArrayList<Request> riderRequests;
     private ArrayList<Request> driverRequests;
 
@@ -196,4 +196,17 @@ public class UserAccount implements Serializable {
      */
     public void setLoginStatus(Boolean status) { this.isLoggedIn = status; }
 
+    /**
+     * This returns whether user is a rider
+     */
+    public boolean isRider() {
+        return this.isRider;
+    }
+
+    /**
+     * This sets the user type (Rider or Driver)
+     */
+    public void setRider(Boolean userType) {
+        this.isRider = userType;
+    }
 }

@@ -11,12 +11,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -25,13 +23,11 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by orlick on 11/7/16.
@@ -193,7 +189,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 setResult(RESULT_OK);
 
                 String startLocation = startEditText.getText().toString();
-                String endLocation = endEditText.getText().toString();
+
+                String endLocation   = endEditText.getText().toString();
 
                 String riderStory = storyEditText.getText().toString();
 

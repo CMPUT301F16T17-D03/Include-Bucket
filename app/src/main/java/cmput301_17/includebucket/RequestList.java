@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by michelletagarino on 16-11-12.
@@ -34,6 +35,12 @@ public class RequestList extends ArrayList {
     public void deleteRequest(Request request) {
         requestList.remove(request);
         notifyListeners();
+    }
+
+    public void addAll(List<Request> requests) {
+        for(Request r : requests) {
+            this.add(r);
+        }
     }
 
     public int size() {

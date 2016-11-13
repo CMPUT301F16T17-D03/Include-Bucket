@@ -21,7 +21,7 @@ public class Request {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
-    private String riderStory;
+    private String riderStory = null;
     private float fare;
     private String description;
     private ArrayList<String> keywords;
@@ -86,6 +86,14 @@ public class Request {
         this.endLocation = endLocation;
     }
 
+    public String getRiderStory() {
+        return riderStory;
+    }
+
+    public void setRiderStory(String riderStory) {
+        this.riderStory = riderStory;
+    }
+
     public UserAccount getRider() {
         return rider;
     }
@@ -93,6 +101,8 @@ public class Request {
     public void setRider(UserAccount rider) {
         this.rider = rider;
     }
+
+    public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
     public float getFare() {
         return fare;
@@ -148,5 +158,15 @@ public class Request {
 
     public void setRiderAccepted(boolean riderAccepted) {
         this.riderAccepted = riderAccepted;
+    }
+
+    @Override
+    public String toString() {
+        String login = getRiderUserName().toString();
+        String story = "";
+        String loc1  = getStartLocation().toString();
+        String loc2  = getEndLocation().toString();
+
+        return login + "\n\n" + "Start Location: "  + loc1 + "\n\nEnd Location: " + loc2 + "\n\n" + story ;
     }
 }

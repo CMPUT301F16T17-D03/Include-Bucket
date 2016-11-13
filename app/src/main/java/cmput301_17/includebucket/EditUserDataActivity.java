@@ -1,12 +1,9 @@
 package cmput301_17.includebucket;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * User data controller?
@@ -61,8 +58,8 @@ public class EditUserDataActivity extends MainMenuActivity {
 
         UserAccount user = new UserAccount(login, name, email, phone);
 
-        ElasticsearchUserController.CreateUser editUser;
-        editUser = new ElasticsearchUserController.CreateUser();
+        ElasticSearchUserController.CreateUser editUser;
+        editUser = new ElasticSearchUserController.CreateUser();
         editUser.execute(user);
     }
 }
