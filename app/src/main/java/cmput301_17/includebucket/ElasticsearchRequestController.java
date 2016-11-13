@@ -22,7 +22,7 @@ import io.searchbox.core.SearchResult;
  *
  * This class controls how the Requests in Elasticsearch are added, retrieved, and deleted.
  */
-public class ElasticsearchRequestController {
+public class    ElasticsearchRequestController {
 
     private static JestDroidClient client;
 
