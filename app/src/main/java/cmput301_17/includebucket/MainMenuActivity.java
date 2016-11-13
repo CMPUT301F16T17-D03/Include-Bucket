@@ -45,8 +45,6 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-
-
         Button riderRequestsButton = (Button) findViewById(R.id.MyRequests);
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
