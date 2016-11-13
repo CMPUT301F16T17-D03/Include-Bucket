@@ -325,7 +325,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 endEditText.setText(endMarker.getPosition().toString());
             }
             // update suggested fare
-            String price = ""+startMarker.getPosition().distanceTo(endMarker.getPosition());
+            String price = "$"+((startMarker.getPosition().distanceTo(endMarker.getPosition())))/100.00;
             priceEditText.setText(price);
 
         }
