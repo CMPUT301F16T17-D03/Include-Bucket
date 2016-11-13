@@ -22,7 +22,7 @@ import io.searchbox.core.Update;
  *
  * This class controls how UserAccounts are added and retrieved in Elasticsearch.
  */
-public class ElasticsearchUserController {
+public class ElasticSearchUserController {
 
     private static JestDroidClient client;
 
