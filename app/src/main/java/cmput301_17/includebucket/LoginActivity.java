@@ -13,8 +13,8 @@ import android.widget.Toast;
  */
 public class    LoginActivity extends MainMenuActivity {
 
-    // EditText userLogin will be used to find whether the username is in the elasticsearch database...
-    // private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
+    private Button loginButton;
+    private Button registerButton;
     private EditText userLogin;
 
     @Override
@@ -26,7 +26,7 @@ public class    LoginActivity extends MainMenuActivity {
          *  create condition where, if the username is not in the database, automatically
          *  switch to RegisterActivity, otherwise login
          */
-        Button loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
@@ -63,7 +63,7 @@ public class    LoginActivity extends MainMenuActivity {
             }
         });
 
-        Button registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);

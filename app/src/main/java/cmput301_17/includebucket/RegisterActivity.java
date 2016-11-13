@@ -43,11 +43,11 @@ public class RegisterActivity extends MainMenuActivity {
 
                 /**
                  * Check first to see if the username is unique.
-                 * Create user if not already in database.
+                 * Create user if Elasticsearch failed to find the username.
                  */
                 ElasticsearchUserController.RetrieveUser retrieveUser;
                 retrieveUser = new ElasticsearchUserController.RetrieveUser();
-                retrieveUser.execute(userLogin.getText().toString());
+                retrieveUser.execute(textLogin);
 
                 try {
                     UserAccount foundUser = retrieveUser.get();
@@ -64,6 +64,7 @@ public class RegisterActivity extends MainMenuActivity {
                         userLogin.setTextColor(Color.parseColor("#E40000"));
                     }
                 } catch (Exception e) {
+
                     createUser();
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");

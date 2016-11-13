@@ -12,12 +12,17 @@ import android.widget.EditText;
  */
 public class EditUserDataActivity extends MainMenuActivity {
 
-    protected EditText userLogin, userName, userEmail, userPhone;
+
+    protected EditText userName, userEmail, userPhone;
+
+    UserAccount user = new UserAccount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_data);
+
+        user = (UserAccount) getIntent().getSerializableExtra("User");
 
         userName  = (EditText) findViewById(R.id.editName);
         userEmail = (EditText) findViewById(R.id.editEmail);
@@ -34,8 +39,6 @@ public class EditUserDataActivity extends MainMenuActivity {
         });
     }
     public void editUser() {
-
-        user = (UserAccount) getIntent().getSerializableExtra("User");
 
         String login = user.getUniqueUserName();
         String name  = userName.getText().toString();
