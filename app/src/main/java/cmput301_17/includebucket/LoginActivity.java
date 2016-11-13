@@ -6,14 +6,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by michelletagarino on 16-10-29.
  */
-public class LoginActivity extends MainMenuActivity {
+public class    LoginActivity extends MainMenuActivity {
 
-    // EditText userLogin will be used to find whether the username is in the elasticsearch database...
-    // private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
+    private Button loginButton;
+    private Button registerButton;
     private EditText userLogin;
 
     @Override
@@ -25,7 +26,7 @@ public class LoginActivity extends MainMenuActivity {
          *  create condition where, if the username is not in the database, automatically
          *  switch to RegisterActivity, otherwise login
          */
-        Button loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
@@ -57,12 +58,12 @@ public class LoginActivity extends MainMenuActivity {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Failed to get the user out of the async object.");
+                    Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        Button registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);

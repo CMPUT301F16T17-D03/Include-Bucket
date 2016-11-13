@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by michelletagarino on 16-10-29.
@@ -25,15 +26,6 @@ public class RegisterActivity extends MainMenuActivity {
         userEmail = (EditText) findViewById(R.id.emailTextField);
         userPhone = (EditText) findViewById(R.id.phoneTextField);
 
-        Button backButton = (Button) findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_OK);
-
-                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                startActivity(intent);
-            }
-        });
 
         /**
          * When the user presses the Accept button, they are directed back into the login activity
@@ -51,11 +43,11 @@ public class RegisterActivity extends MainMenuActivity {
 
                 /**
                  * Check first to see if the username is unique.
-                 * Create user if not already in database.
+                 * Create user if Elasticsearch failed to find the username.
                  */
                 ElasticsearchUserController.RetrieveUser retrieveUser;
                 retrieveUser = new ElasticsearchUserController.RetrieveUser();
-                retrieveUser.execute(userLogin.getText().toString());
+                retrieveUser.execute(textLogin);
 
                 try {
                     UserAccount foundUser = retrieveUser.get();
@@ -68,10 +60,11 @@ public class RegisterActivity extends MainMenuActivity {
                          * Accessed on November 11, 2016
                          * Author: user370305
                          */
-                        Log.i("Uh oh","The Login: " + textLogin + " is already taken.");
+                        Toast.makeText(RegisterActivity.this, "The Login " + textLogin + " is already taken.", Toast.LENGTH_SHORT).show();
                         userLogin.setTextColor(Color.parseColor("#E40000"));
                     }
                 } catch (Exception e) {
+
                     createUser();
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");

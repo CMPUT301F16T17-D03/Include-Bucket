@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by orlick on 11/7/16.
@@ -38,6 +41,7 @@ import java.util.ArrayList;
  * and end locations). These locations are values for instantiating a new Request.
  */
 public class NewRiderRequestActivity extends Activity implements MapEventsReceiver, LocationListener {
+
     EditText startEditText;
     EditText endEditText;
     EditText priceEditText;
@@ -52,12 +56,21 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     LocationListener locationListener;
     GeoPoint currentPoint;
 
+    UserAccount user = new UserAccount();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
+
+        user = (UserAccount) getIntent().getSerializableExtra("User");
+
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         //Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
+
+        startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
+        endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
+        priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -112,9 +125,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         }
 
         //OpenStreetMapTileProviderConstants.setCachePath(new File("/sdcard/osmdroid2/").getAbsolutePath());
-        startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
-        endEditText= (EditText) findViewById(R.id.NRRAEndEditText);
-        priceEditText= (EditText) findViewById(R.id.NRRAPriceEditText);
+
         startEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
@@ -137,7 +148,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                         dragger.onMarkerDragEnd(startMarker);
                     }
                     catch(Exception e){
-
+                        Log.i("Error","Failed to get a valid geolocation.");
                     }
                 }
             }
@@ -157,18 +168,42 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     //TODO Should probably give suggestions as to exact address.
                     //assume is in format of lat,long
                     try {
-                        Double latdub = (Double.parseDouble(endEditText.getText().toString().split(",")[0]));
-                        Double lngdub = (Double.parseDouble(endEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
+                        Double startLat = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
+                        Double startLon = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
+                        GeoPoint tempGeoStart = new GeoPoint(startLat, startLon);
+
+                        Double endLat = (Double.parseDouble(endEditText.getText().toString().split(",")[0]));
+                        Double endLon = (Double.parseDouble(endEditText.getText().toString().split(",")[1]));
+                        GeoPoint tempGeoEnd = new GeoPoint(endLat, endLon);
+
+                        dragger.onMarkerDragStart(startMarker);
+                        startMarker.setPosition(tempGeoStart);
+                        dragger.onMarkerDragEnd(startMarker);
+
                         dragger.onMarkerDragStart(endMarker);
-                        endMarker.setPosition(tempGeo);
+                        endMarker.setPosition(tempGeoEnd);
                         dragger.onMarkerDragEnd(endMarker);
                     }
                     catch(Exception e){
-
+                        Log.i("Error","Failed to get a valid geolocation.");
                     }
-
                 }
+            }
+        });
+
+        Button saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+
+                String startLocation = startEditText.getText().toString();
+                String endLocation   = endEditText.getText().toString();
+
+                Request request = new Request(startLocation, endLocation, user);
+
+                ElasticsearchRequestController.CreateRequest createRequest;
+                createRequest = new ElasticsearchRequestController.CreateRequest();
+                createRequest.execute(request);
             }
         });
 
@@ -200,8 +235,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         map.getOverlays().add(startMarker);
         map.getOverlays().add(endMarker);
         dragger = new OnMarkerDragDrawer();
+
         startMarker.setIcon(getResources().getDrawable(R.mipmap.marker_green));
         endMarker.setIcon(getResources().getDrawable(R.mipmap.marker_red));
+
         startMarker.setTitle("Start point");
         startMarker.setDraggable(true);
         startMarker.setOnMarkerDragListener(dragger);
