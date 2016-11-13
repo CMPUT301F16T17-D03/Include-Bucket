@@ -42,8 +42,6 @@ public class MainMenuActivity extends Activity {
 
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
