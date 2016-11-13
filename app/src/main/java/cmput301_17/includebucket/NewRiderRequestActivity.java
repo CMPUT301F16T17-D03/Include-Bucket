@@ -200,10 +200,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String endLocation   = endEditText.getText().toString();
 
                 Request request = new Request(startLocation, endLocation, user);
-
-                ElasticsearchRequestController.CreateRequest createRequest;
-                createRequest = new ElasticsearchRequestController.CreateRequest();
-                createRequest.execute(request);
+                try {
+                    ElasticsearchRequestController.CreateRequest createRequest;
+                    createRequest = new ElasticsearchRequestController.CreateRequest();
+                    createRequest.execute(request);
+                } catch (Exception e) {
+                    //save in file if not working
+                    //doesn't quite work for now
+                    OfflineSave s = new OfflineSave();
+                    s.saveRequestInFile(NewRiderRequestActivity.this, request, "newRequestFile.sav");
+                }
             }
         });
 
