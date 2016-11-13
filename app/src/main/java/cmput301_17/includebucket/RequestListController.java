@@ -9,9 +9,9 @@ public class RequestListController {
 
     private static RequestList requestList = new RequestList();
 
-    static public RequestList getRequestList() {
+    static public RequestList getRequestList(String userLogin) {
         //if (requestList == null) {
-            requestList = getRequestsFromElasticSearch();
+            requestList = getRequestsFromElasticSearch(userLogin);
         //}
         return requestList;
     }
@@ -20,11 +20,11 @@ public class RequestListController {
      * This returns a list of requests from ElasticSearch.
      * @return requests
      */
-    public static RequestList getRequestsFromElasticSearch() {
+    public static RequestList getRequestsFromElasticSearch(String userLogin) {
 
         ElasticsearchRequestController.GetRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetRequests();
-        retrieveRequests.execute("");
+        retrieveRequests.execute(userLogin);
 
         RequestList requests = new RequestList();
 
@@ -50,7 +50,7 @@ public class RequestListController {
      * This adds a request to the list.
      * @param request
      */
-    public void addRequest(Request request) {
-        getRequestList().addRequest(request);
+    public void addRequest(Request request, String userLogin) {
+        getRequestList(userLogin).addRequest(request);
     }
 }

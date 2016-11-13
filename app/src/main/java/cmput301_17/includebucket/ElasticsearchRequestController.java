@@ -60,12 +60,13 @@ public class ElasticsearchRequestController {
      */
     public static class GetRequests extends AsyncTask<String, Void, RequestList> {
         @Override
-        protected RequestList doInBackground(String... search_parameters) {
+        protected RequestList doInBackground(String... userLogin) {
             verifySettings();
 
             RequestList requests = new RequestList();
 
-            String search_string = "{\"from\": 0, \"size\": 10000}";
+            //String search_string = "{\"from\": 0, \"size\": 10000}";
+            String search_string = "{\"query\": { \"term\": {\"uniqueUserName\": \"" + userLogin[0] + "\" }}}}";
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")

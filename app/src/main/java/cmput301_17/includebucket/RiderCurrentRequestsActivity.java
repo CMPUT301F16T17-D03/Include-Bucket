@@ -35,9 +35,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_requests);
 
+        user = (UserAccount) getIntent().getSerializableExtra("User");
+        final String userLogin = user.getUniqueUserName();
+
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        requests = RequestListController.getRequestList();
+        requests = RequestListController.getRequestList(userLogin);
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
@@ -47,11 +50,11 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         /**
          * Updates the ArrayAdapter when a request is added.
          */
-        RequestListController.getRequestList().addListener(new Listener() {
+        RequestListController.getRequestList(userLogin).addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList().getRequests();
+                Collection<Request> requests = RequestListController.getRequestList(userLogin).getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
