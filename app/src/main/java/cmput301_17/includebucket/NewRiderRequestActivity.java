@@ -83,7 +83,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
+                // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
 
@@ -212,7 +212,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
-
+        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+        startEditText.setText(currentPoint.toString());
+        endEditText.setText(currentPoint.toString());
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -220,8 +223,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        startPoint = new GeoPoint(53.5444, -113.4909);
-        endPoint = new GeoPoint(53.5444, -113.4909);
+        startPoint = currentPoint;
+        endPoint = currentPoint;
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
         startMarker = new Marker(map);
