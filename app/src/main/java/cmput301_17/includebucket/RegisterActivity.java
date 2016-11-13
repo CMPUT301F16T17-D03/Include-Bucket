@@ -45,8 +45,8 @@ public class RegisterActivity extends MainMenuActivity {
                  * Check first to see if the username is unique.
                  * Create user if Elasticsearch failed to find the username.
                  */
-                ElasticSearchUserController.RetrieveUser retrieveUser;
-                retrieveUser = new ElasticSearchUserController.RetrieveUser();
+                ElasticsearchUserController.RetrieveUser retrieveUser;
+                retrieveUser = new ElasticsearchUserController.RetrieveUser();
                 retrieveUser.execute(textLogin);
 
                 try {
@@ -97,8 +97,8 @@ public class RegisterActivity extends MainMenuActivity {
         /**
          * If username is unique, create a new user.
          */
-        ElasticSearchUserController.CreateUser createUser;
-        createUser = new ElasticSearchUserController.CreateUser();
+        ElasticsearchUserController.CreateUser createUser;
+        createUser = new ElasticsearchUserController.CreateUser();
         createUser.execute(user);
     }
 }

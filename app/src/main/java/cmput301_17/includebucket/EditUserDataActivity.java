@@ -58,8 +58,8 @@ public class EditUserDataActivity extends MainMenuActivity {
 
         UserAccount user = new UserAccount(login, name, email, phone);
 
-        ElasticSearchUserController.CreateUser editUser;
-        editUser = new ElasticSearchUserController.CreateUser();
+        ElasticsearchUserController.CreateUser editUser;
+        editUser = new ElasticsearchUserController.CreateUser();
         editUser.execute(user);
     }
 }

@@ -101,8 +101,8 @@ public class    LoginActivity extends MainMenuActivity {
                  *     are compared; if equal, the activity will switch to the MainActivity (in other
                  *     words, the user will be logged in).
                  */
-                ElasticSearchUserController.RetrieveUser findUser;
-                findUser = new ElasticSearchUserController.RetrieveUser();
+                ElasticsearchUserController.RetrieveUser findUser;
+                findUser = new ElasticsearchUserController.RetrieveUser();
                 findUser.execute(userLogin.getText().toString());
 
                 try {
@@ -159,8 +159,8 @@ public class    LoginActivity extends MainMenuActivity {
                      *     are compared; if equal, the activity will switch to the MainActivity (in other
                      *     words, the user will be logged in).
                      */
-                    ElasticSearchUserController.RetrieveUser findUser;
-                    findUser = new ElasticSearchUserController.RetrieveUser();
+                    ElasticsearchUserController.RetrieveUser findUser;
+                    findUser = new ElasticsearchUserController.RetrieveUser();
                     findUser.execute(userLogin.getText().toString());
 
                     try {

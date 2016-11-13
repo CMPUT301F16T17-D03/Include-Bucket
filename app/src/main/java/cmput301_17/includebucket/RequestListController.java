@@ -22,8 +22,8 @@ public class RequestListController {
      */
     public static RequestList getRequestsFromElasticSearch() {
 
-        ElasticSearchRequestController.GetRequests retrieveRequests;
-        retrieveRequests = new ElasticSearchRequestController.GetRequests();
+        ElasticsearchRequestController.GetRequests retrieveRequests;
+        retrieveRequests = new ElasticsearchRequestController.GetRequests();
         retrieveRequests.execute("");
 
         RequestList requests = new RequestList();
