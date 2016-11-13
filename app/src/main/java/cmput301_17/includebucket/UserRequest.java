@@ -17,7 +17,7 @@ public class UserRequest {
  * rider
  * fare/fare calc 0-1
  * drivers
- * bool driveraccpeted
+ * bool driveraccepted
  *
  */
 
@@ -30,6 +30,8 @@ public class UserRequest {
     private ArrayList<String> drivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
+    private boolean isCompleted;
+    private boolean isPaid;
 
     public String getStartLocation() {
         return startLocation;
@@ -109,5 +111,21 @@ public class UserRequest {
 
     public void setRiderAccepted(boolean riderAccepted) {
         this.riderAccepted = riderAccepted;
+    }
+
+    public boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public boolean getIsPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(boolean isPaid) {
+        this.isPaid = isPaid;
     }
 }
