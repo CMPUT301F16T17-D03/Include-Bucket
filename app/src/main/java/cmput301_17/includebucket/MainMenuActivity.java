@@ -41,12 +41,9 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
 
                 setResult(RESULT_OK);
-
                 finish();
             }
         });
-
-
 
         Button riderRequestsButton = (Button) findViewById(R.id.MyRequests);
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {

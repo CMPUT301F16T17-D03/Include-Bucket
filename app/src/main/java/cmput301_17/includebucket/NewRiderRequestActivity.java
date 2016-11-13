@@ -45,6 +45,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     EditText startEditText;
     EditText endEditText;
     EditText priceEditText;
+    EditText storyEditText;
+
     Marker startMarker;
     Marker endMarker;
     GeoPoint startPoint;
@@ -71,6 +73,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
         endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
         priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
+        storyEditText = (EditText) findViewById(R.id.riderStoryEditText);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -143,6 +146,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                         Double latdub = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
                         Double lngdub = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
                         GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
+
                         dragger.onMarkerDragStart(startMarker);
                         startMarker.setPosition(tempGeo);
                         dragger.onMarkerDragEnd(startMarker);
@@ -168,20 +172,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     //TODO Should probably give suggestions as to exact address.
                     //assume is in format of lat,long
                     try {
-                        Double startLat = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
-                        Double startLon = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeoStart = new GeoPoint(startLat, startLon);
-
                         Double endLat = (Double.parseDouble(endEditText.getText().toString().split(",")[0]));
                         Double endLon = (Double.parseDouble(endEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeoEnd = new GeoPoint(endLat, endLon);
-
-                        dragger.onMarkerDragStart(startMarker);
-                        startMarker.setPosition(tempGeoStart);
-                        dragger.onMarkerDragEnd(startMarker);
+                        GeoPoint tempGeo = new GeoPoint(endLat, endLon);
 
                         dragger.onMarkerDragStart(endMarker);
-                        endMarker.setPosition(tempGeoEnd);
+                        endMarker.setPosition(tempGeo);
                         dragger.onMarkerDragEnd(endMarker);
                     }
                     catch(Exception e){
@@ -199,13 +195,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
 
-                Request request = new Request(startLocation, endLocation, user);
+                String riderStory = storyEditText.getText().toString();
+
+                Request request = new Request(startLocation, endLocation, user, riderStory);
 
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
             }
         });
+
 
         /**
          * Important! set your user agent to prevent getting banned from the osm servers

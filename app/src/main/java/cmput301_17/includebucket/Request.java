@@ -21,6 +21,7 @@ public class Request {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
+    private String riderStory;
     private float fare;
     private String description;
     private ArrayList<String> keywords;
@@ -38,12 +39,14 @@ public class Request {
      * @param loc1  The start location
      * @param loc2  The end location
      * @param rider The rider making a request
+     * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider) {
+    public Request(String loc1, String loc2, UserAccount rider, String story) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
+        this.riderStory = story;
     }
 
     /**
@@ -51,13 +54,15 @@ public class Request {
      * @param loc1  The start location
      * @param loc2  The end location
      * @param rider The rider making a request
+     * @param story The rider's story (where is the rider going?)
      * @param keys  The keyword
      */
-    public Request(String loc1, String loc2, UserAccount rider, ArrayList<String> keys) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<String> keys) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
+        this.riderStory = story;
         this.keywords = keys;
     }
 
