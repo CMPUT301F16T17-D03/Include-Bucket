@@ -22,7 +22,7 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu);
 
-        user = (UserAccount)getIntent().getSerializableExtra("User");
+        user = (UserAccount) getIntent().getSerializableExtra("User");
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +44,7 @@ public class MainMenuActivity extends Activity {
 
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -89,6 +90,7 @@ public class MainMenuActivity extends Activity {
                 setResult(RESULT_OK);
 
                 Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
