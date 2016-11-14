@@ -11,12 +11,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -25,13 +23,11 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by orlick on 11/7/16.
@@ -83,7 +79,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
+                // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
 
@@ -146,6 +142,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                         Double latdub = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
                         Double lngdub = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
                         GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
+
                         dragger.onMarkerDragStart(startMarker);
                         startMarker.setPosition(tempGeo);
                         dragger.onMarkerDragEnd(startMarker);
@@ -159,34 +156,28 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         endEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
+            public void onFocusChange(View v, boolean hasFocus){
+                if(hasFocus){
                     //User is typing, do nothing
                     //Toast toast = Toast.makeText(getApplicationContext(), "Has Focus", Toast.LENGTH_SHORT);
                     //toast.show();
-                } else {
+                }
+                else{
                     //User has stopped typing, update the marker and the map
                     //This is caused by hitting return or by clicking off the edit text
                     //TODO Should probably give suggestions as to exact address.
                     //assume is in format of lat,long
                     try {
-                        Double startLat = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
-                        Double startLon = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeoStart = new GeoPoint(startLat, startLon);
-
                         Double endLat = (Double.parseDouble(endEditText.getText().toString().split(",")[0]));
                         Double endLon = (Double.parseDouble(endEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeoEnd = new GeoPoint(endLat, endLon);
-
-                        dragger.onMarkerDragStart(startMarker);
-                        startMarker.setPosition(tempGeoStart);
-                        dragger.onMarkerDragEnd(startMarker);
+                        GeoPoint tempGeo = new GeoPoint(endLat, endLon);
 
                         dragger.onMarkerDragStart(endMarker);
-                        endMarker.setPosition(tempGeoEnd);
+                        endMarker.setPosition(tempGeo);
                         dragger.onMarkerDragEnd(endMarker);
-                    } catch (Exception e) {
-                        Log.i("Error", "Failed to get a valid geolocation.");
+                    }
+                    catch(Exception e){
+                        Log.i("Error","Failed to get a valid geolocation.");
                     }
                 }
             }
@@ -199,7 +190,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 String startLocation = startEditText.getText().toString();
 
-                String endLocation = endEditText.getText().toString();
+                String endLocation   = endEditText.getText().toString();
 
                 String riderStory = storyEditText.getText().toString();
 
@@ -210,6 +201,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 createRequest.execute(request);
             }
         });
+
+
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
@@ -217,7 +210,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
-
+        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+        startEditText.setText(currentPoint.toString());
+        endEditText.setText(currentPoint.toString());
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -225,8 +221,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        startPoint = new GeoPoint(53.5444, -113.4909);
-        endPoint = new GeoPoint(53.5444, -113.4909);
+        startPoint = currentPoint;
+        endPoint = currentPoint;
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
         startMarker = new Marker(map);
@@ -262,7 +258,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
         //DO NOTHING FOR NOW:
         if(dragger.mTrace.get(0).equals(dragger.mTrace.get(1))){
-            dragger.mTrace.remove(0);
+            dragger.onMarkerDragStart(endMarker);
             endMarker.setPosition(p);
             dragger.onMarkerDragEnd(endMarker);
             return true;
@@ -314,7 +310,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         @Override public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
-            map.getOverlays().remove(3);
+
+
             AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(mTrace);
             if (marker.equals(startMarker)){
                 //update start location text
@@ -324,7 +321,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 endEditText.setText(endMarker.getPosition().toString());
             }
             // update suggested fare
-            String price = ""+startMarker.getPosition().distanceTo(endMarker.getPosition());
+            String price = "$"+((startMarker.getPosition().distanceTo(endMarker.getPosition())))/100.00;
             priceEditText.setText(price);
 
         }
@@ -336,6 +333,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             else{
                 mTrace.remove(1);
             }
+            try{map.getOverlays().remove(3); map.invalidate();} catch(Exception e){}
+
         }
     }
 }
