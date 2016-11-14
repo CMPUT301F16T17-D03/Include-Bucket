@@ -11,7 +11,6 @@ import android.widget.TextView;
  */
 public class RiderSingleRequestActivity extends MainMenuActivity {
 
-    private ScrollView requestScrollView;
     private TextView requestTextView;
 
     @Override
@@ -23,7 +22,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity {
 
         requestTextView = (TextView) findViewById(R.id.requestTextView);
 
-        Float price    = request.getFare();
+        String price    = request.getFare();
         String startLoc = request.getStartLocation();
         String endLoc   = request.getEndLocation();
         String story    = request.getRiderStory();

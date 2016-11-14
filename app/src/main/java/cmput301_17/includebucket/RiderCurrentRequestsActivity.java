@@ -33,7 +33,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private Collection<Request> requests;
     private String userLogin;
 
-    final String adbMessage = "Are you sure you want to delete the request?";
+    final String adbMessage = "Click More button for details.";
 
     /**
      * This deals with viewing the current requests and

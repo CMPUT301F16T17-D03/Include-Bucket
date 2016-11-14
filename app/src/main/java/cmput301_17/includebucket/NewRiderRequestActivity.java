@@ -36,24 +36,25 @@ import java.util.ArrayList;
  */
 public class NewRiderRequestActivity extends Activity implements MapEventsReceiver, LocationListener {
 
-    EditText startEditText;
-    EditText endEditText;
-    EditText priceEditText;
-    EditText storyEditText;
+    private EditText startEditText;
+    private EditText endEditText;
+    private EditText priceEditText;
+    private EditText storyEditText;
 
-    Marker startMarker;
-    Marker endMarker;
-    GeoPoint startPoint;
-    GeoPoint endPoint;
-    MapView map;
-    OnMarkerDragDrawer dragger;
-    RoadManager roadManager;
-    LocationManager locationManager;
-    LocationListener locationListener;
-    GeoPoint currentPoint;
+    private Marker startMarker;
+    private Marker endMarker;
+    private GeoPoint startPoint;
+    private GeoPoint endPoint;
+    private MapView map;
+    private OnMarkerDragDrawer dragger;
+    private RoadManager roadManager;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private GeoPoint currentPoint;
+    private String price;
 
-    UserAccount user = new UserAccount();
 
+    private UserAccount user = new UserAccount();
     /**
      * This method gets permissions, deals with the map and handles button presses.
      *
@@ -207,10 +208,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
-                Float fare = Float.parseFloat(priceEditText.getText().toString());
+                /**
+                 * TODO : For some reason Elasticsearch will not instantiate a request with a fare
+                 * String fare = priceEditText.getText().toString();
+                 */
 
-                Request request = new Request(startLocation, endLocation, user, riderStory, fare);
-
+                Request request = new Request(startLocation, endLocation, user, riderStory);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
@@ -369,8 +372,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             else if (marker.equals(endMarker)){
                 endEditText.setText(endMarker.getPosition().toString());
             }
-            // update suggested fare
-            String price = "$"+((startMarker.getPosition().distanceTo(endMarker.getPosition())))/100.00;
+            /**
+             * update suggested fare
+             */
+            price = "$" + ((startMarker.getPosition().distanceTo(endMarker.getPosition())))/100.00;
             priceEditText.setText(price);
         }
 

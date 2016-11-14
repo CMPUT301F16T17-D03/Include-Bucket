@@ -24,7 +24,7 @@ public class Request implements Serializable {
     private UserAccount rider;
     private UserAccount driver;
     private String riderStory = null;
-    private float fare;
+    private String fare;
     private ArrayList<String> keywords;
     private ArrayList<String> drivers;
     private boolean driverAccepted;
@@ -58,13 +58,12 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider, String story, Float fare) {
+    public Request(String loc1, String loc2, UserAccount rider, String story) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
         this.riderStory = story;
-        this.fare = fare;
     }
 
     /**
@@ -122,11 +121,11 @@ public class Request implements Serializable {
 
     public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
-    public float getFare() {
+    public String getFare() {
         return fare;
     }
 
-    public void setFare(float fare) {
+    public void setFare(String fare) {
         this.fare = fare;
     }
 
@@ -186,14 +185,17 @@ public class Request implements Serializable {
         isPaid = paid;
     }
 
+    public void setUser(UserAccount user){
+        this.rider = user;
+    }
 
     @Override
     public String toString() {
         String login = getRiderUserName().toString();
-        String status = "Open";
+        String status = "Open"; //TODO : this is just the default for now...
         String loc1  = getStartLocation().toString();
         String loc2  = getEndLocation().toString();
 
-        return "Fare: " + getFare() + "\n\n" + "Status: " + status;
+        return getRiderStory() + "\n\n" + "Status: " + status;
     }
 }

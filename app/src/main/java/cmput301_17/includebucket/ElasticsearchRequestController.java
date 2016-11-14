@@ -41,9 +41,8 @@ public class ElasticsearchRequestController {
                         .index("cmput301f16t17")
                         .type("request")
                         .build();
-
                 try {
-                    DocumentResult result = client.execute(index);
+                    client.execute(index);
                 } catch(Exception e){
                     Log.i("Error", "Failed to add request to elasticsearch!");
                     e.printStackTrace();
@@ -52,8 +51,6 @@ public class ElasticsearchRequestController {
             return null;
         }
     }
-
-
 
     /**
      * This method retrieves all the requests in the database.
