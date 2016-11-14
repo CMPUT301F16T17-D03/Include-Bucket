@@ -14,7 +14,7 @@ import java.util.Collection;
 /**
  * Created by michelletagarino on 16-10-20.
  *
- * view for browsing requests
+ * Activity for dealing with browsing requests as a driver.
  *
  */
 public class DriverBrowseRequestsActivity extends MainMenuActivity {
@@ -26,6 +26,11 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     private ArrayAdapter<Request> requestAdapter;
     private Collection<Request> requests;
 
+    /**
+     * Controls the list of requests and handles button clicks.
+     *
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_requests);
