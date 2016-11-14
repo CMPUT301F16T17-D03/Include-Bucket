@@ -8,12 +8,9 @@ import java.util.concurrent.ExecutionException;
 public class RequestListController {
 
     private static RequestList requestList = new RequestList();
-    private static RequestList keyWordList = new RequestList();
 
     static public RequestList getRequestList(String userLogin) {
-        //if (requestList == null) {
-            requestList = getRequestsFromElasticSearch(userLogin);
-        //}
+        requestList = getRequestsFromElasticSearch(userLogin);
         return requestList;
     }
 
@@ -22,9 +19,8 @@ public class RequestListController {
         return requestList;
     }
 
-
     /**
-     * This returns a list of requests from ElasticSearch.
+     * This returns a list of requests from ElasticSearch specified by a keyword.
      * @return requests
      */
     public static RequestList getKeywordRequests(String keyword) {
@@ -44,6 +40,11 @@ public class RequestListController {
         }
         return requests;
     }
+
+    /**
+     * This returns a list of requests from ElasticSearch.
+     * @return requests
+     */
     public static RequestList getRequestsFromElasticSearch(String userLogin) {
 
         ElasticsearchRequestController.GetRequests retrieveRequests;

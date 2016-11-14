@@ -194,8 +194,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
 
-
-
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);

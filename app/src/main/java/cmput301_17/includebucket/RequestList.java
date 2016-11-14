@@ -27,8 +27,8 @@ public class RequestList extends ArrayList {
         }
     }
 
-    public void addRequest(Request newRequest) {
-        requestList.add(newRequest);
+    public void addRequest(Request request) {
+        requestList.add(request);
         notifyListeners();
     }
 
