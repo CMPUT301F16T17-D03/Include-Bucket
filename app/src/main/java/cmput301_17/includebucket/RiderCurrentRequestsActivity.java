@@ -81,5 +81,20 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        requestsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+
+                return false;
+            }
+        });
+    }
 }
 
