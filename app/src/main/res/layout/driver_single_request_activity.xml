@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
-        android:id="@+id/textView7"
+        android:id="@+id/DSRAstart"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:textSize="25dp" />
@@ -17,81 +17,89 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="End"
-        android:id="@+id/textView8"
+        android:id="@+id/DSRAend"
         android:textSize="25dp"
-        android:layout_alignBottom="@+id/NRRAEndEditText"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/DSRAstart" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Price"
-        android:id="@+id/textView11"
+        android:id="@+id/DSRApricetext"
         android:textSize="25dp"
-        android:layout_alignBottom="@+id/textView15"
-        android:layout_toEndOf="@+id/textView15" />
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$0.00"
-        android:id="@+id/NRRAPriceEditText"
-        android:layout_toEndOf="@+id/textView11"
-        android:layout_alignBottom="@+id/textView15" />
+        android:id="@+id/DSRAPriceEditText"
+        android:layout_alignBottom="@+id/DSRAmaptext"
+        android:layout_toRightOf="@+id/DSRApricetext"
+        android:layout_toStartOf="@+id/DSRAAcceptButton" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/NRRAStartEditText"
+        android:id="@+id/DSRAStartEditText"
         android:hint="Input Start Location"
+        android:singleLine="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView7"
-        android:singleLine="true" />
+        android:layout_alignEnd="@+id/DSRAAcceptButton"
+        android:layout_above="@+id/DSRAend"
+        android:layout_toEndOf="@+id/DSRAstart" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/NRRAEndEditText"
+        android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
-        android:layout_below="@+id/NRRAStartEditText"
-        android:layout_alignStart="@+id/NRRAStartEditText"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:layout_alignEnd="@+id/DSRAAcceptButton"
+        android:layout_above="@+id/DSRAmaptext"
+        android:layout_toEndOf="@+id/DSRAstart"
+        android:layout_alignTop="@+id/DSRAend" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save_button"
-        android:id="@+id/saveButton"
+        android:text="Accept"
+        android:id="@+id/DSRAAcceptButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/riderStoryEditText"
+        android:id="@+id/DSRAstory"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/saveButton"
-        android:hint="Rider Story" />
+        android:hint="Rider Story"
+        android:layout_alignBottom="@+id/DSRAAcceptButton"
+        android:layout_toStartOf="@+id/DSRAAcceptButton"
+        android:layout_alignTop="@+id/DSRAAcceptButton" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MAP"
-        android:id="@+id/textView15"
-        android:layout_below="@+id/textView8"
-        android:layout_alignParentStart="true"
+        android:id="@+id/DSRAmaptext"
         android:textSize="40dp"
-        tools:layout_width="200dp" />
+        tools:layout_width="200dp"
+        android:layout_below="@+id/DSRAend"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/DSRApricetext" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView11"
-        android:layout_above="@+id/riderStoryEditText">
-        <org.osmdroid.views.MapView android:id="@+id/NRRAMap"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/DSRAmaptext"
+        android:layout_above="@+id/DSRAstory"
+        android:id="@+id/linearLayout">
+        <org.osmdroid.views.MapView android:id="@+id/DSRAmap"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
     </LinearLayout>

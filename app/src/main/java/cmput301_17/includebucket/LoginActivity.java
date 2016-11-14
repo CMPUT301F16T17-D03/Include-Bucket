@@ -1,20 +1,27 @@
 package cmput301_17.includebucket;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by michelletagarino on 16-10-29.
  */
-public class LoginActivity extends MainMenuActivity {
+public class    LoginActivity extends MainMenuActivity {
 
-    // EditText userLogin will be used to find whether the username is in the elasticsearch database...
-    // private EditText userLogin = (EditText) findViewById(R.id.loginTextField);
+    private Button loginButton;
+    private Button registerButton;
     private EditText userLogin;
 
     @Override
@@ -22,14 +29,70 @@ public class LoginActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
         /**
          *  create condition where, if the username is not in the database, automatically
          *  switch to RegisterActivity, otherwise login
          */
-        Button loginButton = (Button) findViewById(R.id.loginButton);
+
+
+        loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
+                String textLogin  = userLogin.getText().toString();
 
                 /**
                  * Checks to see if the user is valid:
@@ -38,27 +101,30 @@ public class LoginActivity extends MainMenuActivity {
                  *     are compared; if equal, the activity will switch to the MainActivity (in other
                  *     words, the user will be logged in).
                  */
-                try {
-                    ElasticsearchController.RetrieveUserTask retrieveUserTask;
-                    retrieveUserTask = new ElasticsearchController.RetrieveUserTask();
-                    retrieveUserTask.execute(userLogin.getText().toString());
+                ElasticsearchUserController.RetrieveUser findUser;
+                findUser = new ElasticsearchUserController.RetrieveUser();
+                findUser.execute(userLogin.getText().toString());
 
-                    UserAccount foundUser = retrieveUserTask.get();
-                    if ((userLogin.getText().toString()).equals(foundUser.getUniqueUserName())){
-                        foundUser.setLoginStatus(Boolean.TRUE);
-                        if (foundUser.getLoginStatus()) {
-                            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                            startActivity(intent);
-                        }
+                try {
+                    UserAccount foundUser = findUser.get();
+                    String foundLogin = foundUser.getUniqueUserName();
+
+                    if (textLogin.equals(foundLogin))
+                    {
+                        Log.i("Success", "User " + textLogin + " was found.");
+
+                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                        intent.putExtra("User", foundUser);
+                        startActivity(intent);
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Failed to get the user out of the async object.");
+                    Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        Button registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
@@ -77,6 +143,46 @@ public class LoginActivity extends MainMenuActivity {
         userLogin = (EditText) findViewById(R.id.loginTextField);
         userLogin.clearComposingText();
         userLogin.setText(str);
+
+        userLogin.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // if you are inside the userLogin EditText and press enter, this runs
+
+                    String textLogin  = userLogin.getText().toString();
+
+                    /**
+                     * Checks to see if the user is valid:
+                     *     If a user was returned, then the task was successful and thereby the login
+                     *     name was valid. The user input and the username returned from elasticsearch
+                     *     are compared; if equal, the activity will switch to the MainActivity (in other
+                     *     words, the user will be logged in).
+                     */
+                    ElasticsearchUserController.RetrieveUser findUser;
+                    findUser = new ElasticsearchUserController.RetrieveUser();
+                    findUser.execute(userLogin.getText().toString());
+
+                    try {
+                        UserAccount foundUser = findUser.get();
+                        String foundLogin = foundUser.getUniqueUserName();
+
+                        if (textLogin.equals(foundLogin))
+                        {
+                            Log.i("Success", "User " + textLogin + " was found.");
+
+                            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                            intent.putExtra("User", foundUser);
+                            startActivity(intent);
+                        }
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override

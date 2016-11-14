@@ -1,37 +1,77 @@
 package cmput301_17.includebucket;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 
 import cmput301_17.includebucket.UserAccount;
+import io.searchbox.annotations.JestId;
 
 /**
  * Created by Owner on 10/20/2016.
+ *
+ * This is the Request class. It holds the data that is attached to each request made by a specific
+ * UserAccount.
  */
-
 public class Request {
 
-/**
- * Request
- * start location
- * end location
- * rider
- * fare/fare calc 0-1
- * drivers
- * bool driveraccepted
- *
- */
+    @JestId
+    String requestID;
 
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
+    private UserAccount driver;
+    private String riderStory = null;
     private float fare;
     private String description;
     private ArrayList<String> keywords;
     private ArrayList<String> drivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
-    private boolean isCompleted;
-    private boolean isPaid;
+    private boolean isCompleted, isPaid;
+
+    /**
+     * The empty constructor.
+
+     */
+    public Request() {}
+
+    /**
+     * Intantiates a new Request.
+     * @param loc1  The start location
+     * @param loc2  The end location
+     * @param rider The rider making a request
+     * @param story The rider's story (where is the rider going?)
+     */
+    public Request(String loc1, String loc2, UserAccount rider, String story) {
+        this.requestID = null;
+        this.startLocation = loc1;
+        this.endLocation = loc2;
+        this.rider = rider;
+        this.riderStory = story;
+    }
+
+    /**
+     * Intantiates a new Request with specified keyword(s).
+     * @param loc1  The start location
+     * @param loc2  The end location
+     * @param rider The rider making a request
+     * @param story The rider's story (where is the rider going?)
+     * @param keys  The keyword
+     */
+    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<String> keys) {
+        this.requestID = null;
+        this.startLocation = loc1;
+        this.endLocation = loc2;
+        this.rider = rider;
+        this.riderStory = story;
+        this.keywords = keys;
+    }
+
+    public String getRequestID() {return requestID; }
+
+    public void setRequestID(String requestID) { this.requestID = requestID; }
 
     public String getStartLocation() {
         return startLocation;
@@ -49,6 +89,14 @@ public class Request {
         this.endLocation = endLocation;
     }
 
+    public String getRiderStory() {
+        return riderStory;
+    }
+
+    public void setRiderStory(String riderStory) {
+        this.riderStory = riderStory;
+    }
+
     public UserAccount getRider() {
         return rider;
     }
@@ -56,6 +104,8 @@ public class Request {
     public void setRider(UserAccount rider) {
         this.rider = rider;
     }
+
+    public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
     public float getFare() {
         return fare;
@@ -117,7 +167,7 @@ public class Request {
         return isCompleted;
     }
 
-    public void setIsCompleted(boolean isCompleted) {
+    public void setIsCompleted(Boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
 
@@ -125,7 +175,18 @@ public class Request {
         return isPaid;
     }
 
-    public void setIsPaid(boolean isPaid) {
-        this.isPaid = isPaid;
+    public void setIsPaid(boolean paid) {
+        isPaid = paid;
+    }
+
+
+    @Override
+    public String toString() {
+        String login = getRiderUserName().toString();
+        String story = "";
+        String loc1  = getStartLocation().toString();
+        String loc2  = getEndLocation().toString();
+
+        return login + "\n\n" + "Start Location: "  + loc1 + "\n\nEnd Location: " + loc2 + "\n\n" + story ;
     }
 }

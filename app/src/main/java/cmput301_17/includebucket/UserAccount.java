@@ -1,5 +1,6 @@
 package cmput301_17.includebucket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
@@ -10,7 +11,7 @@ import io.searchbox.annotations.JestId;
  * It holds and controls the information that is attached to the user's profile.
  */
 
-public class UserAccount implements UserAccountInterface {
+public class UserAccount implements Serializable {
 
     /**
      * User
@@ -45,7 +46,7 @@ public class UserAccount implements UserAccountInterface {
 
     @JestId
     private String uid, uniqueUserName, name, email, phoneNumber;
-    private Boolean isLoggedIn;
+    private Boolean isLoggedIn,isRider;
     private ArrayList<Request> riderRequests;
     private ArrayList<Request> driverRequests;
 
@@ -95,7 +96,7 @@ public class UserAccount implements UserAccountInterface {
     }
 
     /**
-     * This sets the emila address.
+     * This sets the email address.
      * @param email
      */
     public void setEmail(String email) {
@@ -195,4 +196,17 @@ public class UserAccount implements UserAccountInterface {
      */
     public void setLoginStatus(Boolean status) { this.isLoggedIn = status; }
 
+    /**
+     * This returns whether user is a rider
+     */
+    public boolean isRider() {
+        return this.isRider;
+    }
+
+    /**
+     * This sets the user type (Rider or Driver)
+     */
+    public void setRider(Boolean userType) {
+        this.isRider = userType;
+    }
 }
