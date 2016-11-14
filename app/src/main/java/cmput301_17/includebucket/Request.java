@@ -58,12 +58,13 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider, String story) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, Float fare) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
         this.riderStory = story;
+        this.fare = fare;
     }
 
     /**
