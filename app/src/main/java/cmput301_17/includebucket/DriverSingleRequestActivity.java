@@ -45,6 +45,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     RoadManager roadManager;
     UserAccount user = new UserAccount();
 
+    /**
+     * Deals with most map functionality. Gets permissions to run map in phone.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +212,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             //mTrace.add(marker.getPosition());
         }
 
+        /**
+         * Sets the position when the makrer stops being dragged
+         *
+         * @param marker
+         */
         @Override public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
@@ -225,6 +235,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
         }
 
+        /**
+         * Starts the maker being dragged and gets the position
+         *
+         * @param marker
+         */
         @Override public void onMarkerDragStart(Marker marker) {
             if(marker.getPosition().equals(mTrace.get(0))){
                 mTrace.remove(0);

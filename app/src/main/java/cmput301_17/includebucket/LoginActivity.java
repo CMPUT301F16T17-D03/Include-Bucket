@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 /**
  * Created by michelletagarino on 16-10-29.
+ *
+ * This deals with login functionality.
  */
 public class    LoginActivity extends MainMenuActivity {
 
@@ -24,6 +26,10 @@ public class    LoginActivity extends MainMenuActivity {
     private Button registerButton;
     private EditText userLogin;
 
+    /**
+     * This method get permissions to run and deals with button presses.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

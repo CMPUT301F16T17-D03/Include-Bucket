@@ -34,6 +34,11 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
     final String adbMessage = "Are you sure you want to delete the request?";
 
+    /**
+     * This deals with viewing the current requests and
+     * updates  when a request is added or deleted.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +75,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onStart();
     }
 
+    /**
+     * This sets a listener for a long click to delete a request.
+     */
     @Override
     protected void onResume() {
         super.onResume();

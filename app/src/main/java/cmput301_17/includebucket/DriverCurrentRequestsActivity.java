@@ -12,7 +12,7 @@ import java.util.Collection;
 /**
  * Created by michelletagarino on 16-10-20.
  *
- * driver request view?
+ * Activity for viewing current requests a driver is involved in
  *
  */
 public class DriverCurrentRequestsActivity extends MainMenuActivity {
@@ -22,6 +22,12 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
     private ArrayAdapter<Request> requestAdapter;
     private Collection<Request> requests;
 
+    /**
+     *
+     * Updates the ArrayAdapter when a request is added.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +45,7 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
 
-        /**
-         * Updates the ArrayAdapter when a request is added.
-         */
+
         RequestListController.getRequestList(userLogin).addListener(new Listener() {
             @Override
             public void update() {

@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 /**
  * Created by Owner on 11/9/2016.
+ *
+ * Builds the road for a geolocation path
+ *
  */
 
 public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Polyline>

@@ -92,6 +92,10 @@ public class ElasticsearchRequestController {
         }
     }
 
+    /**
+     * This get the keyword for searching requests by keyword.
+     */
+
     public static class GetKeywordList extends AsyncTask<String, Void, RequestList> {
         @Override
         protected RequestList doInBackground(String... search_param) {

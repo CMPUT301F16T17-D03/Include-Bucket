@@ -11,11 +11,21 @@ import android.widget.Toast;
 
 /**
  * Created by michelletagarino on 16-10-29.
+ *
+ * This deals with registering a new user.
  */
 public class RegisterActivity extends MainMenuActivity {
 
     protected EditText userLogin, userName, userEmail, userPhone;
 
+    /**
+     *  When the user presses the Accept button, they are directed back into the login activity
+     * Here they will be prompted for their login that they just created
+     * This is a way of verifying to the user that their account registration was successful
+     *     the string of their unique username will be automatically filled in the text field,
+     *     so that they do not have to retype it.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +37,6 @@ public class RegisterActivity extends MainMenuActivity {
         userPhone = (EditText) findViewById(R.id.phoneTextField);
 
 
-        /**
-         * When the user presses the Accept button, they are directed back into the login activity
-         * Here they will be prompted for their login that they just created
-         * This is a way of verifying to the user that their account registration was successful
-         *     the string of their unique username will be automatically filled in the text field,
-         *     so that they do not have to retype it.
-         */
         Button registerButton = (Button) findViewById(R.id.acceptButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

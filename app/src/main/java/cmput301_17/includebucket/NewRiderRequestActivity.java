@@ -56,6 +56,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
     UserAccount user = new UserAccount();
 
+    /**
+     * This method gets permissions, deals with the map and handles button presses.
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -290,6 +296,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         //DO NOTHING FOR NOW:
         return false;
     }
+
+    /**
+     * deals with location changes
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         currentPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -305,6 +316,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         //
     }
 
+    /**
+     * deals with a change in status of the map.
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         //
@@ -324,10 +341,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         }
 
+        /**
+         * Deals with a marker drag
+         * @param marker
+         */
         @Override public void onMarkerDrag(Marker marker) {
             //mTrace.add(marker.getPosition());
         }
 
+        /**
+         * Deas with the marker stopping being dragged.
+         * @param marker
+         */
         @Override public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
@@ -347,6 +372,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         }
 
+        /**
+         * Deals with the marker starting being dragged.
+         * @param marker
+         */
         @Override public void onMarkerDragStart(Marker marker) {
             if(marker.getPosition().equals(mTrace.get(0))){
                 mTrace.remove(0);
