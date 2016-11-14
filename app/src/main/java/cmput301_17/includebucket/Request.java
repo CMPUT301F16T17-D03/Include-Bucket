@@ -21,6 +21,7 @@ public class Request {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
+    private UserAccount driver;
     private String riderStory = null;
     private float fare;
     private String description;

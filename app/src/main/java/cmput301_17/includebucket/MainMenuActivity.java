@@ -74,6 +74,7 @@ public class MainMenuActivity extends Activity {
                 setResult(RESULT_OK);
 
                 Intent intent = new Intent(MainMenuActivity.this, DriverCurrentRequestsActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
