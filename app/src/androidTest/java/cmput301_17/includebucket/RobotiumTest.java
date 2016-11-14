@@ -2,6 +2,8 @@ package cmput301_17.includebucket;
 
 /**
  * Created by Duncan on 11/7/2016.
+ *
+ * These are the intent tests.
  */
 
 import android.support.test.InstrumentationRegistry;

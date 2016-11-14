@@ -6,7 +6,7 @@ package cmput301_17.includebucket;
  * This is a view to see the user's data. It shows contact information: phone number and email address.
  *
  * username, phone number, nmae , address, back button, save button.
- *dfgfhdsafgf
+ *
  */
 
 import android.support.v7.app.AppCompatActivity;
