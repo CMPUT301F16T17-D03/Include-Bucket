@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 public class RequestListController {
 
     private static RequestList requestList = new RequestList();
+    private static RequestList keyWordList = new RequestList();
 
     static public RequestList getRequestList(String userLogin) {
         //if (requestList == null) {
@@ -16,10 +17,33 @@ public class RequestListController {
         return requestList;
     }
 
+    static public RequestList getKeywordList(String keyword) {
+        requestList = getKeywordRequests(keyword);
+        return requestList;
+    }
+
+
     /**
      * This returns a list of requests from ElasticSearch.
      * @return requests
      */
+    public static RequestList getKeywordRequests(String keyword) {
+
+        ElasticsearchRequestController.GetKeywordList retrieveRequests;
+        retrieveRequests = new ElasticsearchRequestController.GetKeywordList();
+        retrieveRequests.execute(keyword);
+
+        RequestList requests = new RequestList();
+
+        try {
+            requests = retrieveRequests.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
     public static RequestList getRequestsFromElasticSearch(String userLogin) {
 
         ElasticsearchRequestController.GetRequests retrieveRequests;
