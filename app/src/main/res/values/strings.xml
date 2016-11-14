@@ -36,4 +36,5 @@
     <string name="editUserEmail">Email</string>
     <string name="editUserPhone">Phone</string>
     <string name="editUserSaveButton">Save</string>
+    <string name="nullString"></string>
 </resources>

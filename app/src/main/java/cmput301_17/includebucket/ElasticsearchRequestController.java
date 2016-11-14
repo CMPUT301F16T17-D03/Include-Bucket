@@ -22,6 +22,7 @@ import io.searchbox.core.SearchResult;
  *
  * This class controls how the Requests in Elasticsearch are added, retrieved, and deleted.
  */
+
 public class ElasticsearchRequestController {
 
     private static JestDroidClient client;
@@ -52,15 +53,55 @@ public class ElasticsearchRequestController {
         }
     }
 
+
+
     /**
      * This method retrieves all the requests in the database.
      */
-    public static class GetRequests extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class GetRequests extends AsyncTask<String, Void, RequestList> {
+        @Override
+        protected RequestList doInBackground(String... userLogin) {
+            verifySettings();
+
+            RequestList requests = new RequestList();
+
+            //String search_string = "{\"from\": 0, \"size\": 10000}";
+            String search_string = "{\"query\": { \"term\": {\"uniqueUserName\": \"" + userLogin[0] + "\" }}}}";
+            Search search = new Search.Builder(search_string)
+                    .addIndex("cmput301f16t17")
+                    .addType("request")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded())
+                {
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundRequests);
+                    Log.i("Success", "Got the requests.");
+                }
+                else
+                {
+                    Log.i("Error", "The search query did not match any requests in the database.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return requests;
+        }
+    }
+
+
+    /**
+     * This method retrieves all the requests in the database.
+     */
+/*    public static class GetRequests extends AsyncTask<String, Void, ArrayList<Request>> {
         @Override
         protected ArrayList<Request> doInBackground(String... search_parameters) {
             verifySettings();
 
-            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<Request> requests = new ArrayList<>();
 
             String search_string = "{\"from\": 0, \"size\": 10000}";
             Search search = new Search.Builder(search_string)
@@ -74,6 +115,7 @@ public class ElasticsearchRequestController {
                 {
                     List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundRequests);
+                    Log.i("Success", "Got the requests.");
                 }
                 else
                 {
@@ -86,6 +128,7 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
+    */
 
     /**
      * This method deletes a Request specified by an ID.

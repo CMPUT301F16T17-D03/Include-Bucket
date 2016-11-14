@@ -41,22 +41,17 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
 
                 setResult(RESULT_OK);
-
-                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
-
-
 
         Button riderRequestsButton = (Button) findViewById(R.id.MyRequests);
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 setResult(RESULT_OK);
-
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });

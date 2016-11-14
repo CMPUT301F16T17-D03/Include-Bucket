@@ -45,6 +45,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     EditText startEditText;
     EditText endEditText;
     EditText priceEditText;
+    EditText storyEditText;
+
     Marker startMarker;
     Marker endMarker;
     GeoPoint startPoint;
@@ -71,6 +73,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
         endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
         priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
+        storyEditText = (EditText) findViewById(R.id.riderStoryEditText);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -156,13 +159,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         endEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus){
-                if(hasFocus){
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
                     //User is typing, do nothing
                     //Toast toast = Toast.makeText(getApplicationContext(), "Has Focus", Toast.LENGTH_SHORT);
                     //toast.show();
-                }
-                else{
+                } else {
                     //User has stopped typing, update the marker and the map
                     //This is caused by hitting return or by clicking off the edit text
                     //TODO Should probably give suggestions as to exact address.
@@ -183,9 +185,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                         dragger.onMarkerDragStart(endMarker);
                         endMarker.setPosition(tempGeoEnd);
                         dragger.onMarkerDragEnd(endMarker);
-                    }
-                    catch(Exception e){
-                        Log.i("Error","Failed to get a valid geolocation.");
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to get a valid geolocation.");
                     }
                 }
             }
@@ -197,22 +198,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 setResult(RESULT_OK);
 
                 String startLocation = startEditText.getText().toString();
-                String endLocation   = endEditText.getText().toString();
 
-                Request request = new Request(startLocation, endLocation, user);
-                try {
-                    ElasticsearchRequestController.CreateRequest createRequest;
-                    createRequest = new ElasticsearchRequestController.CreateRequest();
-                    createRequest.execute(request);
-                } catch (Exception e) {
-                    //save in file if not working
-                    //doesn't quite work for now
-                    OfflineSave s = new OfflineSave();
-                    s.saveRequestInFile(NewRiderRequestActivity.this, request, "newRequestFile.sav");
-                }
+                String endLocation = endEditText.getText().toString();
+
+                String riderStory = storyEditText.getText().toString();
+
+                Request request = new Request(startLocation, endLocation, user, riderStory);
+
+                ElasticsearchRequestController.CreateRequest createRequest;
+                createRequest = new ElasticsearchRequestController.CreateRequest();
+                createRequest.execute(request);
             }
         });
-
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */

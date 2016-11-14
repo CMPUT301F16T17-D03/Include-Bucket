@@ -1,7 +1,6 @@
 package cmput301_17.includebucket;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,8 +41,20 @@ public class EditUserDataActivity extends MainMenuActivity {
 
         String login = user.getUniqueUserName();
         String name  = userName.getText().toString();
-        String email = userEmail.getText().toString();
-        String phone = userPhone.getText().toString();
+
+        String email;
+        String phone;
+
+        if (userEmail.getText().toString().equals("")){
+             email= user.getEmail();
+        } else{
+             email = userEmail.getText().toString();
+        }
+        if (userPhone.getText().toString().equals("")){
+            phone= user.getPhoneNumber();
+        } else{
+            phone = userPhone.getText().toString();
+        }
 
         UserAccount user = new UserAccount(login, name, email, phone);
 

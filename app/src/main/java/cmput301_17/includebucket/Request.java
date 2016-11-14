@@ -21,6 +21,7 @@ public class Request {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
+    private String riderStory = null;
     private float fare;
     private String description;
     private ArrayList<String> keywords;
@@ -38,12 +39,14 @@ public class Request {
      * @param loc1  The start location
      * @param loc2  The end location
      * @param rider The rider making a request
+     * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider) {
+    public Request(String loc1, String loc2, UserAccount rider, String story) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
+        this.riderStory = story;
     }
 
     /**
@@ -51,13 +54,15 @@ public class Request {
      * @param loc1  The start location
      * @param loc2  The end location
      * @param rider The rider making a request
+     * @param story The rider's story (where is the rider going?)
      * @param keys  The keyword
      */
-    public Request(String loc1, String loc2, UserAccount rider, ArrayList<String> keys) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<String> keys) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
+        this.riderStory = story;
         this.keywords = keys;
     }
 
@@ -81,6 +86,14 @@ public class Request {
         this.endLocation = endLocation;
     }
 
+    public String getRiderStory() {
+        return riderStory;
+    }
+
+    public void setRiderStory(String riderStory) {
+        this.riderStory = riderStory;
+    }
+
     public UserAccount getRider() {
         return rider;
     }
@@ -88,6 +101,8 @@ public class Request {
     public void setRider(UserAccount rider) {
         this.rider = rider;
     }
+
+    public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
     public float getFare() {
         return fare;
@@ -143,5 +158,15 @@ public class Request {
 
     public void setRiderAccepted(boolean riderAccepted) {
         this.riderAccepted = riderAccepted;
+    }
+
+    @Override
+    public String toString() {
+        String login = getRiderUserName().toString();
+        String story = "";
+        String loc1  = getStartLocation().toString();
+        String loc2  = getEndLocation().toString();
+
+        return login + "\n\n" + "Start Location: "  + loc1 + "\n\nEnd Location: " + loc2 + "\n\n" + story ;
     }
 }
