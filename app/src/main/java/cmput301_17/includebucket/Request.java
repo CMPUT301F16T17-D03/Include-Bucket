@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import cmput301_17.includebucket.UserAccount;
@@ -13,7 +14,7 @@ import io.searchbox.annotations.JestId;
  * This is the Request class. It holds the data that is attached to each request made by a specific
  * UserAccount.
  */
-public class Request {
+public class Request implements Serializable {
 
     @JestId
     String requestID;
@@ -188,10 +189,10 @@ public class Request {
     @Override
     public String toString() {
         String login = getRiderUserName().toString();
-        String status = "";
+        String status = "Open";
         String loc1  = getStartLocation().toString();
         String loc2  = getEndLocation().toString();
 
-        return login + "\n\n" + "Start Location: "  + loc1 + "\n\nEnd Location: " + loc2 + "\n\n" + status ;
+        return "Fare: " + getFare() + "\n\n" + "Status: " + status;
     }
 }
