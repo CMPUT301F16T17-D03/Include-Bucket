@@ -51,20 +51,6 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
                 requestAdapter.notifyDataSetChanged();
             }
         });
-/*
-        list = new ArrayList<>();
-
-        ElasticSearchRequestController.GetRequests getRequests = new ElasticSearchRequestController.GetRequests();
-        getRequests.execute("");
-        try {
-            list = getRequests.get();
-        }
-        catch (Exception e) {
-            Log.i("Error", "Failed to get the requests out of the async object.");
-        }
-        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-        requestsListView.setAdapter(requestAdapter);
-*/
     }
 
     @Override

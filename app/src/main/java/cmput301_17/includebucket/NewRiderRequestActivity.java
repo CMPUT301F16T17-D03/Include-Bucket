@@ -183,6 +183,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             }
         });
 
+        /**
+         * Save button that instantiates a new Request and creates a new index in Elasticsearch of
+         * the type "request".
+         */
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -249,6 +253,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         map.getOverlays().add(endMarker);
         dragger = new OnMarkerDragDrawer();
 
+        /**
+         * Set icon markers on map for user to pick start and end location for new request.
+         */
         startMarker.setIcon(getResources().getDrawable(R.mipmap.marker_green));
         endMarker.setIcon(getResources().getDrawable(R.mipmap.marker_red));
 

@@ -52,7 +52,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         requestsListView.setAdapter(requestAdapter);
 
         /**
-         * Updates the ArrayAdapter when a request is added.
+         * Updates the ArrayAdapter when a request is added or deleted.
          */
         RequestListController.getRequestList(userLogin).addListener(new Listener() {
             @Override
@@ -68,8 +68,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
@@ -80,28 +78,34 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-            AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
-            adb.setMessage(adbMessage);
-            adb.setCancelable(true);
-            final int finalPosition = position;
+                AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
+                adb.setMessage(adbMessage);
+                adb.setCancelable(true);
+                final int finalPosition = position;
 
-            // Add Delete button to delete the request invoked
-            adb.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Request request = requestList.get(finalPosition);
-                    RequestListController.getRequestList(userLogin).deleteRequest(request);
-                }
-            });
-            // Add Cancel button to exit the dialog box
-            adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {}
-            });
-            adb.show();
-            return false;
+                // Add Delete button to delete the request invoked
+                adb.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Request request = requestList.get(finalPosition);
+                        RequestListController.deleteRequestFromList(request);
+                        RequestListController.getRequestList(userLogin).deleteRequest(request);
+                        requestsListView.setAdapter(requestAdapter);
+                        requestAdapter.notifyDataSetChanged();
+                    }
+                });
+                // Add Cancel button to exit the dialog box
+                adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+                adb.show();
+                return false;
             }
         });
+        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
+        requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
     }
 }
 

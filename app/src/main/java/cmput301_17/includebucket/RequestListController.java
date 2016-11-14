@@ -9,21 +9,25 @@ public class RequestListController {
 
     private static RequestList requestList = new RequestList();
 
-    static public RequestList getRequestList(String userLogin) {
-        requestList = getRequestsFromElasticSearch(userLogin);
+    static public RequestList getRequestList(String list) {
+        requestList = getRequestsFromElasticSearch(list);
         return requestList;
     }
 
-    static public RequestList getKeywordList(String keyword) {
-        requestList = getKeywordRequests(keyword);
+    static public RequestList getKeywordList(String key) {
+        requestList = getRequestsByKeyword(key);
         return requestList;
+    }
+
+    static public void deleteRequestFromList(Request request) {
+        deleteRequestFromElasticSearch(request);
     }
 
     /**
      * This returns a list of requests from ElasticSearch specified by a keyword.
      * @return requests
      */
-    public static RequestList getKeywordRequests(String keyword) {
+    public static RequestList getRequestsByKeyword(String keyword) {
 
         ElasticsearchRequestController.GetKeywordList retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetKeywordList();
@@ -64,7 +68,18 @@ public class RequestListController {
     }
 
     /**
-     * This will return a list of requests from a local file.
+     * This deletes a request from ElasticSearch.
+     * @return requests
+     */
+    public static void deleteRequestFromElasticSearch(Request request) {
+
+        ElasticsearchRequestController.DeleteRequest deleteRequests;
+        deleteRequests = new ElasticsearchRequestController.DeleteRequest();
+        deleteRequests.execute(request);
+    }
+
+    /**
+     * This will return a list of requests from a local file for offline behaviour.
      * @param
      */
     public static RequestList getRequestsFromLocalFile() {

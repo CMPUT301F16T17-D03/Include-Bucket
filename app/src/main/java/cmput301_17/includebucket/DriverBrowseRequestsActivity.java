@@ -28,18 +28,12 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.browse_requests);
 
         keyword  = (EditText) findViewById(R.id.keyword);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
 
-        key = keyword.getText().toString();
-
-        requests =  RequestListController.getKeywordList("");
         requestList = new ArrayList<>();
-        requestList.addAll(requests);
-
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         browseRequestList.setAdapter(requestAdapter);
 
