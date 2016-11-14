@@ -191,11 +191,8 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        String login = getRiderUserName().toString();
         String status = "Open"; //TODO : this is just the default for now...
-        String loc1  = getStartLocation().toString();
-        String loc2  = getEndLocation().toString();
 
-        return getRiderStory() + "\n\n" + "Status: " + status;
+        return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
     }
 }
