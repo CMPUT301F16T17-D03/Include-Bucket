@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
 
 public class RobotiumTest {
 
-    UserRequest SampleRequest = new UserRequest();
+    Request SampleRequest = new Request();
     //setup an account prior to running tests? How to do this? Or we have to create an account for each test...
     UserAccount Username = new UserAccount("Username", "Username", "test@test.com", "123-456-7890");
 

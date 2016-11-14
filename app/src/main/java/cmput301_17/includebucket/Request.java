@@ -8,7 +8,7 @@ import cmput301_17.includebucket.UserAccount;
  * Created by Owner on 10/20/2016.
  */
 
-public class UserRequest {
+public class Request {
 
 /**
  * Request

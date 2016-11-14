@@ -39,7 +39,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
     public void testNewRequest(){
         Date date =  new Date();
         //This should probably have 2 locations as opposed to just one postal code?
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         assertNotNull(request);
     }
 
@@ -49,7 +49,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testGetRequests(){
         UserAccount user = UserAccount(1234);
-        ArrayList<UserRequest> request = getRequest(user);
+        ArrayList<Request> request = getRequest(user);
         //Will getRequest never return Null? What if the User has no Requests?
         assertNotNull(request);
     }
@@ -61,7 +61,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
     public void testAcceptRequest(){
         Date date =  new Date();
         UserAccount user = UserAccount(1234);
-        UserRequest request = newRequest("test", date, "T6G1H1", user);
+        Request request = newRequest("test", date, "T6G1H1", user);
         request.acceptRequest(user);
         assertbool(request.getAccepted());
     }
@@ -73,7 +73,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
     public void testCancelRequest(){
         Date date =  new Date();
         UserAccount user = UserAccount(1234);
-        UserRequest request = newRequest("test", date, "T6G1H1", user);
+        Request request = newRequest("test", date, "T6G1H1", user);
         cancelRequest(request);
         assertbool(!request.getAccepted());
     }
@@ -87,7 +87,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
         UserAccount user = UserAccount(1234);
         UserAccount driver = UserAccount(4321);
         driver.setEmail(test@gmail.com);
-        UserRequest request = newRequest("test", date, "T6G1H1", user);
+        Request request = newRequest("test", date, "T6G1H1", user);
         request.acceptRequest(driver);
         assertNotNull(request.getDriver().getEmail());
     }
@@ -111,7 +111,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
         UserAccount user = UserAccount(1234);
         UserAccount driver = UserAccount(4321);
         driver.setEmail(test@gmail.com);
-        UserRequest request = newRequest("test", date, "T6G1H1", user);
+        Request request = newRequest("test", date, "T6G1H1", user);
         request.acceptRequest(driver);
         request.confirmDriver(driver);
         Boolean complete = request.completeRequest(); // calls payment with user and driver
@@ -129,7 +129,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
         drivera.setEmail(test@gmail.com);
         UserAccount driverb = UserAccount(4322);
         driverb.setEmail(test@gmail.com);
-        UserRequest request = new UserRequest("test", date, "T6G1H1", user);
+        Request request = new Request("test", date, "T6G1H1", user);
         request.acceptRequest(drivera);
         request.acceptRequest(driverb);
         ArrayList<UserAccount> driverList = request.getDrivers();
@@ -144,7 +144,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testRequestStatus(){
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         String status = request.getStatus();
         assertNotNull(status);
     }
@@ -205,7 +205,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testAcceptRequestDriver() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -222,12 +222,12 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
     //  US 05.02.01 As a driver, I want to view a list of things I have accepted that are pending, each request with its description, and locations.
 
     public void testListPendingDriver() {
-        ArrayList<UserRequest> list = new ArrayList<UserRequest>();
+        ArrayList<Request> list = new ArrayList<Request>();
         Date date =  new Date();
-        UserRequest request1 = new UserRequest("test", date, "T6G1H1");
+        Request request1 = new Request("test", date, "T6G1H1");
         list.add(request1);
         Date date =  new Date();
-        UserRequest request2 = new UserRequest("test2", date, "T6G1H2");
+        Request request2 = new Request("test2", date, "T6G1H2");
         list.add(request2);
         // add ui test later...
         assertTrue(list.contains(request1));
@@ -238,7 +238,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testSeeAcceptance() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -252,7 +252,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testNotifyOfferAcceptance() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -267,7 +267,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testSeeRequestsOffline() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -282,7 +282,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testSeeRequestsOfflineRider() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -297,7 +297,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testRequestQueueRider() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -311,7 +311,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testRequestQueueDriver() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -327,7 +327,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
 
     public void testSpecifyLocation() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
@@ -339,7 +339,7 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
     // As a driver, I want to view start and end geo locations on a map for a request.
     public void testSearchLocation() {
         Date date =  new Date();
-        UserRequest request = new UserRequest("test", date, "T6G1H1");
+        Request request = new Request("test", date, "T6G1H1");
         Uid user = Uid(1234);
         user.setUsername("SomethingCleverIHope");
         user.setPhone("1234567890");
