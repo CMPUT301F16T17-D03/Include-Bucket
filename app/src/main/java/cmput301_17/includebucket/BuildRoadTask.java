@@ -1,6 +1,5 @@
 package cmput301_17.includebucket;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import org.osmdroid.bonuspack.routing.Road;
@@ -9,7 +8,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 /**

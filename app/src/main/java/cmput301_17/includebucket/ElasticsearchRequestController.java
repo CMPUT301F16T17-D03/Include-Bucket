@@ -7,12 +7,10 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
-import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -138,7 +136,8 @@ public class ElasticsearchRequestController {
             for (Request request : requests) {
 
                 Delete deleteRequest = new Delete
-                        .Builder(request.getRequestID().toString())
+
+                        .Builder(request.getRequestID())
                         .index("cmput301f16t17")
                         .type("request")
                         .build();

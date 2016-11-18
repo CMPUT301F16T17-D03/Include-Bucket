@@ -181,7 +181,6 @@ public class UserAccount implements Serializable {
             this.driverRequests.remove(request);
             request.removeDriver(this.getUniqueUserName());
         }
-        return;
     }
 
     /**

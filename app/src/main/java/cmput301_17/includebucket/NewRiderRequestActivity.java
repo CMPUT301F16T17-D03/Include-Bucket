@@ -392,7 +392,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             }
             try {
                 map.getOverlays().remove(3); map.invalidate();
-            } catch(Exception e){}
+            } catch(Exception e){
+                Log.i("Error","something broke in onMarkerDragStart");
+            }
         }
     }
 }

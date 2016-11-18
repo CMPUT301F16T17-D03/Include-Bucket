@@ -1,7 +1,5 @@
 package cmput301_17.includebucket;
 
-
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**

@@ -1,11 +1,9 @@
 package cmput301_17.includebucket;
 
-import org.osmdroid.util.GeoPoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import cmput301_17.includebucket.UserAccount;
 import io.searchbox.annotations.JestId;
 
 /**
