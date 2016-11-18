@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -210,10 +211,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String riderStory = storyEditText.getText().toString();
                 /**
                  * TODO : For some reason Elasticsearch will not instantiate a request with a fare
-                 * String fare = priceEditText.getText().toString();
                  */
+                 Double fare = Double.parseDouble(priceEditText.getText().toString());
+
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
+                request.setFare(fare);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
@@ -230,12 +233,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-        /*
+
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
-        */
+
 
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -250,12 +253,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * program to crash when it tries to find the current location.
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
-         *
-         * startPoint = currentPoint;
-         * endPoint = currentPoint;
          */
-        startPoint = new GeoPoint(53.5232, 113.5263);
-        endPoint = new GeoPoint(53.5232, 113.5263);
+          startPoint = currentPoint;
+          endPoint = currentPoint;
+
+        //startPoint = new GeoPoint(53.5232, -113.5263);
+        //endPoint = new GeoPoint(53.5232, -113.5263);
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
@@ -284,7 +287,13 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
         waypoints.add(endPoint);
-        AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
+        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
+            @Override
+            public void processFinish(Double output){
+                priceEditText.setText(output.toString());//TODO formatting
+
+            }
+        }).execute(waypoints);
 
         /**
          * TODO : Fix this later
@@ -363,8 +372,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         @Override public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
+            Road road;
+            AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
 
-            AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(mTrace);
+                @Override
+                public void processFinish(Double output){
+                    //Here you will receive the result fired from async class
+                    //of onPostExecute(result) method.
+                    priceEditText.setText(output.toString());
+                }
+            }).execute(mTrace);
             if (marker.equals(startMarker)){
                 //update start location text
                 startEditText.setText(startMarker.getPosition().toString());
@@ -375,7 +392,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             /**
              * update suggested fare
              */
-            price = "$" + ((startMarker.getPosition().distanceTo(endMarker.getPosition())))/100.00;
+            price = "" + ((startMarker.getPosition().distanceTo(endMarker.getPosition())));
+
             priceEditText.setText(price);
         }
 

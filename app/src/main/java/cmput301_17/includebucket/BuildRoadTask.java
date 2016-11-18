@@ -19,30 +19,41 @@ import java.util.ArrayList;
  *
  */
 
-public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Polyline>
+public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Road>
 {
+
+    public interface AsyncResponse {
+        void processFinish(Double output);
+    }
+    public AsyncResponse delegate = null;
     public MapView map;
     public RoadManager manager;
-    public BuildRoadTask(MapView m, RoadManager r)
+    public Polyline roadline;
+    public BuildRoadTask(MapView m, RoadManager r, AsyncResponse delegate)
     {
         this.map = m;
         this.manager =r;
+        this.delegate = delegate;
+
     }
 
-    protected Polyline doInBackground(ArrayList<GeoPoint>... waypoints)
+    protected Road doInBackground(ArrayList<GeoPoint>... waypoints)
     {   Road road = manager.getRoad(waypoints[0]);
-        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
 
-        return roadOverlay;
+        roadline = RoadManager.buildRoadOverlay(road);
+
+        return road;
     }
 
     @Override
     protected void onProgressUpdate(Void... values) {}
 
     @Override
-    protected void onPostExecute(Polyline result) {
+    protected void onPostExecute(Road result) {
         super.onPostExecute(result);
-        map.getOverlays().add(result);
+
+        map.getOverlays().add(roadline);
+        delegate.processFinish(result.mLength);
         map.invalidate();
     }
 }

@@ -22,7 +22,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity {
 
         requestTextView = (TextView) findViewById(R.id.requestTextView);
 
-        String price    = request.getFare();
+        Double price    = request.getFare();
         String startLoc = request.getStartLocation();
         String endLoc   = request.getEndLocation();
         String story    = request.getRiderStory();
