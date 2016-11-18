@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -175,7 +176,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
         waypoints.add(endPoint);
-        AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
+        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
+            @Override
+            public void processFinish(Double output){
+            }
+        }).execute(waypoints);
         //Road road = roadManager.getRoad(waypoints);
         //AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
         //Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
@@ -221,7 +226,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
             mTrace.add(marker.getPosition());
             map.getOverlays().remove(3);
-            AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(mTrace);
+            AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
+                @Override
+                public void processFinish(Double output){
+                }
+            }).execute(mTrace);
             if (marker.equals(startMarker)){
                 //update start location text
                 startEditText.setText(startMarker.getPosition().toString());

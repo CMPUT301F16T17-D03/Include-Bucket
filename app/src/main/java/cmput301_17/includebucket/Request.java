@@ -24,7 +24,7 @@ public class Request implements Serializable {
     private UserAccount rider;
     private UserAccount driver;
     private String riderStory = null;
-    private String fare;
+    private double fare;
     private ArrayList<String> keywords;
     private ArrayList<String> drivers;
     private boolean driverAccepted;
@@ -121,11 +121,11 @@ public class Request implements Serializable {
 
     public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
-    public String getFare() {
+    public Double getFare() {
         return fare;
     }
 
-    public void setFare(String fare) {
+    public void setFare(Double fare) {
         this.fare = fare;
     }
 
