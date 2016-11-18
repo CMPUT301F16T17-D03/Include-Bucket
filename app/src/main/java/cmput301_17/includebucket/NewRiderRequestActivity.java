@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.renderscript.Double2;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -289,8 +290,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         waypoints.add(endPoint);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Double output){
-                priceEditText.setText(output.toString());//TODO formatting
+            public void processFinish(Road output){
+                Double temp = output.mLength; //see also mDuration
+                priceEditText.setText(temp.toString());//TODO formatting
+                //Here you will receive the result fired from async class
+                //of onPostExecute(result) method.
 
             }
         }).execute(waypoints);
@@ -373,13 +377,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
             mTrace.add(marker.getPosition());
             Road road;
+            //http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
             AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
 
                 @Override
-                public void processFinish(Double output){
+                public void processFinish(Road output){
+                    Double temp = output.mLength; //see also mDuration
+                    priceEditText.setText(temp.toString());//TODO formatting
                     //Here you will receive the result fired from async class
                     //of onPostExecute(result) method.
-                    priceEditText.setText(output.toString());
+
                 }
             }).execute(mTrace);
             if (marker.equals(startMarker)){

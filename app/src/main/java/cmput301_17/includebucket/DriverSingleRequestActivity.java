@@ -178,7 +178,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         waypoints.add(endPoint);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Double output){
+            public void processFinish(Road output){
             }
         }).execute(waypoints);
         //Road road = roadManager.getRoad(waypoints);
@@ -228,7 +228,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             map.getOverlays().remove(3);
             AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
                 @Override
-                public void processFinish(Double output){
+                public void processFinish(Road output){
                 }
             }).execute(mTrace);
             if (marker.equals(startMarker)){

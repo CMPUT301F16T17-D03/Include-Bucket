@@ -142,7 +142,7 @@ public class PrototypeMapActivity extends Activity implements MapEventsReceiver,
         waypoints.add(endPoint);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Double output){
+            public void processFinish(Road output){
             }
         }).execute(waypoints);
         //Road road = roadManager.getRoad(waypoints);
