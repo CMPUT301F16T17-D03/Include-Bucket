@@ -82,7 +82,7 @@ public class RequestListController {
      * This will return a list of requests from a local file for offline behaviour.
      * @param
      */
-    public static RequestList getRequestsFromLocalFile() {
+    public static RequestList loadRequestsFromLocalFile() {
         return null;
     }
 
