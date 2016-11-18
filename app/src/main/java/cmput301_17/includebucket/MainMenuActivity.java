@@ -27,9 +27,7 @@ public class MainMenuActivity extends Activity {
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
-
                 Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
@@ -39,7 +37,6 @@ public class MainMenuActivity extends Activity {
         Button logOutButton = (Button) findViewById(R.id.Logout);
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
                 finish();
             }
@@ -48,7 +45,6 @@ public class MainMenuActivity extends Activity {
         Button riderRequestsButton = (Button) findViewById(R.id.MyRequests);
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
                 intent.putExtra("User", user);
@@ -59,9 +55,7 @@ public class MainMenuActivity extends Activity {
         Button driverBrowseRequestsButton = (Button) findViewById(R.id.Browse);
         driverBrowseRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
-
                 Intent intent = new Intent(MainMenuActivity.this, DriverBrowseRequestsActivity.class);
                 startActivity(intent);
             }
@@ -70,9 +64,7 @@ public class MainMenuActivity extends Activity {
         Button driverCurrentRequestsButton = (Button) findViewById(R.id.Current);
         driverCurrentRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
-
                 Intent intent = new Intent(MainMenuActivity.this, DriverCurrentRequestsActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
@@ -84,9 +76,8 @@ public class MainMenuActivity extends Activity {
         Button EditAccountButton = (Button) findViewById(R.id.ViewAccount);
         EditAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 setResult(RESULT_OK);
-
+                
                 Intent intent = new Intent(MainMenuActivity.this, ViewUserDataActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);

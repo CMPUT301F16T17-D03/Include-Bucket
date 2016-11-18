@@ -14,15 +14,12 @@ import android.os.Bundle;
  * If the user is logged in, it will switch directly to MainMenuActivity.
  * If the user is not logged in, it will switch directly to LoginActivity.
  */
-
-
 public class LauncherActivity extends Activity {
 
     /**
-     * This is to test whether login activity works when the user is not already logged in
-     * All users should be in the elasticsearch database
-     * We would have to find a way to query whether or not a username is in the elasticsearch
-     * database based on the text input in LoginActivity
+     * Maybe a solution would be to save the last person that was logged in into a local file
+     * by way of using GSON. We would then have to retrieve that user and check their login
+     * status to perform the necessary checks.
      *
      * @param savedInstanceState
      */
@@ -30,8 +27,8 @@ public class LauncherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        UserAccount newUser = new UserAccount("Jimmeh","Jimmy John","jemm@idk.com","null");
+        // TODO : fix these checks using GSON
+        UserAccount newUser = new UserAccount("Username","Jimmy John","jemm@idk.com","null");
 
         Intent intent;
         if (!newUser.getLoginStatus()){
@@ -48,5 +45,4 @@ public class LauncherActivity extends Activity {
         super.onResume();
         finish();
     }
-
 }

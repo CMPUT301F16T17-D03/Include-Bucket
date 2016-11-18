@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import android.os.AsyncTask;
 
+import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -39,7 +40,11 @@ public class OnMarkerDragDrawerold implements Marker.OnMarkerDragListener {
 
         mTrace.add(marker.getPosition());
         map.getOverlays().remove(3);
-        AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(mTrace);
+        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
+            @Override
+            public void processFinish(Road output){
+            }
+        }).execute(mTrace);
         if (marker.getTitle().equals("Start Point")){
             //update start location text
         }

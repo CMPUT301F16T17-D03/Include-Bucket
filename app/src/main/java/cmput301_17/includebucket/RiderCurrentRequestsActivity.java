@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import android.content.Intent;
@@ -32,7 +33,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private Collection<Request> requests;
     private String userLogin;
 
-    final String adbMessage = "Are you sure you want to delete the request?";
+    final String adbMessage = "Click More button for details.";
 
     /**
      * This deals with viewing the current requests and
@@ -68,6 +69,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 requestAdapter.notifyDataSetChanged();
             }
         });
+
+        Button newButton = (Button) findViewById(R.id.newRequestButton);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                Intent intent = new Intent(RiderCurrentRequestsActivity.this, NewRiderRequestActivity.class);
+                intent.putExtra("User", user);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -92,7 +103,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 final int finalPosition = position;
 
                 // Add Delete button to delete the request invoked
-                adb.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
@@ -106,6 +117,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {}
+                });
+                // Add Cancel button to exit the dialog box
+                adb.setPositiveButton("More", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Request request = requestList.get(finalPosition);
+                        Intent intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
+                        intent.putExtra("Request", request);
+                        startActivity(intent);
+                    }
                 });
                 adb.show();
                 return false;

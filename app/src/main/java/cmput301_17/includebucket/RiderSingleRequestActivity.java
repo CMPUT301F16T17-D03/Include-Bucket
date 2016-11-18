@@ -1,10 +1,33 @@
 package cmput301_17.includebucket;
 
-/**
- * Created by Duncan on 11/12/2016.
- *
- * This deals with a single request of a rider
- */
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
-public class RiderSingleRequestActivity {
+/**
+ * This class displays a request's information in full when it is invoked by the user in the
+ * RiderCurrentRequestsActivity.
+ */
+public class RiderSingleRequestActivity extends MainMenuActivity {
+
+    private TextView requestTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.single_request);
+
+        Request request = (Request) getIntent().getSerializableExtra("Request");
+
+        requestTextView = (TextView) findViewById(R.id.requestTextView);
+
+        Double price    = request.getFare();
+        String startLoc = request.getStartLocation();
+        String endLoc   = request.getEndLocation();
+        String story    = request.getRiderStory();
+
+        requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" + startLoc +
+                "\n\nEnd Location:\n" + endLoc + "\n\nRequest Description:\n" + story);
+    }
 }
