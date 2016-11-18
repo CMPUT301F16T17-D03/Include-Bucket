@@ -1,5 +1,6 @@
 package cmput301_17.includebucket;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -61,5 +62,8 @@ public class EditUserDataActivity extends MainMenuActivity {
         ElasticsearchUserController.CreateUser editUser;
         editUser = new ElasticsearchUserController.CreateUser();
         editUser.execute(user);
+        Intent intent = new Intent(EditUserDataActivity.this, MainMenuActivity.class);
+        intent.putExtra("User", user);
+        startActivity(intent);
     }
 }

@@ -27,17 +27,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/MyRequests"
-        android:layout_above="@+id/Driver"
-        android:layout_toEndOf="@+id/Rider" />
+        android:layout_below="@+id/Rider"
+        android:layout_alignStart="@+id/Current" />
 
     <Button
         android:text="Driver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="117dp"
         android:id="@+id/Driver"
-        android:layout_below="@+id/newRequest"
-        android:layout_toStartOf="@+id/MyRequests" />
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/Rider" />
 
     <Button
         android:text="Current"
@@ -56,18 +55,18 @@
         android:id="@+id/Logout" />
 
     <Button
-        android:text="Account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/Account" />
-
-    <Button
         android:text="Browse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Browse"
         android:layout_below="@+id/Driver"
         android:layout_toStartOf="@+id/Driver" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Account"
+        android:id="@+id/ViewAccount"
+        android:layout_alignTop="@+id/Logout"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

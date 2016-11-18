@@ -1,8 +1,13 @@
 package cmput301_17.includebucket;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * ViewUserDataActivity
@@ -14,6 +19,11 @@ import android.os.Bundle;
  */
 public class ViewUserDataActivity extends MainMenuActivity {
 
+
+    protected TextView userEmail, userPhone, userLogin;
+
+    UserAccount user = new UserAccount();
+
     /**
      * This is the onCreate method.
      * @param savedInstanceState
@@ -22,6 +32,34 @@ public class ViewUserDataActivity extends MainMenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_data);
+
+        user = (UserAccount) getIntent().getSerializableExtra("User");
+
+
+        userEmail = (TextView) findViewById(R.id.EmailView);
+        userPhone = (TextView) findViewById(R.id.PhoneNumberView);
+        userLogin = (TextView) findViewById(R.id.UsernameView);
+
+        String login = user.getUniqueUserName();
+        String email = user.getEmail();
+        String phone = user.getPhoneNumber();
+
+        userLogin.setText("Username: \n\t" + login);
+        userEmail.setText("Email: \n\t" + email);
+        userPhone.setText("Phone Number: \n\t" + phone);
+
+
+        Button accountButton = (Button) findViewById(R.id.editMyData);
+        accountButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                setResult(RESULT_OK);
+
+                Intent intent = new Intent(ViewUserDataActivity.this, EditUserDataActivity.class);
+                intent.putExtra("User", user);
+                startActivity(intent);
+            }
+        });
     }
 
 }

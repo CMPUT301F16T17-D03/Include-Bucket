@@ -79,13 +79,15 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        Button accountButton = (Button) findViewById(R.id.Account);
-        accountButton.setOnClickListener(new View.OnClickListener() {
+
+
+        Button EditAccountButton = (Button) findViewById(R.id.ViewAccount);
+        EditAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 setResult(RESULT_OK);
 
-                Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
+                Intent intent = new Intent(MainMenuActivity.this, ViewUserDataActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
             }
