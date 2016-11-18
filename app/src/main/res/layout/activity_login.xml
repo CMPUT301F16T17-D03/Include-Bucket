@@ -17,12 +17,14 @@
         android:layout_height="wrap_content"
         android:text="@string/user_login"
         android:id="@+id/loginButton"
-        android:width="50dp" />
+        android:width="50dp"
+        android:background="#1f41ff" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_button"
         android:id="@+id/registerButton"
-        android:width="50dp" />
+        android:width="50dp"
+        android:background="#36fe0e" />
 </LinearLayout>

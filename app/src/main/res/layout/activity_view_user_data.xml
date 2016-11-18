@@ -41,5 +41,6 @@
         android:text="Edit"
         android:id="@+id/editMyData"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="#ff155f" />
 </RelativeLayout>

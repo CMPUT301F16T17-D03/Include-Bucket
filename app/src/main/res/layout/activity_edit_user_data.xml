@@ -47,5 +47,6 @@
         android:text="Save"
         android:id="@+id/saveButton"
         android:layout_below="@+id/editPhone"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="#2752ff" />
 </RelativeLayout>

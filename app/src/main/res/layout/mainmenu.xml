@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuActivity">
+    tools:context=".MainMenuActivity"
+    android:background="#ffffff">
 
-    <Button
+    <TextView
         android:text="Rider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="84dp"
         android:id="@+id/Rider" />
 
@@ -20,7 +22,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/newRequest"
         android:layout_below="@+id/Rider"
-        android:layout_alignStart="@+id/Browse" />
+        android:layout_toStartOf="@+id/Rider"
+        android:background="#00ff44" />
 
     <Button
         android:text="My Requests"
@@ -28,13 +31,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/MyRequests"
         android:layout_below="@+id/Rider"
-        android:layout_alignStart="@+id/Current" />
+        android:layout_toEndOf="@+id/Driver"
+        android:background="#0099ff" />
 
-    <Button
+    <TextView
         android:text="Driver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Driver"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/Rider" />
 
@@ -43,8 +48,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Current"
-        android:layout_below="@+id/Driver"
-        android:layout_toEndOf="@+id/Driver" />
+        android:layout_alignTop="@+id/Browse"
+        android:layout_toEndOf="@+id/Rider"
+        android:background="#ffee00" />
 
     <Button
         android:text="Logout"
@@ -52,15 +58,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/Logout" />
+        android:id="@+id/Logout"
+        android:background="#ff0011" />
 
     <Button
         android:text="Browse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Browse"
+        android:background="#ff01f7"
         android:layout_below="@+id/Driver"
-        android:layout_toStartOf="@+id/Driver" />
+        android:layout_toEndOf="@+id/Logout" />
 
     <Button
         android:layout_width="wrap_content"
@@ -68,5 +76,6 @@
         android:text="View Account"
         android:id="@+id/ViewAccount"
         android:layout_alignTop="@+id/Logout"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="#00fff2" />
 </RelativeLayout>

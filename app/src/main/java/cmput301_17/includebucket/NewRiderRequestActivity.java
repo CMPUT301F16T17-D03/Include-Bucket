@@ -213,7 +213,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 /**
                  * TODO : For some reason Elasticsearch will not instantiate a request with a fare
                  */
-                 Double fare = Double.parseDouble(priceEditText.getText().toString());
+                Double fare = Double.parseDouble(priceEditText.getText().toString());
 
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
@@ -255,8 +255,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
          */
-          startPoint = currentPoint;
-          endPoint = currentPoint;
+        startPoint = currentPoint;
+        endPoint = currentPoint;
 
         //startPoint = new GeoPoint(53.5232, -113.5263);
         //endPoint = new GeoPoint(53.5232, -113.5263);

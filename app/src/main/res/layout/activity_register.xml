@@ -41,5 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/accept_button"
-        android:id="@+id/acceptButton" />
+        android:id="@+id/acceptButton"
+        android:background="#01ff01" />
 </LinearLayout>

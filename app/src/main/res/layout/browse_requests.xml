@@ -18,8 +18,9 @@
         android:layout_height="wrap_content"
         android:text="Search"
         android:id="@+id/searchButton"
-        android:layout_alignBottom="@+id/keyword"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="#05ffde"
+        android:layout_alignBottom="@+id/keyword" />
 
     <TextView
         android:layout_width="wrap_content"
