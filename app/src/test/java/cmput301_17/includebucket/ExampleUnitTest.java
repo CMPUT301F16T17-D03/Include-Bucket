@@ -26,7 +26,7 @@ import java.util.Date;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
- */
+
 public class ExampleTests extends ActivityInstrumentationTestCase2 {
     public ExampleTests() {
         super(Application.class);
@@ -347,3 +347,5 @@ public class ExampleTests extends ActivityInstrumentationTestCase2 {
         //maps location stuff
     }
 }
+ moved so it could compile
+ */

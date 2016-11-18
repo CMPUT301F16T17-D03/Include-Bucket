@@ -92,18 +92,19 @@ public class ElasticsearchRequestController {
         }
     }
 
-
     /**
-     * This method retrieves all the requests in the database.
+     * This get the keyword for searching requests by keyword.
      */
-/*    public static class GetRequests extends AsyncTask<String, Void, ArrayList<Request>> {
+
+    public static class GetKeywordList extends AsyncTask<String, Void, RequestList> {
         @Override
-        protected ArrayList<Request> doInBackground(String... search_parameters) {
+        protected RequestList doInBackground(String... search_param) {
             verifySettings();
 
-            ArrayList<Request> requests = new ArrayList<>();
+            RequestList requests = new RequestList();
 
-            String search_string = "{\"from\": 0, \"size\": 10000}";
+            //String search_string = "{\"from\": 0, \"size\": 10000}";
+            String search_string = "{\"query\": { \"term\": {\"riderStory\": \"" + search_param[0] + "\" }}}}";
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")
@@ -128,7 +129,6 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
-    */
 
     /**
      * This method deletes a Request specified by an ID.

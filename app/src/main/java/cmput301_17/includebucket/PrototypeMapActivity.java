@@ -27,6 +27,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Owner on 11/9/2016.
+ *
+ * This is a test for the map.
  */
 
 public class PrototypeMapActivity extends Activity implements MapEventsReceiver, LocationListener{

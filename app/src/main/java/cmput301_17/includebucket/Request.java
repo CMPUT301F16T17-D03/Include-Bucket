@@ -21,16 +21,32 @@ public class Request {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
+    private UserAccount driver;
     private String riderStory = null;
     private float fare;
-    private String description;
     private ArrayList<String> keywords;
     private ArrayList<String> drivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
+    private boolean isCompleted, isPaid;
+
+    /**
+     * Enums that specify the state of the status.
+     * A request can be:
+     *     Open (Rider just made a ride request, no driver has accepted it)
+     *     Accepted by driver (A driver accepted the open request)
+     *     Pending (A request that was accepted by a driver is waiting to be confirmed by the rider)
+     *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
+     */
+    public enum RequestStatus {
+        requestOpen, acceptedByDriver, requestPending, requestCompleted
+    }
+
+    private RequestStatus requestStatus;
 
     /**
      * The empty constructor.
+
      */
     public Request() {}
 
@@ -112,14 +128,6 @@ public class Request {
         this.fare = fare;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public ArrayList<String> getKeywords() {
         return keywords;
     }
@@ -160,13 +168,30 @@ public class Request {
         this.riderAccepted = riderAccepted;
     }
 
+    public boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public boolean getIsPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(boolean paid) {
+        isPaid = paid;
+    }
+
+
     @Override
     public String toString() {
         String login = getRiderUserName().toString();
-        String story = "";
+        String status = "";
         String loc1  = getStartLocation().toString();
         String loc2  = getEndLocation().toString();
 
-        return login + "\n\n" + "Start Location: "  + loc1 + "\n\nEnd Location: " + loc2 + "\n\n" + story ;
+        return login + "\n\n" + "Start Location: "  + loc1 + "\n\nEnd Location: " + loc2 + "\n\n" + status ;
     }
 }

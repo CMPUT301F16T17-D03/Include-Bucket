@@ -6,12 +6,17 @@ import java.util.List;
 
 /**
  * Created by michelletagarino on 16-11-12.
+ *
+ * Thsi si a list of requests.
  */
 public class RequestList extends ArrayList {
 
     protected Collection<Request> requestList;
     protected Collection<Listener> listeners;
 
+    /**
+     * Thsi constructor creates a new empty request list.
+     */
     public RequestList(){
         requestList = new ArrayList<>();
         listeners = new ArrayList<>();
@@ -27,8 +32,8 @@ public class RequestList extends ArrayList {
         }
     }
 
-    public void addRequest(Request newRequest) {
-        requestList.add(newRequest);
+    public void addRequest(Request request) {
+        requestList.add(request);
         notifyListeners();
     }
 
@@ -37,6 +42,10 @@ public class RequestList extends ArrayList {
         notifyListeners();
     }
 
+    /**
+     * This adds all requests in a list to the object's list
+     * @param requests
+     */
     public void addAll(List<Request> requests) {
         for(Request r : requests) {
             this.add(r);

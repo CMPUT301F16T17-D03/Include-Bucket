@@ -56,6 +56,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
     UserAccount user = new UserAccount();
 
+    /**
+     * This method gets permissions, deals with the map and handles button presses.
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,15 +189,17 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             }
         });
 
+        /**
+         * Save button that instantiates a new Request and creates a new index in Elasticsearch of
+         * the type "request".
+         */
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
                 String startLocation = startEditText.getText().toString();
-
                 String endLocation   = endEditText.getText().toString();
-
                 String riderStory = storyEditText.getText().toString();
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
@@ -199,6 +207,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
+
+                finish();
             }
         });
 
@@ -210,10 +220,14 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
+
+        /*
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
+        */
+
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -221,8 +235,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        startPoint = currentPoint;
-        endPoint = currentPoint;
+
+        /**
+         * The startPoint and endPoint are subject to change once we figure out what causes the
+         * program to crash when it tries to find the current location.
+         * --> The problem may be when locationManager calls the getLastKnownLocation method.
+         * --> (Lines: 214-215)
+         */
+        //startPoint = currentPoint;
+        //endPoint = currentPoint;
+        startPoint = new GeoPoint(53.5232, 113.5263);
+        endPoint = new GeoPoint(53.5232, 113.5263);
+
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
         startMarker = new Marker(map);
@@ -235,6 +259,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         map.getOverlays().add(endMarker);
         dragger = new OnMarkerDragDrawer();
 
+        /**
+         * Set icon markers on map for user to pick start and end location for new request.
+         */
         startMarker.setIcon(getResources().getDrawable(R.mipmap.marker_green));
         endMarker.setIcon(getResources().getDrawable(R.mipmap.marker_red));
 
@@ -269,6 +296,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         //DO NOTHING FOR NOW:
         return false;
     }
+
+    /**
+     * deals with location changes
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         currentPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -284,6 +316,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         //
     }
 
+    /**
+     * deals with a change in status of the map.
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         //
@@ -303,10 +341,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         }
 
+        /**
+         * Deals with a marker drag
+         * @param marker
+         */
         @Override public void onMarkerDrag(Marker marker) {
             //mTrace.add(marker.getPosition());
         }
 
+        /**
+         * Deas with the marker stopping being dragged.
+         * @param marker
+         */
         @Override public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
@@ -326,6 +372,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         }
 
+        /**
+         * Deals with the marker starting being dragged.
+         * @param marker
+         */
         @Override public void onMarkerDragStart(Marker marker) {
             if(marker.getPosition().equals(mTrace.get(0))){
                 mTrace.remove(0);
