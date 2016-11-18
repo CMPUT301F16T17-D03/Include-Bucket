@@ -42,7 +42,7 @@ public class OnMarkerDragDrawerold implements Marker.OnMarkerDragListener {
         map.getOverlays().remove(3);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Double output){
+            public void processFinish(Road output){
             }
         }).execute(mTrace);
         if (marker.getTitle().equals("Start Point")){
