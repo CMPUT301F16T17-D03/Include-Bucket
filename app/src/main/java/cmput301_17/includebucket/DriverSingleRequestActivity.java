@@ -45,6 +45,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     MapView map;
     RoadManager roadManager;
     UserAccount user = new UserAccount();
+    Request request = new Request();
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -57,6 +58,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         setContentView(R.layout.driver_single_request_activity);
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
+        request = (Request) getIntent().getSerializableExtra("Request");
+
 
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         //Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
