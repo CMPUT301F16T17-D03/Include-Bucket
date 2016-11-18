@@ -1,8 +1,12 @@
 package cmput301_17.includebucket;
 
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +50,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+                requestList.clear();
                 key = keyword.getText().toString();
                 requests = RequestListController.getKeywordList(key);
                 requestList.addAll(requests);
@@ -63,6 +68,20 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
                 requestAdapter.notifyDataSetChanged();
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        browseRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
+                Request request =  requestList.get(position);
+                intent.putExtra("Request", request);
+                startActivity(intent);
+            }
+        });
+
     }
 
 }
