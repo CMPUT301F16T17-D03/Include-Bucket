@@ -234,13 +234,13 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-
+/*
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
 
-
+*/
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -255,11 +255,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
          */
-        startPoint = currentPoint;
-        endPoint = currentPoint;
+        //startPoint = currentPoint;
+        //endPoint = currentPoint;
 
-        //startPoint = new GeoPoint(53.5232, -113.5263);
-        //endPoint = new GeoPoint(53.5232, -113.5263);
+        startPoint = new GeoPoint(53.5232, -113.5263);
+        endPoint = new GeoPoint(53.5232, -113.5263);
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
