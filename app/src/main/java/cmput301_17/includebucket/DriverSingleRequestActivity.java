@@ -121,11 +121,19 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         //OpenStreetMapTileProviderConstants.setCachePath(new File("/sdcard/osmdroid2/").getAbsolutePath());
 
 
-        Button saveButton = (Button) findViewById(R.id.DSRAAcceptButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        Button acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                //is actually accept button
+
+                /*
+                
+                request.setDriverAccepted(true);
+                request.addDriver(user);
+
+                */
+
+
             }
         });
 

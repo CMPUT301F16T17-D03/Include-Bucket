@@ -26,7 +26,7 @@ public class Request implements Serializable {
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
-    private ArrayList<String> drivers;
+    private ArrayList<UserAccount> drivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
     private boolean isCompleted, isPaid;
@@ -58,29 +58,13 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider, String story) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> drivers) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
         this.riderStory = story;
-    }
-
-    /**
-     * Intantiates a new Request with specified keyword(s).
-     * @param loc1  The start location
-     * @param loc2  The end location
-     * @param rider The rider making a request
-     * @param story The rider's story (where is the rider going?)
-     * @param keys  The keyword
-     */
-    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<String> keys) {
-        this.requestID = null;
-        this.startLocation = loc1;
-        this.endLocation = loc2;
-        this.rider = rider;
-        this.riderStory = story;
-        this.keywords = keys;
+        this.drivers = drivers;
     }
 
     public String getRequestID() {return requestID; }
@@ -137,20 +121,20 @@ public class Request implements Serializable {
         this.keywords = keywords;
     }
 
-    public ArrayList<String> getDrivers() {
+    public ArrayList<UserAccount> getDrivers() {
         return drivers;
     }
 
-    public void setDrivers(ArrayList<String> drivers) {
+    public void setDrivers(ArrayList<UserAccount> drivers) {
         this.drivers = drivers;
     }
 
-    public void addDriver(String username){
-        this.drivers.add(username);
+    public void addDriver(UserAccount driver){
+        this.drivers.add(driver);
     }
 
-    public void removeDriver(String username){
-        this.drivers.remove(username);
+    public void removeDriver(UserAccount driver){
+        this.drivers.remove(driver);
     }
 
     public boolean isDriverAccepted() {

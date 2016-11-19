@@ -168,7 +168,7 @@ public class UserAccount implements Serializable {
             return;
         }
         this.driverRequests.add(request);
-        request.addDriver(this.getUniqueUserName());
+        request.addDriver(this);
     }
 
     /**
@@ -178,7 +178,7 @@ public class UserAccount implements Serializable {
     public void cancelDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             this.driverRequests.remove(request);
-            request.removeDriver(this.getUniqueUserName());
+            request.removeDriver(this);
         }
         return;
     }
