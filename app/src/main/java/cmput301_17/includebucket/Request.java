@@ -161,7 +161,7 @@ public class Request implements Serializable {
         this.driverAccepted = driverAccepted;
     }
 
-    public boolean isRiderAccepted() {
+    public boolean hasRiderAccepted() {
         return riderAccepted;
     }
 
@@ -191,7 +191,17 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        String status = "Open"; //TODO : this is just the default for now...
+        String status = "Open";
+        if (hasRiderAccepted()){
+            status = "Driver Accepted";
+        }
+        else if (isDriverAccepted()) {
+            if(getDrivers().size()== 1) {
+                 status = "1 Pending Driver";
+            }else{
+                 status = getDrivers().size() +"Pending Drivers";
+            }
+        }
 
         return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
     }

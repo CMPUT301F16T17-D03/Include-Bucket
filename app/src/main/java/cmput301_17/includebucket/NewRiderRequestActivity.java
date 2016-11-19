@@ -210,11 +210,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
-                /**
-                 * TODO : For some reason Elasticsearch will not instantiate a request with a fare
-                 */
-                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
+                Double fare = Double.parseDouble(priceEditText.getText().toString());
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
                 request.setFare(fare);
@@ -234,12 +231,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-
+/*
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
-
+*/
 
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -255,11 +252,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
          */
-          startPoint = currentPoint;
-          endPoint = currentPoint;
+          //startPoint = currentPoint;
+          //endPoint = currentPoint;
 
-        //startPoint = new GeoPoint(53.5232, -113.5263);
-        //endPoint = new GeoPoint(53.5232, -113.5263);
+        startPoint = new GeoPoint(53.5232, -113.5263);
+        endPoint = new GeoPoint(53.5232, -113.5263);
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
@@ -291,7 +288,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
             public void processFinish(Road output){
-                Double temp = output.mLength; //see also mDuration
+                Double temp = Math.round(output.mLength*100.0)/100.0; //see also mDuration
                 priceEditText.setText(temp.toString());//TODO formatting
                 //Here you will receive the result fired from async class
                 //of onPostExecute(result) method.
@@ -382,7 +379,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 @Override
                 public void processFinish(Road output){
-                    Double temp = output.mLength; //see also mDuration
+                    Double temp = Math.round(output.mLength*100.0)/100.0; //see also mDuration
                     priceEditText.setText(temp.toString());//TODO formatting
                     //Here you will receive the result fired from async class
                     //of onPostExecute(result) method.
@@ -399,8 +396,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             /**
              * update suggested fare
              */
-            price = "" + ((startMarker.getPosition().distanceTo(endMarker.getPosition())));
 
+            double temp = (startMarker.getPosition().distanceTo(endMarker.getPosition()));
+            double format = Math.round(temp *100.0)/100.0;
+
+            price= "$" +String.valueOf(format);
+           // price = "" + Math.round((startMarker.getPosition().distanceTo(endMarker.getPosition())));
             priceEditText.setText(price);
         }
 
