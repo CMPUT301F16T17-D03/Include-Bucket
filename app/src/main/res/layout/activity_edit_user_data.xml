@@ -12,19 +12,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:singleLine="true"
-        android:hint="@string/editUserName" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/editEmail"
-        android:layout_below="@+id/editName"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/editPhone"
         android:singleLine="true"
