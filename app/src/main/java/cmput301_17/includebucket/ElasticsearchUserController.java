@@ -72,7 +72,7 @@ public class ElasticsearchUserController {
             /**
              * This query retrieves one user instance specified by the login input in LoginActivity
              */
-            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + userLogin[0] + "\" }}}";
+            String search_string = "{\"query\": { \"match\": { \"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")

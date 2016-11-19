@@ -24,7 +24,6 @@ public class EditUserDataActivity extends MainMenuActivity {
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
 
-        userName  = (EditText) findViewById(R.id.editName);
         userEmail = (EditText) findViewById(R.id.editEmail);
         userPhone = (EditText) findViewById(R.id.editPhone);
 
@@ -41,7 +40,6 @@ public class EditUserDataActivity extends MainMenuActivity {
     public void editUser() {
 
         String login = user.getUniqueUserName();
-        String name  = userName.getText().toString();
 
         String email;
         String phone;
@@ -57,7 +55,7 @@ public class EditUserDataActivity extends MainMenuActivity {
             phone = userPhone.getText().toString();
         }
 
-        UserAccount user = new UserAccount(login, name, email, phone);
+        UserAccount user = new UserAccount(login, email, phone);
 
         ElasticsearchUserController.CreateUser editUser;
         editUser = new ElasticsearchUserController.CreateUser();
