@@ -38,7 +38,7 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
 
         requestsListView = (ListView) findViewById(R.id.driverCurrentList);
 
-        requests = RequestListController.getRequestList(userLogin);
+        requests = RequestListController.getRequestList();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
@@ -46,11 +46,11 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         requestsListView.setAdapter(requestAdapter);
 
 
-        RequestListController.getRequestList(userLogin).addListener(new Listener() {
+        RequestListController.getRequestList().addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList(userLogin).getRequests();
+                Collection<Request> requests = RequestListController.getRequestList().getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }

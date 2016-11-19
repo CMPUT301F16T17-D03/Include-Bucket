@@ -16,7 +16,7 @@ import android.widget.Toast;
  */
 public class RegisterActivity extends MainMenuActivity {
 
-    protected EditText userLogin, userName, userEmail, userPhone;
+    protected EditText userLogin, userEmail, userPhone;
 
     /**
      *  When the user presses the Accept button, they are directed back into the login activity
@@ -32,7 +32,6 @@ public class RegisterActivity extends MainMenuActivity {
         setContentView(R.layout.activity_register);
 
         userLogin = (EditText) findViewById(R.id.loginTextField);
-        userName  = (EditText) findViewById(R.id.nameTextField);
         userEmail = (EditText) findViewById(R.id.emailTextField);
         userPhone = (EditText) findViewById(R.id.phoneTextField);
 
@@ -91,11 +90,10 @@ public class RegisterActivity extends MainMenuActivity {
     public void createUser() {
 
         String login = userLogin.getText().toString();
-        String name  = userName.getText().toString();
         String email = userEmail.getText().toString();
         String phone = userPhone.getText().toString();
 
-        UserAccount user = new UserAccount(login, name, email, phone);
+        UserAccount user = new UserAccount(login, email, phone);
 
         /**
          * If username is unique, create a new user.

@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.renderscript.Double2;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -54,6 +55,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private GeoPoint currentPoint;
     private String price;
 
+    private Context context;
+
 
     private UserAccount user = new UserAccount();
     /**
@@ -66,6 +69,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
+
+        context = NewRiderRequestActivity.this;
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
 
@@ -209,17 +214,17 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
-                /**
-                 * TODO : For some reason Elasticsearch will not instantiate a request with a fare
-                 */
-                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
+                Double fare = Double.parseDouble(priceEditText.getText().toString());
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
                 request.setFare(fare);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
+
+                RequestListController controller = new RequestListController();
+                controller.saveRequestsInLocalFile();
 
                 finish();
             }
@@ -233,12 +238,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-
+        /*
+         * TODO : Current location does not work on all machines for some reason
+         * Comment out the next four lines for testing purposes,
+         * figure out what is wrong with current location later.
+         * It is not a requirement to have the current location as the starting point anyhow...
+         */
+        /*
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
-
+        */
 
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -254,11 +265,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
          */
-          startPoint = currentPoint;
-          endPoint = currentPoint;
+          //startPoint = currentPoint;
+          //endPoint = currentPoint;
 
-        //startPoint = new GeoPoint(53.5232, -113.5263);
-        //endPoint = new GeoPoint(53.5232, -113.5263);
+        startPoint = new GeoPoint(53.5232, -113.5263);
+        endPoint = new GeoPoint(53.5232, -113.5263);
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
@@ -289,8 +300,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         waypoints.add(endPoint);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Double output){
-                priceEditText.setText(output.toString());//TODO formatting
+            public void processFinish(Road output){
+                Double temp = output.mLength; //see also mDuration
+                priceEditText.setText(temp.toString());//TODO formatting
+                //Here you will receive the result fired from async class
+                //of onPostExecute(result) method.
 
             }
         }).execute(waypoints);
@@ -373,13 +387,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
             mTrace.add(marker.getPosition());
             Road road;
+            //http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
             AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
 
                 @Override
-                public void processFinish(Double output){
+                public void processFinish(Road output){
+                    Double temp = output.mLength; //see also mDuration
+                    priceEditText.setText(temp.toString());//TODO formatting
                     //Here you will receive the result fired from async class
                     //of onPostExecute(result) method.
-                    priceEditText.setText(output.toString());
+
                 }
             }).execute(mTrace);
             if (marker.equals(startMarker)){

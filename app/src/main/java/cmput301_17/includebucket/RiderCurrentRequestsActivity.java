@@ -109,6 +109,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                         Request request = requestList.get(finalPosition);
                         RequestListController.deleteRequestFromList(request);
                         RequestListController.getRequestList(userLogin).deleteRequest(request);
+                        requestList.remove(request);
                         requestsListView.setAdapter(requestAdapter);
                         requestAdapter.notifyDataSetChanged();
                     }

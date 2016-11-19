@@ -45,7 +45,9 @@ public class UserAccount implements Serializable {
     }
 
     @JestId
-    private String uid, uniqueUserName, name, email, phoneNumber;
+    private String uid;
+
+    private String uniqueUserName, email, phoneNumber;
     private Boolean isLoggedIn,isRider;
     private ArrayList<Request> riderRequests;
     private ArrayList<Request> driverRequests;
@@ -59,9 +61,8 @@ public class UserAccount implements Serializable {
      * This is the constructor that creates a user with an id and sets values its values.
      * @param
      */
-    public UserAccount(String userLogin, String userName, String userEmail, String userPhone) {
+    public UserAccount(String userLogin, String userEmail, String userPhone) {
         this.uniqueUserName = userLogin;
-        this.name = userName;
         this.email = userEmail;
         this.phoneNumber = userPhone;
         this.isLoggedIn = false;

@@ -15,14 +15,6 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/nameTextField"
-        android:layout_gravity="center_horizontal"
-        android:hint="@string/user_name"
-        android:singleLine="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/emailTextField"
         android:layout_gravity="center_horizontal"
         android:hint="@string/user_email"

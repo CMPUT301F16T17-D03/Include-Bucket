@@ -22,14 +22,25 @@ import java.util.concurrent.ExecutionException;
 public class RequestListController {
 
     private static RequestList requestList = new RequestList();
-    private static final String REQUEST_LIST = "file.sav";
-    private static Context context;
+    private static RequestList requestListRider  = new RequestList();
+    private static RequestList requestListDriver = new RequestList();
 
+    private static final String REQUESTS_RIDER  = "file.sav";
+    private static final String REQUESTS_DRIVER = "file.sav";
+
+    private Context context;
+
+    static public RequestList getRequestList() {
+        requestList = loadRequestsFromLocalFile();
+        return requestList;
+    }
+
+    /*
     static public RequestList getRequestList(String list) {
         requestList = getRequestsFromElasticSearch(list);
         return requestList;
     }
-
+    */
     static public RequestList getKeywordList(String key) {
         requestList = getRequestsByKeyword(key);
         return requestList;
@@ -37,6 +48,14 @@ public class RequestListController {
 
     static public void deleteRequestFromList(Request request) {
         deleteRequestFromElasticSearch(request);
+    }
+
+    public void setContext (Context context) {
+        this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     /**
@@ -62,7 +81,7 @@ public class RequestListController {
     }
 
     /**
-     * This returns a list of requests from ElasticSearch.
+     * This returns a list of requests from ElasticSearch with specified user login.
      * @return requests
      */
     public static RequestList getRequestsFromElasticSearch(String userLogin) {
@@ -84,22 +103,37 @@ public class RequestListController {
     }
 
     /**
-     * This deletes a request from ElasticSearch.
+     * This returns a list of ALL requests from ElasticSearch.
      * @return requests
      */
-    public static void deleteRequestFromElasticSearch(Request request) {
-        ElasticsearchRequestController.DeleteRequest deleteRequests;
-        deleteRequests = new ElasticsearchRequestController.DeleteRequest();
-        deleteRequests.execute(request);
+    public static RequestList getAllRequestsFromElasticSearch() {
+
+        ElasticsearchRequestController.GetAllRequests retrieveRequests;
+        retrieveRequests = new ElasticsearchRequestController.GetAllRequests();
+        retrieveRequests.execute();
+
+        RequestList requests = new RequestList();
+
+        try {
+            requests = retrieveRequests.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return requests;
     }
 
     /**
      * This will return a list of requests from a local file for offline behaviour.
      * @param
      */
-    public RequestList loadRequestsFromLocalFile() {
+    public static RequestList loadRequestsFromLocalFile() {
+
+        RequestListController controller = new RequestListController();
+
         try {
-            FileInputStream fis = context.openFileInput(REQUEST_LIST);
+            FileInputStream fis = controller.getContext().openFileInput(REQUESTS_RIDER);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
@@ -123,13 +157,13 @@ public class RequestListController {
      */
     public void saveRequestsInLocalFile() {
 
-
+        String FILENAME;
 
         try {
-            FileOutputStream fos = context.openFileOutput(REQUEST_LIST, 0);
+            FileOutputStream fos = context.openFileOutput(REQUESTS_RIDER, 0);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
-            gson.toJson(requestList, writer);
+            gson.toJson(getAllRequestsFromElasticSearch(), writer);
             writer.flush();
         }
         catch (FileNotFoundException e) {
@@ -144,7 +178,35 @@ public class RequestListController {
      * This adds a request to the list.
      * @param request
      */
-    public void addRequest(Request request, String userLogin) {
-        getRequestList(userLogin).addRequest(request);
+    public void addRequest(Request request) {
+        getRequestList().addRequest(request);
+    }
+
+    /**
+     * Get list of current requests made by a certain user.
+     */
+    public RequestList getRequestsByUid(String uid) {
+
+        RequestList requestsByUid = new RequestList();
+
+        for (int i = 0; i < requestList.size(); i++) {
+
+            String userId = requestList.get(i).getRider().getUid();
+
+            if (userId.equals(uid)) {
+                requestsByUid.add(requestList.get(i));
+            }
+        }
+        return requestsByUid;
+    }
+
+    /**
+     * This deletes a request from ElasticSearch.
+     * @return requests
+     */
+    public static void deleteRequestFromElasticSearch(Request request) {
+        ElasticsearchRequestController.DeleteRequest deleteRequests;
+        deleteRequests = new ElasticsearchRequestController.DeleteRequest();
+        deleteRequests.execute(request);
     }
 }

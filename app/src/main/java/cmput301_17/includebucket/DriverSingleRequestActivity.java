@@ -45,6 +45,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     MapView map;
     RoadManager roadManager;
     UserAccount user = new UserAccount();
+    Request request = new Request();
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -57,6 +58,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         setContentView(R.layout.driver_single_request_activity);
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
+        request = (Request) getIntent().getSerializableExtra("Request");
+
 
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         //Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
@@ -144,8 +147,13 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        startPoint = new GeoPoint(53.5444, -113.4909); // TODO get from file/elasticsearch
-        endPoint = new GeoPoint(53.6444, -113.5909);   // get from file/elasticsearch
+
+        //startPoint =
+
+
+        //startPoint = new GeoPoint(53.5444, -113.4909); // TODO get from file/elasticsearch
+        //endPoint = new GeoPoint(53.6444, -113.5909);   // get from file/elasticsearch
+
         startEditText.setText(startPoint.toString());  // get from file/elasticsearch
         endEditText.setText(endPoint.toString());      // get from file/elasticsearch
         String price = "" + startPoint.distanceTo(endPoint);
@@ -178,7 +186,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         waypoints.add(endPoint);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Double output){
+            public void processFinish(Road output){
             }
         }).execute(waypoints);
         //Road road = roadManager.getRoad(waypoints);
@@ -228,7 +236,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             map.getOverlays().remove(3);
             AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
                 @Override
-                public void processFinish(Double output){
+                public void processFinish(Road output){
                 }
             }).execute(mTrace);
             if (marker.equals(startMarker)){

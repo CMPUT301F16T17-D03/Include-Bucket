@@ -119,6 +119,12 @@ public class    LoginActivity extends MainMenuActivity {
                     {
                         Log.i("Success", "User " + textLogin + " was found.");
 
+                        RequestList requests = RequestListController.getRequestsByUid(foundUser.getUid());
+
+                        RequestListController requestController = new RequestListController();
+                        requestController.setContext(LoginActivity.this);
+                        requestController.saveRequestsInLocalFile();
+
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         intent.putExtra("User", foundUser);
                         startActivity(intent);

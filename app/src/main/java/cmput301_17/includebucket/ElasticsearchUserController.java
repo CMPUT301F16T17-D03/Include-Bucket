@@ -38,7 +38,7 @@ public class ElasticsearchUserController {
                     Index index = new Index.Builder(user)
                             .index("cmput301f16t17")
                             .type("user")
-                            .id(user.getUniqueUserName()).build();
+                            .build();
                     try {
                         DocumentResult result = client.execute(index);
 
@@ -72,7 +72,7 @@ public class ElasticsearchUserController {
             /**
              * This query retrieves one user instance specified by the login input in LoginActivity
              */
-            String search_string = "{\"query\": { \"match\": { \"_id\": \"" + userLogin[0] + "\" }}}";
+            String search_string = "{\"query\": { \"match\": { \"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
