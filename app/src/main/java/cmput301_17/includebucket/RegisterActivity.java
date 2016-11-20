@@ -17,6 +17,7 @@ import android.widget.Toast;
 public class RegisterActivity extends MainMenuActivity {
 
     protected EditText userLogin, userEmail, userPhone;
+    UserController controller = new UserController();
 
     /**
      *  When the user presses the Accept button, they are directed back into the login activity
@@ -57,17 +58,22 @@ public class RegisterActivity extends MainMenuActivity {
 
                     if (textLogin.equals(foundLogin))
                     {
-                        /**
-                         * Taken from http://stackoverflow.com/questions/8472349/how-to-set-text-color-to-a-text-view-programmatically
-                         * Accessed on November 11, 2016
-                         * Author: user370305
-                         */
                         Toast.makeText(RegisterActivity.this, "The Login " + textLogin + " is already taken.", Toast.LENGTH_SHORT).show();
-                        userLogin.setTextColor(Color.parseColor("#E40000"));
                     }
                 } catch (Exception e) {
 
-                    createUser();
+                    String login = userLogin.getText().toString();
+                    String email = userEmail.getText().toString();
+                    String phone = userPhone.getText().toString();
+
+                    UserAccount user = new UserAccount(login, email, phone);
+
+                    ElasticsearchUserController.CreateUser createUser;
+                    createUser = new ElasticsearchUserController.CreateUser();
+                    createUser.execute(user);
+
+                    controller.setContext(RegisterActivity.this);
+                    UserController.saveUserAccountInLocalFile(user, controller.getContext());
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");
 
@@ -82,24 +88,5 @@ public class RegisterActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    /**
-     * When a user clicks the Accept button, a new UserAccount instance is created
-     */
-    public void createUser() {
-
-        String login = userLogin.getText().toString();
-        String email = userEmail.getText().toString();
-        String phone = userPhone.getText().toString();
-
-        UserAccount user = new UserAccount(login, email, phone);
-
-        /**
-         * If username is unique, create a new user.
-         */
-        ElasticsearchUserController.CreateUser createUser;
-        createUser = new ElasticsearchUserController.CreateUser();
-        createUser.execute(user);
     }
 }

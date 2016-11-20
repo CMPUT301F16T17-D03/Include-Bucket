@@ -15,16 +15,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by michelletagarino on 16-10-29.
  *
  * This deals with login functionality.
  */
-public class    LoginActivity extends MainMenuActivity {
+public class LoginActivity extends MainMenuActivity {
 
     private Button loginButton;
     private Button registerButton;
     private EditText userLogin;
+
+    UserController controller;
 
     /**
      * This method get permissions to run and deals with button presses.
@@ -34,6 +38,8 @@ public class    LoginActivity extends MainMenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        controller = new UserController();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -107,26 +113,29 @@ public class    LoginActivity extends MainMenuActivity {
                  *     are compared; if equal, the activity will switch to the MainActivity (in other
                  *     words, the user will be logged in).
                  */
-                ElasticsearchUserController.RetrieveUser findUser;
-                findUser = new ElasticsearchUserController.RetrieveUser();
-                findUser.execute(userLogin.getText().toString());
+
+                //ElasticsearchUserController.RetrieveUser findUser;
+                //findUser = new ElasticsearchUserController.RetrieveUser();
+                //findUser.execute(userLogin.getText().toString());
+
+                UserAccount foundUser = UserController.retrieveUserFromElasticSearch(userLogin.getText().toString());
+                RequestListController requestListController = new RequestListController();
+
+                controller.setContext(LoginActivity.this);
+                //requestListController.setContext(LoginActivity.this);
+
+                UserController.saveUserAccountInLocalFile(foundUser, controller.getContext());
 
                 try {
-                    UserAccount foundUser = findUser.get();
                     String foundLogin = foundUser.getUniqueUserName();
 
                     if (textLogin.equals(foundLogin))
                     {
                         Log.i("Success", "User " + textLogin + " was found.");
 
-                        RequestList requests = RequestListController.getRequestsByUid(foundUser.getUid());
-
-                        RequestListController requestController = new RequestListController();
-                        requestController.setContext(LoginActivity.this);
-                        requestController.saveRequestsInLocalFile();
-
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                        intent.putExtra("User", foundUser);
+                        //intent.putExtra("User", foundUser);
+                        //intent.putExtra("User", UserController.getUserAccount());
                         startActivity(intent);
                     }
                 }

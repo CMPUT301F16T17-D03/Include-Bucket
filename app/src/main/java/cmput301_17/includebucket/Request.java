@@ -21,18 +21,17 @@ public class Request implements Serializable {
 
     private String startLocation;
     private String endLocation;
-    private UserAccount rider;
-    private UserAccount driver;
+    private UserAccount user;
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
-    private ArrayList<String> drivers;
+    private ArrayList<UserAccount> drivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
     private boolean isCompleted, isPaid;
 
     /**
-     * Enums that specify the state of the status.
+     * Enum class that specify the state of the status.
      * A request can be:
      *     Open (Rider just made a ride request, no driver has accepted it)
      *     Accepted by driver (A driver accepted the open request)
@@ -55,32 +54,16 @@ public class Request implements Serializable {
      * Intantiates a new Request.
      * @param loc1  The start location
      * @param loc2  The end location
-     * @param rider The rider making a request
+     * @param user The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider, String story) {
+    public Request(String loc1, String loc2, UserAccount user, String story, ArrayList<UserAccount> drivers) {
         this.requestID = null;
+        this.user = user;
         this.startLocation = loc1;
         this.endLocation = loc2;
-        this.rider = rider;
         this.riderStory = story;
-    }
-
-    /**
-     * Intantiates a new Request with specified keyword(s).
-     * @param loc1  The start location
-     * @param loc2  The end location
-     * @param rider The rider making a request
-     * @param story The rider's story (where is the rider going?)
-     * @param keys  The keyword
-     */
-    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<String> keys) {
-        this.requestID = null;
-        this.startLocation = loc1;
-        this.endLocation = loc2;
-        this.rider = rider;
-        this.riderStory = story;
-        this.keywords = keys;
+        this.drivers = drivers;
     }
 
     public String getRequestID() {return requestID; }
@@ -111,16 +94,6 @@ public class Request implements Serializable {
         this.riderStory = riderStory;
     }
 
-    public UserAccount getRider() {
-        return rider;
-    }
-
-    public void setRider(UserAccount rider) {
-        this.rider = rider;
-    }
-
-    public String getRiderUserName() { return getRider().getUniqueUserName(); }
-
     public Double getFare() {
         return fare;
     }
@@ -137,20 +110,20 @@ public class Request implements Serializable {
         this.keywords = keywords;
     }
 
-    public ArrayList<String> getDrivers() {
+    public ArrayList<UserAccount> getDrivers() {
         return drivers;
     }
 
-    public void setDrivers(ArrayList<String> drivers) {
+    public void setDrivers(ArrayList<UserAccount> drivers) {
         this.drivers = drivers;
     }
 
-    public void addDriver(String username){
-        this.drivers.add(username);
+    public void addDriver(UserAccount driver){
+        this.drivers.add(driver);
     }
 
-    public void removeDriver(String username){
-        this.drivers.remove(username);
+    public void removeDriver(UserAccount driver){
+        this.drivers.remove(driver);
     }
 
     public boolean isDriverAccepted() {
@@ -161,7 +134,7 @@ public class Request implements Serializable {
         this.driverAccepted = driverAccepted;
     }
 
-    public boolean isRiderAccepted() {
+    public boolean hasRiderAccepted() {
         return riderAccepted;
     }
 
@@ -185,13 +158,28 @@ public class Request implements Serializable {
         isPaid = paid;
     }
 
-    public void setUser(UserAccount user){
-        this.rider = user;
+    public UserAccount getUser() {
+        return user;
+    }
+    //public void setUser(UserAccount user){this.rider = user;}
+
+    public boolean isRiderAccepted() {
+        return Boolean.FALSE;
     }
 
     @Override
     public String toString() {
-        String status = "Open"; //TODO : this is just the default for now...
+        String status = "Open";
+        if (hasRiderAccepted()){
+            status = "Driver Accepted";
+        }
+        else if (isDriverAccepted()) {
+            if(getDrivers().size()== 1) {
+                 status = "1 Pending Driver";
+            }else{
+                 status = getDrivers().size() +"Pending Drivers";
+            }
+        }
 
         return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
     }

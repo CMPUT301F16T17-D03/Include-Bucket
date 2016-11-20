@@ -54,11 +54,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private LocationListener locationListener;
     private GeoPoint currentPoint;
     private String price;
+    private ArrayList<UserAccount> drivers;
 
     private Context context;
 
 
-    private UserAccount user = new UserAccount();
+    private UserAccount user;
+    private UserController userController;
+    private RequestListController requestListController;
+    //private UserAccount user = UserController.getUserAccount();
+
     /**
      * This method gets permissions, deals with the map and handles button presses.
      *
@@ -70,9 +75,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
 
-        context = NewRiderRequestActivity.this;
-
-        user = (UserAccount) getIntent().getSerializableExtra("User");
+        user = UserController.getUserAccount();
+        userController = new UserController();
+        requestListController = new RequestListController();
 
         /**
          * TODO : Fix this later.
@@ -211,20 +216,28 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
+                userController.setContext(NewRiderRequestActivity.this);
+                requestListController.setContext(NewRiderRequestActivity.this);
+
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
-
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
+                user.setUserCategory(UserAccount.UserCategory.rider); //users that make requests are riders
 
-                Request request = new Request(startLocation, endLocation, user, riderStory);
+                UserController.saveUserAccountInLocalFile(user, userController.getContext());
+
+                Request request = new Request(startLocation, endLocation, user, riderStory, drivers);
                 request.setFare(fare);
+
+                Log.i("Success","Got "+user.getUniqueUserName());
+
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
 
-                RequestListController controller = new RequestListController();
-                controller.saveRequestsInLocalFile();
+                requestListController.addRequest(request);
+                RequestListController.saveRequestsInLocalFile(requestListController.getRequestList(), requestListController.getContext());
 
                 finish();
             }
@@ -301,7 +314,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
             public void processFinish(Road output){
-                Double temp = output.mLength; //see also mDuration
+                Double temp = Math.round(output.mLength*100.0)/100.0; //see also mDuration
                 priceEditText.setText(temp.toString());//TODO formatting
                 //Here you will receive the result fired from async class
                 //of onPostExecute(result) method.
@@ -392,7 +405,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 @Override
                 public void processFinish(Road output){
-                    Double temp = output.mLength; //see also mDuration
+                    Double temp = Math.round(output.mLength*100.0)/100.0; //see also mDuration
                     priceEditText.setText(temp.toString());//TODO formatting
                     //Here you will receive the result fired from async class
                     //of onPostExecute(result) method.
@@ -409,8 +422,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             /**
              * update suggested fare
              */
-            price = "" + ((startMarker.getPosition().distanceTo(endMarker.getPosition())));
 
+            double temp = (startMarker.getPosition().distanceTo(endMarker.getPosition()));
+            double format = Math.round(temp *100.0)/100.0;
+
+            price= "$" +String.valueOf(format);
+           // price = "" + Math.round((startMarker.getPosition().distanceTo(endMarker.getPosition())));
             priceEditText.setText(price);
         }
 

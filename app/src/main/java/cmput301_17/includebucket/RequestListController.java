@@ -1,6 +1,7 @@
 package cmput301_17.includebucket;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -21,17 +23,42 @@ import java.util.concurrent.ExecutionException;
  */
 public class RequestListController {
 
-    private static RequestList requestList = new RequestList();
-    private static RequestList requestListRider  = new RequestList();
-    private static RequestList requestListDriver = new RequestList();
+    private static RequestList requestList = null;
+    private static UserAccount user = new UserAccount();
+    private static RequestList requestListRider = new RequestList();
+    //private static RequestList requestListDriver = new RequestList();
 
-    private static final String REQUESTS_RIDER  = "file.sav";
-    private static final String REQUESTS_DRIVER = "file.sav";
+    private static final String REQUESTS_RIDER  = "rider_requests.sav";
+    private static final String REQUESTS_DRIVER = "driver_requests.sav";
 
     private Context context;
 
-    static public RequestList getRequestList() {
-        requestList = loadRequestsFromLocalFile();
+    private static RequestListController controller = new RequestListController();
+
+    public static RequestList getRequestList() {
+
+        //UserAccount user = UserController.getUserAccount();
+/*
+        if (user.getUserCategory().equals(UserAccount.UserCategory.rider))
+        {
+            Log.i("Whoa","I did something here.");
+            //requestList = getRequestsByUid();
+        }
+        else
+        {
+            Collection<Request> requests = loadRequestsFromLocalFile();
+            requestList.clear();
+            for (Request r : requests) {
+                if (!user.getUniqueUserName().equals(r.getUser().getUniqueUserName()))
+                {
+
+                    requestList.add(r);
+                }
+            }
+        }*/
+        if (requestList == null) {
+            requestList = getAllRequestsFromElasticSearch();
+        }
         return requestList;
     }
 
@@ -110,7 +137,7 @@ public class RequestListController {
 
         ElasticsearchRequestController.GetAllRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetAllRequests();
-        retrieveRequests.execute();
+        retrieveRequests.execute("");
 
         RequestList requests = new RequestList();
 
@@ -130,15 +157,14 @@ public class RequestListController {
      */
     public static RequestList loadRequestsFromLocalFile() {
 
-        RequestListController controller = new RequestListController();
-
+        Context context = controller.getContext();
         try {
-            FileInputStream fis = controller.getContext().openFileInput(REQUESTS_RIDER);
+            FileInputStream fis = context.openFileInput(REQUESTS_RIDER);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
 
-            Type listType = new TypeToken<ArrayList<Request>>() {}.getType();
+            Type listType = new TypeToken<RequestList>() {}.getType();
             requestList = gson.fromJson(in, listType);
         }
         catch (FileNotFoundException e) {
@@ -147,23 +173,32 @@ public class RequestListController {
         catch (IOException e) {
             throw new RuntimeException();
         }
-
-        return null;
+        return requestList;
     }
 
     /**
      * This will grab a list of requests from Elasticsearch and save it in a local file.
      * @param
      */
-    public void saveRequestsInLocalFile() {
+    public static void saveRequestsInLocalFile(RequestList requests, Context context) {
 
-        String FILENAME;
+        String file;
+
+        UserAccount user = UserController.getUserAccount();
+
+        controller.setContext(context);
+
+        if(user.getUserCategory()==(UserAccount.UserCategory.rider))
+        {
+            file = REQUESTS_RIDER;
+        }
+        else file = REQUESTS_DRIVER;
 
         try {
-            FileOutputStream fos = context.openFileOutput(REQUESTS_RIDER, 0);
+            FileOutputStream fos = context.openFileOutput(file, 0);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
-            gson.toJson(getAllRequestsFromElasticSearch(), writer);
+            gson.toJson(requests, writer);
             writer.flush();
         }
         catch (FileNotFoundException e) {
@@ -184,20 +219,25 @@ public class RequestListController {
 
     /**
      * Get list of current requests made by a certain user.
+     * TODO : it's getting all the requests but the UserController is sending a null object
      */
-    public RequestList getRequestsByUid(String uid) {
+    public static RequestList getRequestsByUid() {
 
-        RequestList requestsByUid = new RequestList();
+        RequestList requests = getAllRequestsFromElasticSearch();
+        UserAccount user = UserController.getUserAccount();
 
-        for (int i = 0; i < requestList.size(); i++) {
+        String uid = user.getUid();
 
-            String userId = requestList.get(i).getRider().getUid();
+        for (int i = 0; i < requests.size(); i++) {
+
+            String userId = requests.get(i).getUser().getUid();
 
             if (userId.equals(uid)) {
-                requestsByUid.add(requestList.get(i));
+                Log.i("Success","Got someeeee.");
+                requestListRider.add(requests.get(i));
             }
         }
-        return requestsByUid;
+        return requestListRider;
     }
 
     /**

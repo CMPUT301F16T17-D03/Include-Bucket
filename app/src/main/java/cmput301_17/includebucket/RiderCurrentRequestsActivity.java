@@ -30,8 +30,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private ListView requestsListView;
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
-    private Collection<Request> requests;
-    private String userLogin;
+    private RequestList requests;
+    private RequestList requestCollection;
+    //private String userLogin;
+
+    RequestListController requestListController = new RequestListController();
+    private UserAccount user = new UserAccount();
 
     final String adbMessage = "Click More button for details.";
 
@@ -45,14 +49,31 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_requests);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
-        userLogin = user.getUniqueUserName();
+        //user = (UserAccount) getIntent().getSerializableExtra("User");
+        //userLogin = user.getUniqueUserName();
+
+        requestListController.setContext(RiderCurrentRequestsActivity.this);
+        user = UserController.getUserAccount();
 
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        requests = RequestListController.getRequestList(userLogin);
+        RequestList requestLocal = new RequestList();
+        //requests = new RequestList();
+
+        /**
+         * TODO : create condition where if the user is offline get requests from a local file
+         * instead of Elasticsearch.
+         */
+        //if (networkDown==Boolean.TRUE) {
+        //requests = controller.getRequestList();
+        //controller.saveRequestsInLocalFile(requests, controller.getContext());
+        //}
+        //else {
+            //requests = RequestListController.getRequestList();
+        //}
+        requestCollection = RequestListController.getRequestList();
         requestList = new ArrayList<>();
-        requestList.addAll(requests);
+        requestList.addAll(requestCollection);
 
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
@@ -60,13 +81,13 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         /**
          * Updates the ArrayAdapter when a request is added or deleted.
          */
-        RequestListController.getRequestList(userLogin).addListener(new Listener() {
+        RequestListController.getRequestList().addListener(new Listener() {
             @Override
             public void update() {
-                requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList(userLogin).getRequests();
-                requestList.addAll(requests);
-                requestAdapter.notifyDataSetChanged();
+            requestList.clear();
+            Collection<Request> requests = requestListController.getRequestList().getRequests();
+            requestList.addAll(requests);
+            requestAdapter.notifyDataSetChanged();
             }
         });
 
@@ -93,9 +114,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     protected void onResume() {
         super.onResume();
 
-        requestsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
                 adb.setMessage(adbMessage);
@@ -107,8 +128,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
-                        RequestListController.deleteRequestFromList(request);
-                        RequestListController.getRequestList(userLogin).deleteRequest(request);
+                        requestListController.deleteRequestFromList(request);
+                        requestListController.getRequestList().deleteRequest(request);
                         requestList.remove(request);
                         requestsListView.setAdapter(requestAdapter);
                         requestAdapter.notifyDataSetChanged();
@@ -130,7 +151,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     }
                 });
                 adb.show();
-                return false;
             }
         });
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
@@ -138,4 +158,3 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         requestAdapter.notifyDataSetChanged();
     }
 }
-
