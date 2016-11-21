@@ -70,7 +70,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         setContentView(R.layout.new_rider_request);
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
-
+        drivers= new ArrayList<UserAccount>();
         /**
          * TODO : Fix this later.
          *

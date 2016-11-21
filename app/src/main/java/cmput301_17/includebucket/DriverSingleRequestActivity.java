@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -126,14 +127,14 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                /*
-                
                 request.setDriverAccepted(true);
                 request.addDriver(user);
-
-                */
-
-
+                RequestListController.deleteRequestFromElasticSearch(request);
+                ElasticsearchRequestController.CreateRequest createRequest;
+                createRequest = new ElasticsearchRequestController.CreateRequest();
+                createRequest.execute(request);
+                Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
