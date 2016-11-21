@@ -49,24 +49,21 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_requests);
 
-        //user = (UserAccount) getIntent().getSerializableExtra("User");
-        //userLogin = user.getUniqueUserName();
-
-        requestListController.setContext(RiderCurrentRequestsActivity.this);
-        user = UserController.getUserAccount();
-
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        RequestList requestLocal = new RequestList();
-        //requests = new RequestList();
+        requestListController.setContext(RiderCurrentRequestsActivity.this);
+
+        user = UserController.getUserAccount();
+
+        Log.i("Success", "Got " + user.getUniqueUserName() + " with ID: " + user.getUid());
 
         /**
          * TODO : create condition where if the user is offline get requests from a local file
          * instead of Elasticsearch.
          */
         //if (networkDown==Boolean.TRUE) {
-        //requests = controller.getRequestList();
-        //controller.saveRequestsInLocalFile(requests, controller.getContext());
+        requests = requestListController.getRequestsFromElasticSearch();
+        requestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
         //}
         //else {
             //requests = RequestListController.getRequestList();

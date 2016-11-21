@@ -35,6 +35,9 @@ public class RequestListController {
 
     private static RequestListController controller = new RequestListController();
 
+
+    private static RequestList rl = new RequestList();
+
     public static RequestList getRequestList() {
 
         //UserAccount user = UserController.getUserAccount();
@@ -57,7 +60,7 @@ public class RequestListController {
             }
         }*/
         if (requestList == null) {
-            requestList = getAllRequestsFromElasticSearch();
+            requestList = loadRequestsFromLocalFile();
         }
         return requestList;
     }
@@ -111,7 +114,7 @@ public class RequestListController {
      * This returns a list of requests from ElasticSearch with specified user login.
      * @return requests
      */
-    public static RequestList getRequestsFromElasticSearch(String userLogin) {
+    public static RequestList getBlehRequestsFromElasticSearch(String userLogin) {
 
         ElasticsearchRequestController.GetRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetRequests();
@@ -133,7 +136,8 @@ public class RequestListController {
      * This returns a list of ALL requests from ElasticSearch.
      * @return requests
      */
-    public static RequestList getAllRequestsFromElasticSearch() {
+    /*
+    public static RequestList getRequestsFromElasticSearch(String userLogin) {
 
         ElasticsearchRequestController.GetAllRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetAllRequests();
@@ -150,7 +154,7 @@ public class RequestListController {
         }
         return requests;
     }
-
+    */
     /**
      * This will return a list of requests from a local file for offline behaviour.
      * @param
@@ -187,18 +191,18 @@ public class RequestListController {
         UserAccount user = UserController.getUserAccount();
 
         controller.setContext(context);
-
+/*
         if(user.getUserCategory()==(UserAccount.UserCategory.rider))
         {
             file = REQUESTS_RIDER;
         }
         else file = REQUESTS_DRIVER;
-
+*/
         try {
-            FileOutputStream fos = context.openFileOutput(file, 0);
+            FileOutputStream fos = context.openFileOutput(REQUESTS_RIDER, 0);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
-            gson.toJson(requests, writer);
+            gson.toJson(requestListRider, writer);
             writer.flush();
         }
         catch (FileNotFoundException e) {
@@ -221,23 +225,28 @@ public class RequestListController {
      * Get list of current requests made by a certain user.
      * TODO : it's getting all the requests but the UserController is sending a null object
      */
-    public static RequestList getRequestsByUid() {
+    public static RequestList getRequestsFromElasticSearch() {
 
-        RequestList requests = getAllRequestsFromElasticSearch();
         UserAccount user = UserController.getUserAccount();
 
-        String uid = user.getUid();
+        RequestList requests = new RequestList();
 
-        for (int i = 0; i < requests.size(); i++) {
+        ElasticsearchRequestController.GetRequests retrieveRequests;
+        retrieveRequests = new ElasticsearchRequestController.GetRequests();
+        retrieveRequests.execute(user.getUid());
 
-            String userId = requests.get(i).getUser().getUid();
-
-            if (userId.equals(uid)) {
-                Log.i("Success","Got someeeee.");
-                requestListRider.add(requests.get(i));
-            }
+        try {
+            requests = retrieveRequests.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return requestListRider;
+
+        requestListRider.addAll(requests);
+        if (requestListRider!=null) Log.i("Success","List is not null");
+
+        return requests;
     }
 
     /**
