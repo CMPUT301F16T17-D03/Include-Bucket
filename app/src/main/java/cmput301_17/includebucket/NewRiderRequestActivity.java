@@ -55,7 +55,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private GeoPoint currentPoint;
     private String price;
     private ArrayList<UserAccount> drivers;
-
+    private UserAccount driver;
 
     private UserAccount user = new UserAccount();
     /**
@@ -71,6 +71,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
         drivers= new ArrayList<UserAccount>();
+        driver= new UserAccount();
         /**
          * TODO : Fix this later.
          *
@@ -214,7 +215,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
-                Request request = new Request(startLocation, endLocation, user, riderStory, drivers);
+                Request request = new Request(startLocation, endLocation, user, riderStory, drivers, driver);
                 request.setFare(fare);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();

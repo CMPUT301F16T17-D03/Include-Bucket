@@ -26,7 +26,7 @@ public class Request implements Serializable {
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
-    private ArrayList<UserAccount> drivers;
+    private ArrayList<UserAccount> pendingDrivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
     private boolean isCompleted, isPaid;
@@ -58,13 +58,14 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> drivers) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
         this.riderStory = story;
-        this.drivers = drivers;
+        this.pendingDrivers = pendingDrivers;
+        this.driver = driver;
     }
 
     public String getRequestID() {return requestID; }
@@ -122,19 +123,19 @@ public class Request implements Serializable {
     }
 
     public ArrayList<UserAccount> getDrivers() {
-        return drivers;
+        return pendingDrivers;
     }
 
     public void setDrivers(ArrayList<UserAccount> drivers) {
-        this.drivers = drivers;
+        this.pendingDrivers = pendingDrivers;
     }
 
     public void addDriver(UserAccount driver){
-        this.drivers.add(driver);
+        this.pendingDrivers.add(driver);
     }
 
     public void removeDriver(UserAccount driver){
-        this.drivers.remove(driver);
+        this.pendingDrivers.remove(driver);
     }
 
     public boolean isDriverAccepted() {
@@ -173,17 +174,21 @@ public class Request implements Serializable {
         this.rider = user;
     }
 
+    public void chooseDriver(UserAccount user){
+        this.driver = user;
+    }
+
     @Override
     public String toString() {
         String status = "Open";
         if (hasRiderAccepted()){
-            status = "Driver Accepted";
+            status = "Closed";
         }
         else if (isDriverAccepted()) {
             if(getDrivers().size()== 1) {
                  status = "1 Pending Driver";
             }else{
-                 status = getDrivers().size() +"Pending Drivers";
+                 status = getDrivers().size() +" Pending Drivers";
             }
         }
 
