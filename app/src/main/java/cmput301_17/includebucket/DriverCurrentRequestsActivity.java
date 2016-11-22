@@ -33,8 +33,8 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_requests);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
-        final String userLogin = user.getUniqueUserName();
+        //user = (UserAccount) getIntent().getSerializableExtra("User");
+        //final String userLogin = user.getUniqueUserName();
 
         requestsListView = (ListView) findViewById(R.id.driverCurrentList);
 

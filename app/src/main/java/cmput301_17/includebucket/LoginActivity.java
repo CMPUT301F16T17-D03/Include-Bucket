@@ -27,8 +27,10 @@ public class LoginActivity extends MainMenuActivity {
     private Button loginButton;
     private Button registerButton;
     private EditText userLogin;
+    private UserAccount foundUser;
 
-    UserController controller;
+    UserController userController;
+    RequestListController requestListController;
 
     /**
      * This method get permissions to run and deals with button presses.
@@ -39,7 +41,8 @@ public class LoginActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        controller = new UserController();
+        userController = new UserController();
+        requestListController = new RequestListController();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -104,6 +107,9 @@ public class LoginActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
+                userController.setContext(getApplicationContext());
+                requestListController.setContext(LoginActivity.this);
+
                 String textLogin  = userLogin.getText().toString();
 
                 /**
@@ -118,20 +124,21 @@ public class LoginActivity extends MainMenuActivity {
                 //findUser = new ElasticsearchUserController.RetrieveUser();
                 //findUser.execute(userLogin.getText().toString());
 
-                UserAccount foundUser = UserController.retrieveUserFromElasticSearch(userLogin.getText().toString());
-                RequestListController requestListController = new RequestListController();
-
-                controller.setContext(LoginActivity.this);
-                //requestListController.setContext(LoginActivity.this);
-
-                UserController.saveUserAccountInLocalFile(foundUser, controller.getContext());
+                foundUser = UserController.retrieveUserFromElasticSearch(userLogin.getText().toString());
+                UserController.saveUserAccountInLocalFile(foundUser, userController.getContext());
 
                 try {
                     String foundLogin = foundUser.getUniqueUserName();
 
                     if (textLogin.equals(foundLogin))
                     {
-                        Log.i("Success", "User " + textLogin + " was found.");
+                        Log.i("Success", "User " + foundUser.getUniqueUserName() + " was found.");
+
+                        RequestListController.saveRequestsInLocalFile(
+                                RequestListController.getRequestsFromElasticSearch(),
+                                requestListController.getContext()
+                        );
+                        //RequestListController.loadRequestsFromLocalFile();
 
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         //intent.putExtra("User", foundUser);
@@ -207,7 +214,9 @@ public class LoginActivity extends MainMenuActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStop() {
+        super.onStop();
+        UserController.saveUserAccountInLocalFile(foundUser, userController.getContext());
+        UserController.loadUserAccountFromLocalFile();
     }
 }

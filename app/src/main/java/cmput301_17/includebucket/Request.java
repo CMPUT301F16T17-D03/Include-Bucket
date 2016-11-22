@@ -170,6 +170,7 @@ public class Request implements Serializable {
     @Override
     public String toString() {
         String status = "Open";
+
         if (hasRiderAccepted()){
             status = "Driver Accepted";
         }

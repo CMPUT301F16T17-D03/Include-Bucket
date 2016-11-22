@@ -96,20 +96,18 @@ public class ElasticsearchRequestController {
      */
     public static class GetRequests extends AsyncTask<String, Void, RequestList> {
         @Override
-        protected RequestList doInBackground(String... uid) {
+        protected RequestList doInBackground(String... userLogin) {
             verifySettings();
 
             RequestList requests = new RequestList();
 
             String search_string;
-            if (uid==null)
+            if (userLogin == null)
             {
                 search_string = "{\"from\": 0, \"size\": 10000}";
-
             }
             else {
-                search_string = "{\"query\": { \"match\": {\"uid\": \"" + uid[0] + "\" }}}}";
-                Log.i("Success","Found a match with ID " + uid);
+                search_string = "{\"from\":0,\"size\":10000, \"query\": { \"term\": {\"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
             }
 
             Search search = new Search.Builder(search_string)
@@ -188,7 +186,7 @@ public class ElasticsearchRequestController {
             for (Request request : requests) {
 
                 Delete deleteRequest = new Delete
-                        .Builder(request.getRequestID().toString())
+                        .Builder(request.getRequestID())
                         .index("cmput301f16t17")
                         .type("request")
                         .build();

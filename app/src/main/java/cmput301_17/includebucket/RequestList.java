@@ -51,6 +51,7 @@ public class RequestList extends ArrayList {
         for(Request r : requests) {
             this.add(r);
         }
+        notifyListeners();
     }
 
     public Request get(int i) {

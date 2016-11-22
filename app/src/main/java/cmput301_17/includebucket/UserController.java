@@ -37,7 +37,6 @@ public class UserController {
     public static UserAccount getUserAccount() {
         if (userAccount == null) {
             userAccount = loadUserAccountFromLocalFile();
-            //userAccount = retrieveUserFromElasticSearch("w");
         }
         return userAccount;
     }
@@ -108,6 +107,15 @@ public class UserController {
         return userAccount;
     }
 
+    public static void logUserOut(Context context) {
+        userAccount = null;
+        UserController.saveUserAccountInLocalFile(userAccount, context);
+    }
+
+    /**
+     * Add user ride request ID's to riderRequests list.
+     * @return
+     */
     public Context getContext() {
         return context;
     }

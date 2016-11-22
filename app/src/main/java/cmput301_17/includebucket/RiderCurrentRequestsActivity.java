@@ -31,17 +31,15 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
     private RequestList requests;
-    private RequestList requestCollection;
-    //private String userLogin;
 
-    RequestListController requestListController = new RequestListController();
+    private RequestListController requestListController = new RequestListController();
+    private UserController userController = new UserController();
     private UserAccount user = new UserAccount();
 
     final String adbMessage = "Click More button for details.";
 
     /**
-     * This deals with viewing the current requests and
-     * updates  when a request is added or deleted.
+     * This deals with viewing the current requests and updates  when a request is added or deleted.
      * @param savedInstanceState
      */
     @Override
@@ -52,25 +50,27 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
         requestListController.setContext(RiderCurrentRequestsActivity.this);
+        userController.setContext(RiderCurrentRequestsActivity.this);
 
         user = UserController.getUserAccount();
+        //UserController.saveUserAccountInLocalFile(user, userController.getContext());
+        //UserAccount foundUser = UserController.loadUserAccountFromLocalFile();
 
-        Log.i("Success", "Got " + user.getUniqueUserName() + " with ID: " + user.getUid());
+        RequestListController.saveRequestsInLocalFile(
+                RequestListController.getRequestsFromElasticSearch(),
+                requestListController.getContext()
+        );
+        //RequestListController.loadRequestsFromLocalFile();
+
+        Log.i("Success", "Got " + user.getUniqueUserName() + " Category: " + user.getUserCategory());
 
         /**
          * TODO : create condition where if the user is offline get requests from a local file
          * instead of Elasticsearch.
          */
-        //if (networkDown==Boolean.TRUE) {
-        requests = requestListController.getRequestsFromElasticSearch();
-        requestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
-        //}
-        //else {
-            //requests = RequestListController.getRequestList();
-        //}
-        requestCollection = RequestListController.getRequestList();
+        requests = RequestListController.getRequestList();
         requestList = new ArrayList<>();
-        requestList.addAll(requestCollection);
+        requestList.addAll(requests);
 
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
@@ -81,10 +81,10 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         RequestListController.getRequestList().addListener(new Listener() {
             @Override
             public void update() {
-            requestList.clear();
-            Collection<Request> requests = requestListController.getRequestList().getRequests();
-            requestList.addAll(requests);
-            requestAdapter.notifyDataSetChanged();
+                requestList.clear();
+                Collection<Request> requests = RequestListController.getRequestList().getRequests();
+                requestList.addAll(requests);
+                requestAdapter.notifyDataSetChanged();
             }
         });
 
@@ -92,8 +92,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         newButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
                 Intent intent = new Intent(RiderCurrentRequestsActivity.this, NewRiderRequestActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -102,6 +102,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     /**
@@ -126,7 +127,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
                         requestListController.deleteRequestFromList(request);
-                        requestListController.getRequestList().deleteRequest(request);
+                        //requestListController.getRequestList().deleteRequest(request);
                         requestList.remove(request);
                         requestsListView.setAdapter(requestAdapter);
                         requestAdapter.notifyDataSetChanged();

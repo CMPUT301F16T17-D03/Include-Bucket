@@ -223,21 +223,13 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
-                user.setUserCategory(UserAccount.UserCategory.rider); //users that make requests are riders
 
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
 
                 Request request = new Request(startLocation, endLocation, user, riderStory, drivers);
                 request.setFare(fare);
 
-                Log.i("Success","Got "+user.getUniqueUserName());
-
-                ElasticsearchRequestController.CreateRequest createRequest;
-                createRequest = new ElasticsearchRequestController.CreateRequest();
-                createRequest.execute(request);
-
                 requestListController.addRequest(request);
-                RequestListController.saveRequestsInLocalFile(requestListController.getRequestList(), requestListController.getContext());
 
                 finish();
             }
@@ -278,8 +270,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
          */
-          //startPoint = currentPoint;
-          //endPoint = currentPoint;
+        //startPoint = currentPoint;
+        //endPoint = currentPoint;
 
         startPoint = new GeoPoint(53.5232, -113.5263);
         endPoint = new GeoPoint(53.5232, -113.5263);
@@ -427,7 +419,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             double format = Math.round(temp *100.0)/100.0;
 
             price= "$" +String.valueOf(format);
-           // price = "" + Math.round((startMarker.getPosition().distanceTo(endMarker.getPosition())));
+            // price = "" + Math.round((startMarker.getPosition().distanceTo(endMarker.getPosition())));
             priceEditText.setText(price);
         }
 

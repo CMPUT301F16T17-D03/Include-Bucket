@@ -23,46 +23,43 @@ import java.util.concurrent.ExecutionException;
  */
 public class RequestListController {
 
-    private static RequestList requestList = null;
-    private static UserAccount user = new UserAccount();
+    private static RequestListController controller = new RequestListController();
+
     private static RequestList requestListRider = new RequestList();
-    //private static RequestList requestListDriver = new RequestList();
+    private static RequestList requestListDriver = new RequestList();
 
     private static final String REQUESTS_RIDER  = "rider_requests.sav";
     private static final String REQUESTS_DRIVER = "driver_requests.sav";
 
     private Context context;
 
-    private static RequestListController controller = new RequestListController();
-
-
-    private static RequestList rl = new RequestList();
 
     public static RequestList getRequestList() {
 
-        //UserAccount user = UserController.getUserAccount();
-/*
-        if (user.getUserCategory().equals(UserAccount.UserCategory.rider))
+        UserAccount user = UserController.getUserAccount();
+
+        RequestList requestList = new RequestList();
+
+        if (requestList != null)
         {
-            Log.i("Whoa","I did something here.");
-            //requestList = getRequestsByUid();
+            if (user.getUserCategory() == (UserAccount.UserCategory.rider))
+            {
+                requestList = requestListRider;
+                Log.i("Success", "This user is a rider." + user.getUniqueUserName());
+            } else
+            {
+                requestList = requestListDriver;
+                Log.i("Uh oh", "The fuck did you do...");
+                Log.i("User", " " + user.getUserCategory());
+            }
         }
         else
         {
-            Collection<Request> requests = loadRequestsFromLocalFile();
-            requestList.clear();
-            for (Request r : requests) {
-                if (!user.getUniqueUserName().equals(r.getUser().getUniqueUserName()))
-                {
-
-                    requestList.add(r);
-                }
-            }
-        }*/
-        if (requestList == null) {
+            //requestList = getRequestsFromElasticSearch();
             requestList = loadRequestsFromLocalFile();
+            Log.i("No!","You fucked up big time.");
         }
-        return requestList;
+        return requestListRider;
     }
 
     /*
@@ -72,7 +69,7 @@ public class RequestListController {
     }
     */
     static public RequestList getKeywordList(String key) {
-        requestList = getRequestsByKeyword(key);
+        RequestList requestList = getRequestsByKeyword(key);
         return requestList;
     }
 
@@ -138,13 +135,10 @@ public class RequestListController {
      */
     /*
     public static RequestList getRequestsFromElasticSearch(String userLogin) {
-
         ElasticsearchRequestController.GetAllRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetAllRequests();
         retrieveRequests.execute("");
-
         RequestList requests = new RequestList();
-
         try {
             requests = retrieveRequests.get();
         } catch (InterruptedException e) {
@@ -155,6 +149,10 @@ public class RequestListController {
         return requests;
     }
     */
+
+
+
+
     /**
      * This will return a list of requests from a local file for offline behaviour.
      * @param
@@ -162,22 +160,36 @@ public class RequestListController {
     public static RequestList loadRequestsFromLocalFile() {
 
         Context context = controller.getContext();
+
+        UserAccount user = UserController.getUserAccount();
+
+        String file;
+        if(user.getUserCategory()==(UserAccount.UserCategory.rider))
+        {
+            file = REQUESTS_RIDER;
+            Log.i("Success","This user is a " + user.getUserCategory());
+        }
+        else
+        {
+            file = REQUESTS_DRIVER;
+            Log.i("Uh oh","This user is a " + user.getUserCategory());
+        }
+
         try {
-            FileInputStream fis = context.openFileInput(REQUESTS_RIDER);
+            FileInputStream fis = context.openFileInput(file);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
 
             Type listType = new TypeToken<RequestList>() {}.getType();
-            requestList = gson.fromJson(in, listType);
+            return gson.fromJson(in, listType);
         }
         catch (FileNotFoundException e) {
-            requestList = new RequestList();
+            return new RequestList();
         }
         catch (IOException e) {
             throw new RuntimeException();
         }
-        return requestList;
     }
 
     /**
@@ -186,23 +198,23 @@ public class RequestListController {
      */
     public static void saveRequestsInLocalFile(RequestList requests, Context context) {
 
-        String file;
-
         UserAccount user = UserController.getUserAccount();
 
         controller.setContext(context);
-/*
+
+        String file;
         if(user.getUserCategory()==(UserAccount.UserCategory.rider))
         {
             file = REQUESTS_RIDER;
+            Log.i("Saving"," " + user.getUniqueUserName());
         }
         else file = REQUESTS_DRIVER;
-*/
+
         try {
-            FileOutputStream fos = context.openFileOutput(REQUESTS_RIDER, 0);
+            FileOutputStream fos = context.openFileOutput(file, 0);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
-            gson.toJson(requestListRider, writer);
+            gson.toJson(requests, writer);
             writer.flush();
         }
         catch (FileNotFoundException e) {
@@ -211,14 +223,6 @@ public class RequestListController {
         catch (IOException e) {
             throw new RuntimeException();
         }
-    }
-
-    /**
-     * This adds a request to the list.
-     * @param request
-     */
-    public void addRequest(Request request) {
-        getRequestList().addRequest(request);
     }
 
     /**
@@ -231,12 +235,12 @@ public class RequestListController {
 
         RequestList requests = new RequestList();
 
-        ElasticsearchRequestController.GetRequests retrieveRequests;
-        retrieveRequests = new ElasticsearchRequestController.GetRequests();
-        retrieveRequests.execute(user.getUid());
+        ElasticsearchRequestController.GetRequests foundRequests;
+        foundRequests = new ElasticsearchRequestController.GetRequests();
+        foundRequests.execute(user.getUniqueUserName());
 
         try {
-            requests = retrieveRequests.get();
+            requests = foundRequests.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -244,9 +248,23 @@ public class RequestListController {
         }
 
         requestListRider.addAll(requests);
-        if (requestListRider!=null) Log.i("Success","List is not null");
+        Log.i("Success","GETTING RIDER LIST  " + user.getUniqueUserName());
 
         return requests;
+    }
+
+    /**
+     * This adds a request to Elasticsearch and the local list.
+     * @param request
+     */
+    public void addRequest(Request request) {
+
+        // Add the request to Elasticsearch.
+        ElasticsearchRequestController.CreateRequest createRequest;
+        createRequest = new ElasticsearchRequestController.CreateRequest();
+        createRequest.execute(request);
+
+        getRequestList().addRequest(request);
     }
 
     /**
@@ -257,5 +275,10 @@ public class RequestListController {
         ElasticsearchRequestController.DeleteRequest deleteRequests;
         deleteRequests = new ElasticsearchRequestController.DeleteRequest();
         deleteRequests.execute(request);
+    }
+
+    public static void clearRequestLists() {
+        requestListRider = null;
+        requestListDriver = null;
     }
 }

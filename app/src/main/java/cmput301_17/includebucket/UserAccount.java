@@ -22,8 +22,6 @@ public class UserAccount implements Serializable {
     private Collection<Request> riderRequests;
     private Collection<Request> driverRequests;
 
-
-
     private UserCategory userCategory;
 
 
@@ -48,7 +46,7 @@ public class UserAccount implements Serializable {
         this.email = userEmail;
         this.phoneNumber = userPhone;
         this.isLoggedIn = true;
-        this.userCategory = getUserCategory();
+        this.userCategory = UserCategory.rider;
     }
 
     /**
