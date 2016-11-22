@@ -50,7 +50,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        requests = RequestListController.getRequestList(userLogin);
+        requests = RequestListController.getRiderRequestList(user);
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
@@ -60,11 +60,11 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         /**
          * Updates the ArrayAdapter when a request is added or deleted.
          */
-        RequestListController.getRequestList(userLogin).addListener(new Listener() {
+        RequestListController.getRiderRequestList(user).addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList(userLogin).getRequests();
+                Collection<Request> requests = RequestListController.getRiderRequestList(user).getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -108,7 +108,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
                         RequestListController.deleteRequestFromList(request);
-                        RequestListController.getRequestList(userLogin).deleteRequest(request);
+                        RequestListController.getRiderRequestList(user).deleteRequest(request);
                         requestsListView.setAdapter(requestAdapter);
                         requestAdapter.notifyDataSetChanged();
                     }
@@ -118,7 +118,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {}
                 });
-                // Add Cancel button to exit the dialog box
+                // Add More button to view request
                 adb.setPositiveButton("More", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

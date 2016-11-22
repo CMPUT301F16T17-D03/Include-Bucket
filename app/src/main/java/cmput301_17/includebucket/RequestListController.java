@@ -1,6 +1,5 @@
 package cmput301_17.includebucket;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -10,11 +9,14 @@ public class RequestListController {
 
     private static RequestList requestList = new RequestList();
 
-    static public RequestList getRequestList(String list) {
-        requestList = getRequestsFromElasticSearch(list);
+    static public RequestList getRiderRequestList(UserAccount user) {
+        requestList = getRiderRequestsFromElasticSearch(user);
         return requestList;
     }
-
+    static public RequestList getDriverRequestList(UserAccount user) {
+        requestList = getDriverRequestsFromElasticSearch(user);
+        return requestList;
+    }
     static public RequestList getKeywordList(String key) {
         requestList = getRequestsByKeyword(key);
         return requestList;
@@ -50,11 +52,33 @@ public class RequestListController {
      * This returns a list of requests from ElasticSearch.
      * @return requests
      */
-    public static RequestList getRequestsFromElasticSearch(String userLogin) {
+    public static RequestList getRiderRequestsFromElasticSearch(UserAccount user) {
 
-        ElasticsearchRequestController.GetRequests retrieveRequests;
-        retrieveRequests = new ElasticsearchRequestController.GetRequests();
-        retrieveRequests.execute(userLogin);
+        ElasticsearchRequestController.GetRiderRequests retrieveRequests;
+        retrieveRequests = new ElasticsearchRequestController.GetRiderRequests();
+        retrieveRequests.execute(user);
+
+        RequestList requests = new RequestList();
+
+        try {
+            requests = retrieveRequests.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+
+    /**
+     * This returns a list of requests from ElasticSearch.
+     * @return requests
+     */
+    public static RequestList getDriverRequestsFromElasticSearch(UserAccount user) {
+
+        ElasticsearchRequestController.GetDriverRequests retrieveRequests;
+        retrieveRequests = new ElasticsearchRequestController.GetDriverRequests();
+        retrieveRequests.execute(user);
 
         RequestList requests = new RequestList();
 
@@ -91,7 +115,7 @@ public class RequestListController {
      * This adds a request to the list.
      * @param request
      */
-    public void addRequest(Request request, String userLogin) {
-        getRequestList(userLogin).addRequest(request);
+    public void addRequest(Request request, UserAccount user) {
+        getRiderRequestList(user).addRequest(request);
     }
 }

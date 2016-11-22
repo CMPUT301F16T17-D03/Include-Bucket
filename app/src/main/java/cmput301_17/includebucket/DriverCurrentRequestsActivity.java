@@ -34,11 +34,11 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         setContentView(R.layout.driver_requests);
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
-        final String userLogin = user.getUniqueUserName();
+        //final String userLogin = user.getUniqueUserName();
 
         requestsListView = (ListView) findViewById(R.id.driverCurrentList);
 
-        requests = RequestListController.getRequestList(userLogin);
+        requests = RequestListController.getDriverRequestList(user);
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
@@ -46,11 +46,11 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         requestsListView.setAdapter(requestAdapter);
 
 
-        RequestListController.getRequestList(userLogin).addListener(new Listener() {
+        RequestListController.getDriverRequestList(user).addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList(userLogin).getRequests();
+                Collection<Request> requests = RequestListController.getDriverRequestList(user).getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }

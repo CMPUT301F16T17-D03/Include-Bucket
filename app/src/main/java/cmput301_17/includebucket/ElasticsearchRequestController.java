@@ -54,17 +54,20 @@ public class ElasticsearchRequestController {
     }
 
     /**
-     * This method retrieves all the requests in the database.
+     * This method retrieves all of the riders requests in the database.
      */
-    public static class GetRequests extends AsyncTask<String, Void, RequestList> {
+    public static class GetRiderRequests extends AsyncTask<UserAccount, Void, RequestList> {
         @Override
-        protected RequestList doInBackground(String... userLogin) {
+        protected RequestList doInBackground(UserAccount... rider) {
             verifySettings();
 
             RequestList requests = new RequestList();
 
             //String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = "{\"query\": { \"term\": {\"uniqueUserName\": \"" + userLogin[0] + "\" }}}}";
+           String search_string = "{\"query\": { \"match\": {\"rider.uniqueUserName\" : \"" + rider[0].getUniqueUserName() + "\"}}}";
+                   //+ rider[0].getEmail() + "\",\"isLoggedIn\":"+ rider[0].getLoginStatus() +
+       //" \", \"phoneNumber\": \"" + rider[0].getPhoneNumber() + "\", \"uniqueUserName\":\"" +rider[0].getUniqueUserName() + "\"}}}}";
+
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")
@@ -80,7 +83,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
-                    Log.i("Error", "The search query did not match any requests in the database.");
+                    Log.i("Error", rider[0].getUniqueUserName() +" The search query did not match any requests in the database.");
                 }
             }
             catch (Exception e) {
@@ -89,7 +92,43 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
+    /**
+     * This method retrieves all of the drivers requests in the database.
+     */
+    public static class GetDriverRequests extends AsyncTask<UserAccount, Void, RequestList> {
+        @Override
+        protected RequestList doInBackground(UserAccount... driver) {
+            verifySettings();
 
+            RequestList requests = new RequestList();
+
+            //String search_string = "{\"from\": 0, \"size\": 10000}";
+            String search_string = "{\"query\": { \"match\": {\"driver.uniqueUserName\" : \"" + driver[0].getUniqueUserName() + "\"}}}";
+
+            Search search = new Search.Builder(search_string)
+                    .addIndex("cmput301f16t17")
+                    .addType("request")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded())
+                {
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundRequests);
+                    Log.i("Success", "Got the requests.");
+                }
+                else
+                {
+                    Log.i("Error", driver[0].getUniqueUserName() +" The search query did not match any requests in the database.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return requests;
+        }
+    }
     /**
      * This get the keyword for searching requests by keyword.
      */
