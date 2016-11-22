@@ -107,6 +107,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
+
+                        requestList.remove(finalPosition);
+
                         RequestListController.deleteRequestFromList(request);
                         RequestListController.getRiderRequestList(user).deleteRequest(request);
                         requestsListView.setAdapter(requestAdapter);
