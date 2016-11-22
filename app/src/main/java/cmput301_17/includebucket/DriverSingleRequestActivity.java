@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -121,11 +122,19 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         //OpenStreetMapTileProviderConstants.setCachePath(new File("/sdcard/osmdroid2/").getAbsolutePath());
 
 
-        Button saveButton = (Button) findViewById(R.id.DSRAAcceptButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        Button acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                //is actually accept button
+
+                request.setDriverAccepted(true);
+                request.addDriver(user);
+                RequestListController.deleteRequestFromElasticSearch(request);
+                ElasticsearchRequestController.CreateRequest createRequest;
+                createRequest = new ElasticsearchRequestController.CreateRequest();
+                createRequest.execute(request);
+                Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
@@ -147,14 +156,16 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        startPoint = new GeoPoint(53.5444, -113.4909); // TODO get from file/elasticsearch
-        endPoint = new GeoPoint(53.6444, -113.5909);   // get from file/elasticsearch
-        startEditText.setText(startPoint.toString());  // get from file/elasticsearch
-        endEditText.setText(endPoint.toString());      // get from file/elasticsearch
-        String price = "" + startPoint.distanceTo(endPoint);
-        priceEditText.setText(price);                  // get from file/elasticsearch
-        storyText.setText("A Story goes here");        // get from file/elasticsearch
-
+        double startLat= (Double.parseDouble(request.getStartLocation().split(",")[0]));
+        double startLon= (Double.parseDouble(request.getStartLocation().split(",")[1]));
+        double endLat= (Double.parseDouble(request.getEndLocation().split(",")[0]));
+        double endLon= (Double.parseDouble(request.getEndLocation().split(",")[1]));
+        startPoint = new GeoPoint(startLat,startLon);
+        endPoint = new GeoPoint(endLat,endLon);
+        startEditText.setText(startPoint.toString());
+        endEditText.setText(endPoint.toString());
+        priceEditText.setText(request.getFare().toString());
+        storyText.setText(request.getRiderStory());
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
         startMarker = new Marker(map);

@@ -29,6 +29,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
     private Collection<Request> requests;
+    UserAccount user = new UserAccount();
 
     /**
      * Controls the list of requests and handles button clicks.
@@ -38,6 +39,8 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_requests);
+
+        user = (UserAccount) getIntent().getSerializableExtra("User");
 
         keyword  = (EditText) findViewById(R.id.keyword);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
@@ -77,6 +80,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
                 Request request =  requestList.get(position);
+                intent.putExtra("User", user);
                 intent.putExtra("Request", request);
                 startActivity(intent);
             }
