@@ -126,6 +126,7 @@ public class Request implements Serializable {
         return pendingDrivers;
     }
 
+
     public void setDrivers(ArrayList<UserAccount> drivers) {
         this.pendingDrivers = pendingDrivers;
     }
@@ -184,13 +185,14 @@ public class Request implements Serializable {
         if (hasRiderAccepted()){
             status = "Closed";
         }
+        /*
         else if (isDriverAccepted()) {
             if(getDrivers().size()== 1) {
                  status = "1 Pending Driver";
             }else{
                  status = getDrivers().size() +" Pending Drivers";
             }
-        }
+        } */
 
         return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
     }
