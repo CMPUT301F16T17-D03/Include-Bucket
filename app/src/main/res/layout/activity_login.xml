@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="600dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/app_background"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -10,7 +19,9 @@
         android:id="@+id/loginTextField"
         android:hint="@string/user_login"
         android:autoText="false"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -18,7 +29,9 @@
         android:text="@string/user_login"
         android:id="@+id/loginButton"
         android:width="50dp"
-        android:background="#1f41ff" />
+        android:background="#1f41ff"
+        android:layout_below="@+id/registerButton"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -26,5 +39,11 @@
         android:text="@string/register_button"
         android:id="@+id/registerButton"
         android:width="50dp"
-        android:background="#36fe0e" />
-</LinearLayout>
+        android:background="#36fe0e"
+        android:layout_below="@+id/loginTextField"
+        android:layout_alignParentStart="true" />
+
+
+
+
+</RelativeLayout>

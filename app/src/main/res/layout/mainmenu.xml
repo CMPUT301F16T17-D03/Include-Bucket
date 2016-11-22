@@ -6,6 +6,15 @@
     tools:context=".MainMenuActivity"
     android:background="#ffffff">
 
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="600dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/app_background"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/ViewAccount" />
+
     <TextView
         android:text="Rider"
         android:layout_width="wrap_content"
@@ -14,25 +23,27 @@
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="84dp"
-        android:id="@+id/Rider" />
+        android:id="@+id/Rider"
+        android:textColor="#000000" />
 
     <Button
         android:text="@string/new_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/newRequest"
+        android:background="#00ff44"
         android:layout_below="@+id/Rider"
-        android:layout_toStartOf="@+id/Rider"
-        android:background="#00ff44" />
+        android:layout_alignStart="@+id/Browse" />
 
     <Button
         android:text="My Requests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/MyRequests"
+        android:background="#0099ff"
         android:layout_below="@+id/Rider"
-        android:layout_toEndOf="@+id/Driver"
-        android:background="#0099ff" />
+        android:layout_alignBottom="@+id/newRequest"
+        android:layout_alignEnd="@+id/Current" />
 
     <TextView
         android:text="Driver"
@@ -41,16 +52,17 @@
         android:id="@+id/Driver"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/Rider" />
+        android:layout_alignStart="@+id/Rider"
+        android:textColor="#000000" />
 
     <Button
         android:text="Current"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Current"
-        android:layout_alignTop="@+id/Browse"
-        android:layout_toEndOf="@+id/Rider"
-        android:background="#ffee00" />
+        android:background="#ffee00"
+        android:layout_below="@+id/Driver"
+        android:layout_toEndOf="@+id/Rider" />
 
     <Button
         android:text="Logout"
@@ -78,4 +90,7 @@
         android:layout_alignTop="@+id/Logout"
         android:layout_alignParentEnd="true"
         android:background="#00fff2" />
+
+
+
 </RelativeLayout>
