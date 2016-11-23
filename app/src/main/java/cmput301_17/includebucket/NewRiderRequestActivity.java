@@ -4,12 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.renderscript.Double2;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.location.GeocoderNominatim;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -27,9 +28,10 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * In this class, the user should be able to specify the start and end locations by typing in an
@@ -54,6 +56,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private LocationListener locationListener;
     private GeoPoint currentPoint;
     private String price;
+    private Double roadLength;
 
 
     private UserAccount user = new UserAccount();
@@ -155,14 +158,22 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                      * TODO Should probably give suggestions as to exact address.
                      * assume is in format of lat,long
                      */
+                     dragger.onMarkerDragStart(startMarker);
                     try {
-                        Double latdub = (Double.parseDouble(startEditText.getText().toString().split(",")[0]));
-                        Double lngdub = (Double.parseDouble(startEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeo = new GeoPoint(latdub, lngdub);
+                        AsyncTask<String, Void, GeoPoint> task = new GetGeoPointFromAddressTask(new GetGeoPointFromAddressTask.AsyncResponse(){
 
-                        dragger.onMarkerDragStart(startMarker);
-                        startMarker.setPosition(tempGeo);
-                        dragger.onMarkerDragEnd(startMarker);
+                            @Override
+                            public void processFinish(GeoPoint output){
+
+                                //Here you will receive the result fired from async class
+                                //of onPostExecute(result) method.
+                                startMarker.setPosition(output);
+                                startPoint = output;
+                                dragger.onMarkerDragEnd(startMarker);
+
+                            }
+                        }).execute(startEditText.getText().toString());
+
                     }
                     catch(Exception e){
                         Log.i("Error","Failed to get a valid geolocation.");
@@ -179,17 +190,25 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     /**
                      * User has stopped typing, update the marker and the map
                      * This is caused by hitting return or by clicking off the edit text
-                     * TODO Should probably give suggestions as to exact address.
+                     * Should probably give suggestions as to exact address.
                      * assume is in format of lat,long
                      */
+                    dragger.onMarkerDragStart(endMarker);
                     try {
-                        Double endLat = (Double.parseDouble(endEditText.getText().toString().split(",")[0]));
-                        Double endLon = (Double.parseDouble(endEditText.getText().toString().split(",")[1]));
-                        GeoPoint tempGeo = new GeoPoint(endLat, endLon);
+                        AsyncTask<String, Void, GeoPoint> task = new GetGeoPointFromAddressTask(new GetGeoPointFromAddressTask.AsyncResponse(){
 
-                        dragger.onMarkerDragStart(endMarker);
-                        endMarker.setPosition(tempGeo);
-                        dragger.onMarkerDragEnd(endMarker);
+                            @Override
+                            public void processFinish(GeoPoint output){
+
+                                //Here you will receive the result fired from async class
+                                //of onPostExecute(result) method.
+                                endMarker.setPosition(output);
+                                endPoint = output;
+                                dragger.onMarkerDragEnd(endMarker);
+
+                            }
+                        }).execute(endEditText.getText().toString());
+
                     }
                     catch(Exception e){
                         Log.i("Error","Failed to get a valid geolocation.");
@@ -197,7 +216,28 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 }
             }
         });
+        priceEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(hasFocus){} //User is typing, do nothing
+                else{
+                    /**
+                     * User has stopped typing, update the marker and the map
+                     * This is caused by hitting return or by clicking off the edit text
+                     * Should probably give suggestions as to exact address.
+                     * assume is in format of lat,long
+                     */
+                    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                    try {
+                        priceEditText.setText(formatter.format(Double.parseDouble(priceEditText.getText().toString().substring(1, priceEditText.getText().toString().length()))).toString());
+                    }
+                    catch(Exception e){
+                        priceEditText.setText(formatter.format(roadLength).toString());
+                    }
 
+                }
+            }
+        });
         /**
          * Save button that instantiates a new Request and creates a new index in Elasticsearch of
          * the type "request".
@@ -207,17 +247,21 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                String startLocation = startEditText.getText().toString();
-                String endLocation = endEditText.getText().toString();
+                String startLocation = startPoint.toString();
+                String endLocation = endPoint.toString();
+                String startAddress = startEditText.getText().toString();
+                String endAddress = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
-                /**
-                 * TODO : For some reason Elasticsearch will not instantiate a request with a fare
-                 */
-                 Double fare = Double.parseDouble(priceEditText.getText().toString());
+                Double fare = Double.parseDouble(priceEditText.getText().toString().substring(1,priceEditText.getText().toString().length()));
+                Double distance = roadLength;
+
 
 
                 Request request = new Request(startLocation, endLocation, user, riderStory);
                 request.setFare(fare);
+                request.setStartAddress(startAddress);
+                request.setEndAddress(endAddress);
+                request.setRoadLength(distance);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
@@ -237,8 +281,21 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
-        startEditText.setText(currentPoint.toString());
-        endEditText.setText(currentPoint.toString());
+
+        AsyncTask<GeoPoint, Void, String> getAddress = new GetAddressFromGeoPointTask(new GetAddressFromGeoPointTask.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                //Double temp = output.mLength; //see also mDuration
+                startEditText.setText(output);
+                endEditText.setText(output);
+                //Here you will receive the result fired from async class
+                //of onPostExecute(result) method.
+
+            }
+        }).execute(currentPoint);
+        //startEditText.setText(currentPoint.toString()); //replaced with GetAddressFromGeoPointTask()
+        //endEditText.setText(currentPoint.toString());
 
 
         map = (MapView) findViewById(R.id.NRRAMap);
@@ -291,22 +348,15 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
             public void processFinish(Road output){
-                Double temp = output.mLength; //see also mDuration
-                priceEditText.setText(temp.toString());//TODO formatting
+                roadLength = output.mLength; //see also mDuration
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                priceEditText.setText(formatter.format(roadLength).toString());
                 //Here you will receive the result fired from async class
                 //of onPostExecute(result) method.
 
             }
         }).execute(waypoints);
 
-        /**
-         * TODO : Fix this later
-         *
-         * Road road = roadManager.getRoad(waypoints);
-         * AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
-         * Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-         * map.getOverlays().add(roadOverlay);
-         */
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
@@ -362,7 +412,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         }
 
         /**
-         * Deals with a marker drag
+         * Deals with a marker drag, unused
          * @param marker
          */
         @Override public void onMarkerDrag(Marker marker) {
@@ -370,7 +420,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         }
 
         /**
-         * Deas with the marker stopping being dragged.
+         * Deals with the marker stopping being dragged.
          * @param marker
          */
         @Override public void onMarkerDragEnd(Marker marker) {
@@ -382,26 +432,40 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 @Override
                 public void processFinish(Road output){
-                    Double temp = output.mLength; //see also mDuration
-                    priceEditText.setText(temp.toString());//TODO formatting
+                    roadLength = output.mLength; //see also mDuration
+                    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                    priceEditText.setText(formatter.format(roadLength).toString());
                     //Here you will receive the result fired from async class
                     //of onPostExecute(result) method.
-
                 }
             }).execute(mTrace);
             if (marker.equals(startMarker)){
                 //update start location text
-                startEditText.setText(startMarker.getPosition().toString());
+                //startEditText.setText(startMarker.getPosition().toString());
+                startPoint = marker.getPosition();
+                AsyncTask<GeoPoint, Void, String> getAddress = new GetAddressFromGeoPointTask(new GetAddressFromGeoPointTask.AsyncResponse() {
+
+                    @Override
+                    public void processFinish(String output) {
+                        startEditText.setText(output);
+                        //Here you will receive the result fired from async class
+                        //of onPostExecute(result) method.
+                    }
+                }).execute(startMarker.getPosition());
             }
             else if (marker.equals(endMarker)){
-                endEditText.setText(endMarker.getPosition().toString());
-            }
-            /**
-             * update suggested fare
-             */
-            price = "" + ((startMarker.getPosition().distanceTo(endMarker.getPosition())));
+                //endEditText.setText(endMarker.getPosition().toString());
+                endPoint = marker.getPosition();
+                AsyncTask<GeoPoint, Void, String> getAddress = new GetAddressFromGeoPointTask(new GetAddressFromGeoPointTask.AsyncResponse() {
 
-            priceEditText.setText(price);
+                    @Override
+                    public void processFinish(String output) {
+                        endEditText.setText(output);
+                        //Here you will receive the result fired from async class
+                        //of onPostExecute(result) method.
+                    }
+                }).execute(endMarker.getPosition());
+            }
         }
 
         /**
@@ -409,6 +473,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * @param marker
          */
         @Override public void onMarkerDragStart(Marker marker) {
+            if(mTrace.size()>=2)
+            {
             if(marker.getPosition().equals(mTrace.get(0))) {
                 mTrace.remove(0);
             }
@@ -418,6 +484,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             try {
                 map.getOverlays().remove(3); map.invalidate();
             } catch(Exception e){}
+            }
         }
     }
 }

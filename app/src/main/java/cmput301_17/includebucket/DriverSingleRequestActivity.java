@@ -147,13 +147,28 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        startPoint = new GeoPoint(53.5444, -113.4909); // TODO get from file/elasticsearch
-        endPoint = new GeoPoint(53.6444, -113.5909);   // get from file/elasticsearch
-        startEditText.setText(startPoint.toString());  // get from file/elasticsearch
-        endEditText.setText(endPoint.toString());      // get from file/elasticsearch
-        String price = "" + startPoint.distanceTo(endPoint);
-        priceEditText.setText(price);                  // get from file/elasticsearch
-        storyText.setText("A Story goes here");        // get from file/elasticsearch
+
+        Request request = (Request) getIntent().getSerializableExtra("Request");
+        startEditText.setText(request.getStartAddress());
+        Double latdub = (Double.parseDouble(request.getStartLocation().split(",")[0]));
+        Double lngdub = (Double.parseDouble(request.getStartLocation().split(",")[1]));
+        startPoint = new GeoPoint(latdub, lngdub);
+
+        endEditText.setText(request.getEndAddress());
+        latdub = (Double.parseDouble(request.getEndLocation().split(",")[0]));
+        lngdub = (Double.parseDouble(request.getEndLocation().split(",")[1]));
+        endPoint = new GeoPoint(latdub, lngdub);
+
+        priceEditText.setText("$"+request.getFare().toString());
+        storyText.setText(request.getRiderStory());
+
+        //startPoint = new GeoPoint(53.5444, -113.4909);
+        //endPoint = new GeoPoint(53.6444, -113.5909);
+        //startEditText.setText(startPoint.toString());
+        //endEditText.setText(endPoint.toString());
+        //String price = "" + startPoint.distanceTo(endPoint);
+        //priceEditText.setText(price);
+        //storyText.setText("A Story goes here");
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);

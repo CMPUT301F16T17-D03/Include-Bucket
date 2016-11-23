@@ -10,7 +10,8 @@
         android:id="@+id/loginTextField"
         android:hint="@string/user_login"
         android:autoText="false"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:inputType="textNoSuggestions" />
 
     <Button
         android:layout_width="wrap_content"

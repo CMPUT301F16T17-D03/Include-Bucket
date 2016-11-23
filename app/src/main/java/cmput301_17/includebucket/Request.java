@@ -21,10 +21,13 @@ public class Request implements Serializable {
 
     private String startLocation;
     private String endLocation;
+    private String startAddress;
+    private String endAddress;
     private UserAccount rider;
     private UserAccount driver;
     private String riderStory = null;
     private double fare;
+    private double roadLength;
     private ArrayList<String> keywords;
     private ArrayList<String> drivers;
     private boolean driverAccepted;
@@ -183,6 +186,30 @@ public class Request implements Serializable {
 
     public void setIsPaid(boolean paid) {
         isPaid = paid;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
+
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public double getRoadLength() {
+        return roadLength;
+    }
+
+    public void setRoadLength(double roadLength) {
+        this.roadLength = roadLength;
     }
 
     public void setUser(UserAccount user){
