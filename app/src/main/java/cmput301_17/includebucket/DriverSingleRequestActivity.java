@@ -47,6 +47,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     RoadManager roadManager;
     UserAccount user = new UserAccount();
     Request request = new Request();
+    private ArrayList<UserAccount> drivers;
+    private UserAccount driver;
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -59,7 +61,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         setContentView(R.layout.driver_single_request_activity);
 
         request = (Request) getIntent().getSerializableExtra("Request");
-
+        drivers= new ArrayList<UserAccount>();
+        driver = new UserAccount();
 
         /****************************************************** PERMISSIONS *****************************************************/
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
