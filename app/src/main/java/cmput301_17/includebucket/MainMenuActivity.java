@@ -33,7 +33,7 @@ public class MainMenuActivity extends Activity {
                 userController.setContext(MainMenuActivity.this);
 
                 user = UserController.getUserAccount();
-                user.setUserCategory(UserAccount.UserCategory.rider);
+                user.setUserState(UserAccount.UserState.rider);
 
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
@@ -61,7 +61,7 @@ public class MainMenuActivity extends Activity {
                 userController.setContext(MainMenuActivity.this);
 
                 user = UserController.getUserAccount();
-                user.setUserCategory(UserAccount.UserCategory.rider);
+                user.setUserState(UserAccount.UserState.rider);
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
 
@@ -78,7 +78,7 @@ public class MainMenuActivity extends Activity {
                 userController.setContext(MainMenuActivity.this);
 
                 user = UserController.getUserAccount();
-                user.setUserCategory(UserAccount.UserCategory.driver);
+                user.setUserState(UserAccount.UserState.driver);
 
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
@@ -97,7 +97,7 @@ public class MainMenuActivity extends Activity {
                 userController.setContext(MainMenuActivity.this);
 
                 user = UserController.getUserAccount();
-                user.setUserCategory(UserAccount.UserCategory.driver);
+                user.setUserState(UserAccount.UserState.driver);
 
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();

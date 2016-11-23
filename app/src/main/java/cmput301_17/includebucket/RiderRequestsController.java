@@ -78,7 +78,7 @@ public class RiderRequestsController {
     }
 
     /**
-     * TODO Get list of current requests made by the rider.
+     * Get list of current requests made by the rider.
      */
     public static RequestList getRequestsFromElasticSearch() {
 
@@ -99,7 +99,6 @@ public class RiderRequestsController {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            Log.i("The user is a ", user.getUserCategory() + " ELASTIC");
         }
         return requestList;
     }

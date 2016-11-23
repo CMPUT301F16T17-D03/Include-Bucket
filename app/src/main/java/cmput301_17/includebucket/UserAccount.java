@@ -19,25 +19,22 @@ public class UserAccount implements Serializable {
 
     private String uniqueUserName, email, phoneNumber;
     private Boolean isLoggedIn;
-    private ArrayList<String> riderRequestIds = new ArrayList<>();
-    private Collection<Request> driverRequests;
+    private ArrayList<String> riderRequestIds  = new ArrayList<>();
+    private Collection<Request> driverRequests = new ArrayList<>();
 
-    private UserCategory userCategory;
+    private UserState userState;
 
     /**
      * User can either be a rider or a driver.
      */
-    public enum UserCategory {
+    public enum UserState {
         rider, driver
     }
 
-    /**
-     * The initialization constructor (creates an empty user). Will later be filled with values.
-     */
     public UserAccount() {}
 
     /**
-     * This is the constructor that creates a user with an id and sets values its values.
+     * This is the constructor that creates a user with an id and sets its values.
      * @param
      */
     public UserAccount(String userLogin, String userEmail, String userPhone) {
@@ -45,7 +42,7 @@ public class UserAccount implements Serializable {
         this.email = userEmail;
         this.phoneNumber = userPhone;
         this.isLoggedIn = true;
-        this.userCategory = null;
+        this.userState = null;
     }
 
     /**
@@ -57,7 +54,7 @@ public class UserAccount implements Serializable {
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.isLoggedIn = true;
-        this.userCategory = user.getUserCategory();
+        this.userState = user.getUserState();
     }
 
     /**
@@ -210,15 +207,15 @@ public class UserAccount implements Serializable {
      * Gets the user category
      * @return
      */
-    public UserCategory getUserCategory() {
-        return userCategory;
+    public UserState getUserState() {
+        return userState;
     }
 
     /**
      * Sets the user category
-     * @param userCategory
+     * @param userState
      */
-    public void setUserCategory(UserCategory userCategory) {
-        this.userCategory = userCategory;
+    public void setUserState(UserState userState) {
+        this.userState = userState;
     }
 }

@@ -62,9 +62,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
 
-        /**
-         * Updates the ArrayAdapter when a request is added or deleted.
-         */
         RiderRequestsController.getRiderRequests().addListener(new Listener() {
             @Override
             public void update() {
@@ -89,7 +86,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     /**

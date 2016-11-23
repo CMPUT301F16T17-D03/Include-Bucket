@@ -1,11 +1,8 @@
 package cmput301_17.includebucket;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import cmput301_17.includebucket.UserAccount;
 import io.searchbox.annotations.JestId;
 
 /**
@@ -21,7 +18,7 @@ public class Request implements Serializable {
 
     private String startLocation;
     private String endLocation;
-    private String userId;
+    private String userName;
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
@@ -31,18 +28,18 @@ public class Request implements Serializable {
     private boolean isCompleted, isPaid;
 
     /**
-     * Enum class that specify the state of the status.
+     * Enum class that specifies the state of the status.
      * A request can be:
      *     Open (Rider just made a ride request, no driver has accepted it)
      *     Accepted by driver (A driver accepted the open request)
      *     Pending (A request that was accepted by a driver is waiting to be confirmed by the rider)
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
-    public enum RequestStatus {
+    public enum RequestState {
         requestOpen, acceptedByDriver, requestPending, requestCompleted
     }
 
-    private RequestStatus requestStatus;
+    private RequestState requestState;
 
     /**
      * The empty constructor.
@@ -54,12 +51,12 @@ public class Request implements Serializable {
      * Intantiates a new Request.
      * @param loc1  The start location
      * @param loc2  The end location
-     * @param userId The rider making a request
+     * @param userName The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, String userId, String story, ArrayList<UserAccount> drivers) {
+    public Request(String loc1, String loc2, String userName, String story, ArrayList<UserAccount> drivers) {
         this.requestId = null;
-        this.userId = userId;
+        this.userName = userName;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.riderStory = story;
@@ -159,9 +156,8 @@ public class Request implements Serializable {
     }
 
     public String getUserId() {
-        return userId;
+        return userName;
     }
-    //public void setUser(UserAccount user){this.rider = user;}
 
     public boolean isRiderAccepted() {
         return Boolean.FALSE;

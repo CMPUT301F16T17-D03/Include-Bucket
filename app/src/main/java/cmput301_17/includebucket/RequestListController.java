@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -46,7 +45,7 @@ public class RequestListController {
         }
         else
         {
-            if (user.getUserCategory() == (UserAccount.UserCategory.rider))
+            if (user.getUserState() == (UserAccount.UserState.rider))
             {
                 requestList = requestListRider;
                 Log.i("Success", "This user is a rider." + user.getUniqueUserName());
@@ -55,7 +54,7 @@ public class RequestListController {
             {
                 requestList = requestListDriver;
                 Log.i("Uh oh", "The fuck did you do...");
-                Log.i("User", " " + user.getUserCategory());
+                Log.i("User", " " + user.getUserState());
             }
         }
         return requestList;
@@ -162,15 +161,15 @@ public class RequestListController {
         Context context = controller.getContext();
 
         String file;
-        if(user.getUserCategory()==(UserAccount.UserCategory.rider))
+        if(user.getUserState()==(UserAccount.UserState.rider))
         {
             file = REQUESTS_RIDER;
-            Log.i("Success","This user is a " + user.getUserCategory());
+            Log.i("Success","This user is a " + user.getUserState());
         }
         else
         {
             file = REQUESTS_DRIVER;
-            Log.i("Uh oh","This user is a " + user.getUserCategory());
+            Log.i("Uh oh","This user is a " + user.getUserState());
         }
 
         try {
@@ -201,7 +200,7 @@ public class RequestListController {
         controller.setContext(context);
 
         String file;
-        if(user.getUserCategory() == (UserAccount.UserCategory.rider))
+        if(user.getUserState() == (UserAccount.UserState.rider))
         {
             file = REQUESTS_RIDER;
             Log.i("Saving"," " + user.getUniqueUserName());
@@ -238,7 +237,7 @@ public class RequestListController {
         ElasticsearchRequestController.GetAllRequests foundRequests;
         foundRequests = new ElasticsearchRequestController.GetAllRequests();
 
-        if (user.getUserCategory() == (UserAccount.UserCategory.rider))
+        if (user.getUserState() == (UserAccount.UserState.rider))
         {
             // Get requests specified by user login
             foundRequests.execute(user.getUniqueUserName());
@@ -250,7 +249,7 @@ public class RequestListController {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            Log.i("The user is a ",user.getUserCategory() + " ELASTIC");
+            Log.i("The user is a ",user.getUserState() + " ELASTIC");
         }
         else
         {
@@ -264,7 +263,7 @@ public class RequestListController {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            Log.i("The user is a ","" + user.getUserCategory());
+            Log.i("The user is a ","" + user.getUserState());
         }
         return requestList;
     }

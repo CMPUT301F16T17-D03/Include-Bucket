@@ -69,7 +69,7 @@ public class ElasticsearchRequestController {
      * This method retrieves a request made by a particular user, specified by the request ID.
      * Will retrieve only one request at a time.
      */
-    public static class GetRiderRequests extends AsyncTask<String, Void, Request> {
+    public static class GetRidersRequests extends AsyncTask<String, Void, Request> {
         @Override
         protected Request doInBackground(String... requestIds) {
             verifySettings();
@@ -141,7 +141,7 @@ public class ElasticsearchRequestController {
     /**
      * This method retrieves all the requests in the database.
      */
-    public static class GetAllRequests extends AsyncTask<String, Void, RequestList> {
+    public static class GetRiderRequests extends AsyncTask<String, Void, RequestList> {
         @Override
         protected RequestList doInBackground(String... userLogin) {
             verifySettings();
