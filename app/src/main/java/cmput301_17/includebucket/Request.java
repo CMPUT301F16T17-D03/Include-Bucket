@@ -1,11 +1,8 @@
 package cmput301_17.includebucket;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import cmput301_17.includebucket.UserAccount;
 import io.searchbox.annotations.JestId;
 
 /**
@@ -39,11 +36,11 @@ public class Request implements Serializable {
      *     Pending (A request that was accepted by a driver is waiting to be confirmed by the rider)
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
-    public enum RequestStatus {
+    public enum RequestState {
         Open, Accepted, Pending, Completed
     }
 
-    private RequestStatus requestStatus;
+    private RequestState requestState;
 
     /**
      * The empty constructor.
@@ -65,7 +62,7 @@ public class Request implements Serializable {
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
-        requestStatus = RequestStatus.Open;
+        requestState = RequestState.Open;
     }
 
     public String getRequestID() {return requestID; }
