@@ -18,7 +18,7 @@ public class Request implements Serializable {
 
     private String startLocation;
     private String endLocation;
-    private String userName;
+    private String uniqueUserName;
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
@@ -36,7 +36,15 @@ public class Request implements Serializable {
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
     public enum RequestState {
-        requestOpen, acceptedByDriver, requestPending, requestCompleted
+        requestOpen, acceptedByDriver, requestPending, riderConfirmed
+    }
+
+    public RequestState getRequestState() {
+        return requestState;
+    }
+
+    public void setRequestState(RequestState requestState) {
+        this.requestState = requestState;
     }
 
     private RequestState requestState;
@@ -51,12 +59,12 @@ public class Request implements Serializable {
      * Intantiates a new Request.
      * @param loc1  The start location
      * @param loc2  The end location
-     * @param userName The rider making a request
+     * @param uniqueUserName The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, String userName, String story, ArrayList<UserAccount> drivers) {
+    public Request(String loc1, String loc2, String uniqueUserName, String story, ArrayList<UserAccount> drivers) {
         this.requestId = null;
-        this.userName = userName;
+        this.uniqueUserName = uniqueUserName;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.riderStory = story;
@@ -156,7 +164,7 @@ public class Request implements Serializable {
     }
 
     public String getUserId() {
-        return userName;
+        return uniqueUserName;
     }
 
     public boolean isRiderAccepted() {
