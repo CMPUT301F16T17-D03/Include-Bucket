@@ -69,14 +69,16 @@ public class UserController {
      */
     public static void updateUser(UserAccount user) {
 
-        UserAccount newUser = new UserAccount(user);
-        newUser.setRiderRequestIds(user.getRiderRequestIds());
+        String oldUserId = user.getUserId();
 
-        // Create new
-        createUserInElasticSearch(newUser);
+        UserAccount newUser = user;
+        newUser.setRiderRequestIds(user.getRiderRequestIds());
 
         // Delete old
         deleteUserFromElasticSearch(user);
+
+        // Create new
+        createUserInElasticSearch(newUser);
     }
 
     /**

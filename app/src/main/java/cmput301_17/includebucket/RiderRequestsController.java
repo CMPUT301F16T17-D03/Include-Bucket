@@ -17,10 +17,8 @@ public class RiderRequestsController {
 
     public static RequestList getRiderRequests() {
 
-        UserAccount user = UserController.getUserAccount();
-
         if (riderRequests == null) {
-            riderRequests = new RequestList();
+            riderRequests = getRequestsFromElasticSearch();
         }
         return riderRequests;
     }
@@ -61,7 +59,7 @@ public class RiderRequestsController {
             e.printStackTrace();
         }
 
-        getRiderRequests().addRequest(request);
+        getRiderRequests().add(request);
 
         return requestId;
     }
@@ -72,10 +70,20 @@ public class RiderRequestsController {
      */
     public static void deleteRequest(Request request) {
 
-        ElasticsearchRequestController.DeleteRequest deleteRequests;
-        deleteRequests = new ElasticsearchRequestController.DeleteRequest();
-        deleteRequests.execute(request);
+        UserAccount user = UserController.getUserAccount();
 
+        ElasticsearchRequestController.DeleteRequest deleteRequest;
+        deleteRequest = new ElasticsearchRequestController.DeleteRequest();
+        deleteRequest.execute(request);
+
+        ArrayList<String> requests = user.getRiderRequestIds();
+        for (String id : requests) {
+            if (id.equals(request))
+            {
+                requests.remove(id);
+            }
+        }
+        user.setRiderRequestIds(requests);
         getRiderRequests().deleteRequest(request);
     }
 
@@ -86,25 +94,24 @@ public class RiderRequestsController {
 
         UserAccount user = UserController.getUserAccount();
         RequestList requestList = new RequestList();
+
         ArrayList<String> requestIds = user.getRiderRequestIds();
+        for (String requestId : requestIds) {
 
-        if (requestIds == null) {
-            requestIds = new ArrayList<>();
+            ElasticsearchRequestController.GetRiderRequests riderRequests;
+            riderRequests = new ElasticsearchRequestController.GetRiderRequests();
+            riderRequests.execute(requestId);
+
+            try {
+                requestList.add(riderRequests.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            Log.i("The user is a ", user.getUserCategory() + " ELASTIC");
         }
-
-        ElasticsearchRequestController.GetAllRequests foundRequests;
-        foundRequests = new ElasticsearchRequestController.GetAllRequests();
-        foundRequests.execute(user.getUniqueUserName());
-
-        try {
-            requestIds = foundRequests.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        Log.i("The user is a ",user.getUserCategory() + " ELASTIC");
-
+        riderRequests = requestList;
         return requestList;
     }
 }

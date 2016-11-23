@@ -226,7 +226,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String riderStory = storyEditText.getText().toString();
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
-                Request request = new Request(startLocation, endLocation, user.getUid(), riderStory, drivers);
+                Request request = new Request(startLocation, endLocation, user.getUniqueUserName(), riderStory, drivers);
                 request.setFare(fare);
 
                 //user.addRiderRequestId(request.getRequestID());
@@ -243,6 +243,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 //  2. deleting the user
                 //  3. and then creating a new doc with the new user's data.
                 user.getRiderRequestIds().add(requestId);
+
+                //UserAccount newUser = new UserAccount(user);
+                //newUser.setRiderRequestIds(user.getRiderRequestIds());
+                //UserController.createUserInElasticSearch(user);
+                //UserController.deleteUserFromElasticSearch(user);
+
                 UserController.updateUser(user);
 
 

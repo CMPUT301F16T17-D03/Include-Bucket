@@ -110,7 +110,7 @@ public class RequestListController {
      * This returns a list of requests from ElasticSearch with specified user login.
      * @return requests
      */
-    public static RequestList getBlehRequestsFromElasticSearch(String userLogin) {
+    /*public static RequestList getBlehRequestsFromElasticSearch(String userLogin) {
 
         ElasticsearchRequestController.GetRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetRequests();
@@ -127,7 +127,7 @@ public class RequestListController {
         }
         return requests;
     }
-
+*/
     /**
      * This returns a list of ALL requests from ElasticSearch.
      * @return requests

@@ -55,28 +55,21 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        Log.i("Success", "Got " + user.getUniqueUserName() + " Category: " + user.getUserCategory());
-
-        /**
-         * TODO : create condition where if the user is offline get requests from a local file
-         * instead of Elasticsearch.
-         */
-        requests = RequestListController.getRequestsFromElasticSearch();
+        requests = RiderRequestsController.getRiderRequests();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
-        requestAdapter.notifyDataSetChanged();
 
         /**
          * Updates the ArrayAdapter when a request is added or deleted.
          */
-        RequestListController.getRequestList().addListener(new Listener() {
+        RiderRequestsController.getRiderRequests().addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList().getRequests();
+                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -120,8 +113,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
-                        requestListController.deleteRequestFromList(request);
-                        //requestListController.getRequestList().deleteRequest(request);
+                        RiderRequestsController.deleteRequest(request);
+                        //UserController.updateUser(user);
                         requestList.remove(request);
                         requestsListView.setAdapter(requestAdapter);
                         requestAdapter.notifyDataSetChanged();
@@ -153,6 +146,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        RequestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
+        //RequestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
     }
 }

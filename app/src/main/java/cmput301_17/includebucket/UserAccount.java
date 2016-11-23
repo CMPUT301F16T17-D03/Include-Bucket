@@ -65,7 +65,7 @@ public class UserAccount implements Serializable {
      * This returns the user id
      * @return
      */
-    public String getUid() {
+    public String getUserId() {
         return userId;
     }
 
@@ -73,7 +73,7 @@ public class UserAccount implements Serializable {
      * this sets the user id.
      * @param userId
      */
-    public void setUid(String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

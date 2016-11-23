@@ -71,7 +71,7 @@ public class RegisterActivity extends MainMenuActivity {
                     UserController.createUserInElasticSearch(user);
 
                     controller.setContext(RegisterActivity.this);
-                    //UserController.saveUserAccountInLocalFile(user, controller.getContext());
+                    UserController.saveUserAccountInLocalFile(user, controller.getContext());
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");
 

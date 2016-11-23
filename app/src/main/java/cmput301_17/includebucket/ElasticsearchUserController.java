@@ -47,7 +47,7 @@ public class ElasticsearchUserController {
 
                         if (result.isSucceeded())
                         {
-                            user.setUid(result.getId());
+                            user.setUserId(result.getId());
                         }
                         else
                         {
@@ -144,16 +144,19 @@ public class ElasticsearchUserController {
         protected Void doInBackground(UserAccount... users) {
             verifySettings();
 
-            Delete deleteUser = new Delete
-                    .Builder(users[0].getUid())
-                    .index("cmput301f16t17")
-                    .type("user")
-                    .build();
+            for (UserAccount user : users) {
 
-            try {
-                client.execute(deleteUser);
-            } catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the Elasticsearch!");
+                Delete deleteUser = new Delete
+                        .Builder(user.getUserId())
+                        .index("cmput301f16t17")
+                        .type("user")
+                        .build();
+
+                try {
+                    client.execute(deleteUser);
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the Elasticsearch!");
+                }
             }
             return null;
         }
