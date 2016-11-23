@@ -1,11 +1,8 @@
 package cmput301_17.includebucket;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import cmput301_17.includebucket.UserAccount;
 import io.searchbox.annotations.JestId;
 
 /**
@@ -17,7 +14,7 @@ import io.searchbox.annotations.JestId;
 public class Request implements Serializable {
 
     @JestId
-    String requestID;
+    String requestId;
 
     private String startLocation;
     private String endLocation;
@@ -26,29 +23,25 @@ public class Request implements Serializable {
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
-    private ArrayList<UserAccount> pendingDrivers;
+    private ArrayList<UserAccount> pendingDrivers = new ArrayList<>();
     private boolean driverAccepted;
     private boolean riderAccepted;
     private boolean isCompleted, isPaid;
 
     /**
-     * Enums that specify the state of the status.
+     * Enum class that specifies the state of the status.
      * A request can be:
      *     Open (Rider just made a ride request, no driver has accepted it)
      *     Accepted by driver (A driver accepted the open request)
      *     Pending (A request that was accepted by a driver is waiting to be confirmed by the rider)
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
-    public enum RequestStatus {
-        requestOpen, acceptedByDriver, requestPending, requestCompleted
+    public enum RequestState {
+        requestOpen, acceptedByDriver, requestPending, riderConfirmed
     }
 
-    private RequestStatus requestStatus;
+    private RequestState requestState;
 
-    /**
-     * The empty constructor.
-
-     */
     public Request() {}
 
     /**
@@ -57,9 +50,10 @@ public class Request implements Serializable {
      * @param loc2  The end location
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
+     * @param pendingDrivers
+     * @param driver
      */
     public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
-        this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.rider = rider;
@@ -68,9 +62,25 @@ public class Request implements Serializable {
         this.driver = driver;
     }
 
-    public String getRequestID() {return requestID; }
+    public ArrayList<UserAccount> getPendingDrivers() {
+        return pendingDrivers;
+    }
 
-    public void setRequestID(String requestID) { this.requestID = requestID; }
+    public void setPendingDrivers(ArrayList<UserAccount> pendingDrivers) {
+        this.pendingDrivers = pendingDrivers;
+    }
+
+    public RequestState getRequestState() {
+        return requestState;
+    }
+
+    public void setRequestState(RequestState requestState) {
+        this.requestState = requestState;
+    }
+
+    public String getRequestID() {return requestId; }
+
+    public void setRequestID(String requestID) { this.requestId = requestID; }
 
     public String getStartLocation() {
         return startLocation;
@@ -96,16 +106,6 @@ public class Request implements Serializable {
         this.riderStory = riderStory;
     }
 
-    public UserAccount getRider() {
-        return rider;
-    }
-
-    public void setRider(UserAccount rider) {
-        this.rider = rider;
-    }
-
-    public String getRiderUserName() { return getRider().getUniqueUserName(); }
-
     public Double getFare() {
         return fare;
     }
@@ -125,7 +125,6 @@ public class Request implements Serializable {
     public ArrayList<UserAccount> getDrivers() {
         return pendingDrivers;
     }
-
 
     public void setDrivers(ArrayList<UserAccount> drivers) {
         this.pendingDrivers = pendingDrivers;
@@ -171,17 +170,20 @@ public class Request implements Serializable {
         isPaid = paid;
     }
 
-    public void setUser(UserAccount user){
-        this.rider = user;
+    public UserAccount getRider() {
+        return rider;
     }
 
-    public void chooseDriver(UserAccount user){
-        this.driver = user;
+    public boolean isRiderAccepted() {
+        return Boolean.FALSE;
     }
+
+    //public void chooseDriver(UserAccount user){this.driver = user;}
 
     @Override
     public String toString() {
         String status = "Open";
+
         if (hasRiderAccepted()){
             status = "Closed";
         }

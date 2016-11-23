@@ -58,14 +58,12 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
         request = (Request) getIntent().getSerializableExtra("Request");
 
 
+        /****************************************************** PERMISSIONS *****************************************************/
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         //Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
-
-
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -118,8 +116,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 // result of the request.
             }
         }
-
         //OpenStreetMapTileProviderConstants.setCachePath(new File("/sdcard/osmdroid2/").getAbsolutePath());
+        /**************************************************** PERMISSIONS ***************************************************/
+
 
 
         Button acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
@@ -138,6 +137,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             }
         });
 
+
+
+        /*************************************************** MAPS STUFF *****************************************************/
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
@@ -156,6 +158,17 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
+
+        //startPoint = new GeoPoint(53.5444, -113.4909); // TODO get from file/elasticsearch
+        //endPoint = new GeoPoint(53.6444, -113.5909);   // get from file/elasticsearch
+
+        startEditText.setText(startPoint.toString());  // get from file/elasticsearch
+        endEditText.setText(endPoint.toString());      // get from file/elasticsearch
+        String price = "" + startPoint.distanceTo(endPoint);
+        priceEditText.setText(price);                  // get from file/elasticsearch
+        storyText.setText("A Story goes here");        // get from file/elasticsearch
+
+
         double startLat= (Double.parseDouble(request.getStartLocation().split(",")[0]));
         double startLon= (Double.parseDouble(request.getStartLocation().split(",")[1]));
         double endLat= (Double.parseDouble(request.getEndLocation().split(",")[0]));
@@ -199,7 +212,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         //AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
         //Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
         //map.getOverlays().add(roadOverlay);
-
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
@@ -210,8 +222,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         //DO NOTHING FOR NOW:
         return false;
     }
-
-
 
     /**
      * Handles the dragging of a marker, and updates dependant widgets.

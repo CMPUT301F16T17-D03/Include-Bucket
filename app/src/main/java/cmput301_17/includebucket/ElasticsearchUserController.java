@@ -7,9 +7,12 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.searchbox.client.JestResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -38,13 +41,13 @@ public class ElasticsearchUserController {
                     Index index = new Index.Builder(user)
                             .index("cmput301f16t17")
                             .type("user")
-                            .id(user.getUniqueUserName()).build();
+                            .build();
                     try {
                         DocumentResult result = client.execute(index);
 
                         if (result.isSucceeded())
                         {
-                            user.setUid(result.getId());
+                            user.setUserId(result.getId());
                         }
                         else
                         {
@@ -72,7 +75,10 @@ public class ElasticsearchUserController {
             /**
              * This query retrieves one user instance specified by the login input in LoginActivity
              */
-            String search_string = "{\"query\": { \"match\": { \"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
+            String search_string =
+                    "{\"from\":0,\"size\":10000, " +
+                        "\"query\": { \"term\": {" +
+                            "\"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
@@ -95,6 +101,62 @@ public class ElasticsearchUserController {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 return null;
             }
+        }
+    }
+
+    /**
+     * Get user from Elasticsearch based on a userId.
+     */
+    public static class RetrieveUserById extends AsyncTask<String, Void, UserAccount> {
+        @Override
+        protected UserAccount doInBackground(String... userIds) {
+            verifySettings();
+
+            UserAccount user = new UserAccount();
+
+            Get response = new Get.Builder("cmput301f16t17",userIds[0]).type("user").build();
+
+            try {
+
+                DocumentResult result = client.execute(response);
+
+                if(result.isSucceeded())
+                {
+                    user = result.getSourceAsObject(UserAccount.class);
+                }
+                else
+                {
+                    Log.i("Error", "Could not find the user with that ID in Elasticsearch!");
+                }
+            } catch (IOException e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return user;
+        }
+    }
+
+    /**
+     * This method deletes a user specified by an ID.
+     */
+    public static class DeleteUser extends AsyncTask<UserAccount, Void, Void> {
+        @Override
+        protected Void doInBackground(UserAccount... users) {
+            verifySettings();
+
+            Delete deleteUser = new Delete
+                    .Builder(users[0].getUserId())
+                    .index("cmput301f16t17")
+                    .type("user")
+                    .build();
+
+            try {
+                client.execute(deleteUser);
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the Elasticsearch!");
+            }
+
+            return null;
         }
     }
 

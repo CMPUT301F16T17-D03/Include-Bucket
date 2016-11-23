@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -30,14 +31,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private ListView requestsListView;
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
-    private Collection<Request> requests;
-    private String userLogin;
+    private RequestList requests;
+
+    private RiderRequestsController riderRequestsController = new RiderRequestsController();
+    private UserController userController = new UserController();
+    private UserAccount user = new UserAccount();
 
     final String adbMessage = "Click More button for details.";
 
     /**
-     * This deals with viewing the current requests and
-     * updates  when a request is added or deleted.
+     * This deals with viewing the current requests and updates  when a request is added or deleted.
      * @param savedInstanceState
      */
     @Override
@@ -45,26 +48,25 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_requests);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
-        userLogin = user.getUniqueUserName();
-
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        requests = RequestListController.getRiderRequestList(user);
+        riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
+        userController.setContext(RiderCurrentRequestsActivity.this);
+
+        user = UserController.getUserAccount();
+
+        requests = RiderRequestsController.getRiderRequests();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
 
-        /**
-         * Updates the ArrayAdapter when a request is added or deleted.
-         */
-        RequestListController.getRiderRequestList(user).addListener(new Listener() {
+        RiderRequestsController.getRiderRequests().addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRiderRequestList(user).getRequests();
+                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -75,7 +77,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 Intent intent = new Intent(RiderCurrentRequestsActivity.this, NewRiderRequestActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -93,9 +94,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     protected void onResume() {
         super.onResume();
 
-        requestsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
                 adb.setMessage(adbMessage);
@@ -106,14 +107,18 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Request request = requestList.get(finalPosition);
 
-                        requestList.remove(finalPosition);
+                    riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
 
-                        RequestListController.deleteRequestFromList(request);
-                        RequestListController.getRiderRequestList(user).deleteRequest(request);
-                        requestsListView.setAdapter(requestAdapter);
-                        requestAdapter.notifyDataSetChanged();
+                    Request request = requestList.get(finalPosition);
+                    RiderRequestsController.deleteRequest(request);
+
+                    user.getRiderRequestIds().remove(request.getRequestID());
+                    UserController.updateUser(user);
+
+                    requestList.remove(request);
+                    requestsListView.setAdapter(requestAdapter);
+                    requestAdapter.notifyDataSetChanged();
                     }
                 });
                 // Add Cancel button to exit the dialog box
@@ -132,12 +137,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     }
                 });
                 adb.show();
-                return false;
             }
         });
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
     }
-}
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //RequestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
+    }
+}

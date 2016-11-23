@@ -1,5 +1,6 @@
 package cmput301_17.includebucket;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,6 +51,13 @@ public class RequestList extends ArrayList {
         for(Request r : requests) {
             this.add(r);
         }
+        notifyListeners();
+    }
+
+    public Request get(int i) {
+        ArrayList<Request> list = new ArrayList<>();
+        list.addAll(getRequests());
+        return list.get(i);
     }
 
     public int size() {

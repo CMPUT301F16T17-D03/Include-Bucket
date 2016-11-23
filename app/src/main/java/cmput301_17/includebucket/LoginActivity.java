@@ -15,16 +15,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by michelletagarino on 16-10-29.
  *
  * This deals with login functionality.
  */
-public class    LoginActivity extends MainMenuActivity {
+public class LoginActivity extends MainMenuActivity {
 
     private Button loginButton;
     private Button registerButton;
     private EditText userLogin;
+    private UserAccount foundUser;
+
+    UserController userController;
+    RequestListController requestListController;
 
     /**
      * This method get permissions to run and deals with button presses.
@@ -34,6 +40,9 @@ public class    LoginActivity extends MainMenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        userController = new UserController();
+        requestListController = new RequestListController();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -88,45 +97,32 @@ public class    LoginActivity extends MainMenuActivity {
         }
 
         /**
-         *  create condition where, if the username is not in the database, automatically
-         *  switch to RegisterActivity, otherwise login
+         * Invoking the login button will check if the text matches any
+         * usernames in the server. If it passes, the user gets logged in.
          */
-
-
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
+            setResult(RESULT_OK);
 
-                String textLogin  = userLogin.getText().toString();
+            String textLogin  = userLogin.getText().toString();
 
-                /**
-                 * Checks to see if the user is valid:
-                 *     If a user was returned, then the task was successful and thereby the login
-                 *     name was valid. The user input and the username returned from elasticsearch
-                 *     are compared; if equal, the activity will switch to the MainActivity (in other
-                 *     words, the user will be logged in).
-                 */
-                ElasticsearchUserController.RetrieveUser findUser;
-                findUser = new ElasticsearchUserController.RetrieveUser();
-                findUser.execute(userLogin.getText().toString());
+            foundUser = UserController.retrieveUserFromElasticSearch(userLogin.getText().toString());
 
-                try {
-                    UserAccount foundUser = findUser.get();
-                    String foundLogin = foundUser.getUniqueUserName();
+            try {
+                String foundLogin = foundUser.getUniqueUserName();
 
-                    if (textLogin.equals(foundLogin))
-                    {
-                        Log.i("Success", "User " + textLogin + " was found.");
+                if (textLogin.equals(foundLogin))
+                {
+                    Log.i("Success", "User " + foundUser.getUniqueUserName() + " was found.");
 
-                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                        intent.putExtra("User", foundUser);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                    startActivity(intent);
                 }
-                catch (Exception e) {
-                    Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
-                }
+            }
+            catch (Exception e) {
+                Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+            }
             }
         });
 
@@ -134,7 +130,6 @@ public class    LoginActivity extends MainMenuActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
                 Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
             }
@@ -158,13 +153,6 @@ public class    LoginActivity extends MainMenuActivity {
 
                     String textLogin  = userLogin.getText().toString();
 
-                    /**
-                     * Checks to see if the user is valid:
-                     *     If a user was returned, then the task was successful and thereby the login
-                     *     name was valid. The user input and the username returned from elasticsearch
-                     *     are compared; if equal, the activity will switch to the MainActivity (in other
-                     *     words, the user will be logged in).
-                     */
                     ElasticsearchUserController.RetrieveUser findUser;
                     findUser = new ElasticsearchUserController.RetrieveUser();
                     findUser.execute(userLogin.getText().toString());
@@ -192,7 +180,10 @@ public class    LoginActivity extends MainMenuActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStop() {
+        super.onStop();
+        UserController.saveUserAccountInLocalFile(foundUser, LoginActivity.this);
+        //RequestList requestList = RiderRequestsController.getRequestsFromElasticSearch();
+        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
     }
 }

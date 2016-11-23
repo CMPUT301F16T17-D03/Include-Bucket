@@ -15,21 +15,30 @@ import android.widget.Button;
 public class MainMenuActivity extends Activity {
    // private Activity activity = this;
 
-    UserAccount user = new UserAccount();
+    private UserAccount user;
+    private UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
+        userController = new UserController();
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
+                userController.setContext(MainMenuActivity.this);
+
+                user = UserController.getUserAccount();
+                user.setUserState(UserAccount.UserState.rider);
+
+                UserController.saveUserAccountInLocalFile(user, userController.getContext());
+                UserController.loadUserAccountFromLocalFile();
+
                 Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -38,6 +47,8 @@ public class MainMenuActivity extends Activity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+                UserController.logUserOut(MainMenuActivity.this);
+                //RiderRequestsController.clearRiderRequests();
                 finish();
             }
         });
@@ -46,8 +57,15 @@ public class MainMenuActivity extends Activity {
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
+                userController.setContext(MainMenuActivity.this);
+
+                user = UserController.getUserAccount();
+                user.setUserState(UserAccount.UserState.rider);
+                UserController.saveUserAccountInLocalFile(user, userController.getContext());
+                UserController.loadUserAccountFromLocalFile();
+
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -56,6 +74,15 @@ public class MainMenuActivity extends Activity {
         driverBrowseRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
+                userController.setContext(MainMenuActivity.this);
+
+                user = UserController.getUserAccount();
+                user.setUserState(UserAccount.UserState.driver);
+
+                UserController.saveUserAccountInLocalFile(user, userController.getContext());
+                UserController.loadUserAccountFromLocalFile();
+
                 Intent intent = new Intent(MainMenuActivity.this, DriverBrowseRequestsActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
@@ -66,6 +93,15 @@ public class MainMenuActivity extends Activity {
         driverCurrentRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
+                userController.setContext(MainMenuActivity.this);
+
+                user = UserController.getUserAccount();
+                user.setUserState(UserAccount.UserState.driver);
+
+                UserController.saveUserAccountInLocalFile(user, userController.getContext());
+                UserController.loadUserAccountFromLocalFile();
+
                 Intent intent = new Intent(MainMenuActivity.this, DriverCurrentRequestsActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);

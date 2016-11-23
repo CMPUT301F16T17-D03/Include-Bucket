@@ -7,9 +7,11 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
@@ -30,43 +32,126 @@ public class ElasticsearchRequestController {
 
     /**
      * This method creates a Request instance
+     * @return requestId
      */
-    public static class CreateRequest extends AsyncTask<Request, Void, Void> {
+    public static class CreateRequest extends AsyncTask<Request, Void, String> {
         @Override
-        protected Void doInBackground(Request... requests) {
+        protected String doInBackground(Request... requests) {
             verifySettings();
 
+            String requestId = null;
+
             for (Request request : requests) {
-                Index index = new Index
-                        .Builder(request)
+                Index index = new Index.Builder(request)
                         .index("cmput301f16t17")
                         .type("request")
                         .build();
                 try {
-                    client.execute(index);
+                    DocumentResult result = client.execute(index);
+
+                    if (result.isSucceeded())
+                    {
+                        requestId = result.getId();
+                    }
+                    else
+                    {
+                        Log.i("Error","Could not retrieve doc from Elasticsearch!");
+                    }
                 } catch(Exception e){
                     Log.i("Error", "Failed to add request to elasticsearch!");
                     e.printStackTrace();
                 }
             }
-            return null;
+            return requestId;
         }
     }
 
     /**
-     * This method retrieves all of the riders requests in the database.
+     * This method retrieves a request made by a particular user, specified by the request ID.
+     * Will retrieve only one request at a time.
      */
-    public static class GetRiderRequests extends AsyncTask<UserAccount, Void, RequestList> {
+    public static class GetRidersRequests extends AsyncTask<String, Void, Request> {
         @Override
-        protected RequestList doInBackground(UserAccount... rider) {
+        protected Request doInBackground(String... requestIds) {
+            verifySettings();
+
+            Request request = new Request();
+
+            DocumentResult result;
+
+            Get requests = new Get.Builder("cmput301f16t17", requestIds[0]).type("request").build();
+            try {
+                result = client.execute(requests);
+
+                if(result.isSucceeded())
+                {
+                    request = result.getSourceAsObject(Request.class);
+                }
+                else
+                {
+                    Log.i("Error", "The search query did not match any requests in the database.");
+                }
+
+            } catch (IOException e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return request;
+        }
+    }
+
+    /**
+     * This method retrieves all requests. Essentially, the driver will obtain these results,
+     * which will then be filtered out so that only the requests not including their own will
+     * be left in the DriverCurrentRequestsActivity.
+     */
+    public static class GetOpenRequests extends AsyncTask<String, Void, RequestList> {
+        @Override
+        protected RequestList doInBackground(String... search_parameters) {
+            verifySettings();
+
+            RequestList requestList = new RequestList();
+
+            SearchResult result;
+
+            String query = "{\"from\": 0, \"size\": 10000}";
+            Search search = new Search
+                    .Builder(query)
+                    .addIndex("cmput301f16t17")
+                    .addType("request").build();
+
+            try {
+                result = client.execute(search);
+
+                if(result.isSucceeded())
+                {
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    requestList.addAll(foundRequests);
+                }
+                else
+                {
+                    Log.i("Error", "The search query did not match any requests in the database.");
+                }
+            } catch (IOException e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return requestList;
+        }
+    }
+
+    /**
+     * This method retrieves all of the rider's requests in the database.
+     */
+    public static class GetRiderRequests extends AsyncTask<String, Void, RequestList> {
+        @Override
+        protected RequestList doInBackground(String... uniqueUserName) {
             verifySettings();
 
             RequestList requests = new RequestList();
 
-            //String search_string = "{\"from\": 0, \"size\": 10000}";
-           String search_string = "{\"query\": { \"match\": {\"rider.uniqueUserName\" : \"" + rider[0].getUniqueUserName() + "\"}}}";
-                   //+ rider[0].getEmail() + "\",\"isLoggedIn\":"+ rider[0].getLoginStatus() +
-       //" \", \"phoneNumber\": \"" + rider[0].getPhoneNumber() + "\", \"uniqueUserName\":\"" +rider[0].getUniqueUserName() + "\"}}}}";
+            String search_string =
+                    "{\"from\": 0, \"size\": 10000," +
+                    "\"query\": { \"match\": {\"uniqueUserName\" : \"" + uniqueUserName[0] + "\"}}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
@@ -83,7 +168,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
-                    Log.i("Error", rider[0].getUniqueUserName() +" The search query did not match any requests in the database.");
+                    Log.i("Error", uniqueUserName[0] + " The search query did not match any requests in the database.");
                 }
             }
             catch (Exception e) {
@@ -92,18 +177,21 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
+
     /**
      * This method retrieves all of the drivers requests in the database.
      */
-    public static class GetDriverRequests extends AsyncTask<UserAccount, Void, RequestList> {
+    public static class GetDriverRequests extends AsyncTask<String, Void, RequestList> {
         @Override
-        protected RequestList doInBackground(UserAccount... driver) {
+        protected RequestList doInBackground(String... uniqueUserName) {
             verifySettings();
 
             RequestList requests = new RequestList();
 
             //String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = "{\"query\": { \"match\": {\"driver.uniqueUserName\" : \"" + driver[0].getUniqueUserName() + "\"}}}";
+            String search_string =
+                    "{\"from\": 0,\"size\": 10000," +
+                        "\"query\": { \"match\": { \"uniqueUserName\": \"" + uniqueUserName[0] + "\"}}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
@@ -120,7 +208,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
-                    Log.i("Error", driver[0].getUniqueUserName() +" The search query did not match any requests in the database.");
+                    Log.i("Error", uniqueUserName[0] +" The search query did not match any requests in the database.");
                 }
             }
             catch (Exception e) {
@@ -129,10 +217,10 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
+
     /**
      * This get the keyword for searching requests by keyword.
      */
-
     public static class GetKeywordList extends AsyncTask<String, Void, RequestList> {
         @Override
         protected RequestList doInBackground(String... search_param) {
@@ -168,25 +256,23 @@ public class ElasticsearchRequestController {
     }
 
     /**
-     * This method deletes a Request specified by an ID.
+     * Delete a Request specified by an ID.
      */
     public static class DeleteRequest extends AsyncTask<Request, Void, Void> {
         @Override
         protected Void doInBackground(Request... requests) {
             verifySettings();
 
-            for (Request request : requests) {
+            Delete deleteRequest = new Delete
+                    .Builder(requests[0].getRequestID().toString())
+                    .index("cmput301f16t17")
+                    .type("request")
+                    .build();
 
-                Delete deleteRequest = new Delete.Builder(request.getRequestID())
-                        .index("cmput301f16t17")
-                        .type("request")
-                        .build();
-
-                try {
-                    DocumentResult result = client.execute(deleteRequest);
-                } catch (Exception e) {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                }
+            try {
+                client.execute(deleteRequest);
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
             return null;
         }

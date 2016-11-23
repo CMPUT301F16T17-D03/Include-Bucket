@@ -54,31 +54,43 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private LocationListener locationListener;
     private GeoPoint currentPoint;
     private String price;
-    private ArrayList<UserAccount> drivers;
+    private ArrayList<UserAccount> pendingDrivers;
+
     private UserAccount driver;
 
-    private UserAccount user = new UserAccount();
+
+    private Context context;
+
+
+    private UserAccount user;
+    private UserController userController;
+    private RequestListController requestListController;
+    private RiderRequestsController riderRequestsController;
+
+
     /**
      * This method gets permissions, deals with the map and handles button presses.
      *
      * @param savedInstanceState
      */
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
-        drivers= new ArrayList<UserAccount>();
-        driver= new UserAccount();
+        pendingDrivers = new ArrayList<>();
+
+        user = UserController.getUserAccount();
+        userController = new UserController();
+        requestListController = new RequestListController();
+        riderRequestsController = new RiderRequestsController();
+
         /**
          * TODO : Fix this later.
          *
          * int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
          * Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
          */
-
         startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
         endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
         priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
@@ -209,22 +221,31 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
+                userController.setContext(NewRiderRequestActivity.this);
+                requestListController.setContext(NewRiderRequestActivity.this);
+                riderRequestsController.setContext(NewRiderRequestActivity.this);
+
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
-
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
-                Request request = new Request(startLocation, endLocation, user, riderStory, drivers, driver);
+                Request request = new Request(startLocation, endLocation, user, riderStory, pendingDrivers, driver);
+
                 request.setFare(fare);
-                ElasticsearchRequestController.CreateRequest createRequest;
-                createRequest = new ElasticsearchRequestController.CreateRequest();
-                createRequest.execute(request);
+
+                // Add the request to Elasticsearch
+                RiderRequestsController.addRequest(request);
+                //user.getRiderRequestIds().add(requestId);
+                //UserController.updateUser(user);
 
                 finish();
             }
         });
 
+
+
+        /********************************************** MAPS STUFF ********************************************/
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
@@ -233,12 +254,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-/*
+        /*
+         * TODO : Current location does not work on all machines for some reason
+         * Comment out the next four lines for testing purposes,
+         * figure out what is wrong with current location later.
+         * It is not a requirement to have the current location as the starting point anyhow...
+         */
+        /*
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
-*/
+        */
 
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -254,8 +281,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * --> The problem may be when locationManager calls the getLastKnownLocation method.
          * --> (Lines: 214-215)
          */
-          //startPoint = currentPoint;
-          //endPoint = currentPoint;
+        //startPoint = currentPoint;
+        //endPoint = currentPoint;
 
         startPoint = new GeoPoint(53.5232, -113.5263);
         endPoint = new GeoPoint(53.5232, -113.5263);
@@ -308,6 +335,17 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          */
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestList requestList = RiderRequestsController.getRiderRequests();
+        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+    }
+
+
+
+    /********************************************** MAPS GUI ***************************************/
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
         if(dragger.mTrace.get(0).equals(dragger.mTrace.get(1))){
             dragger.onMarkerDragStart(endMarker);
@@ -403,7 +441,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             double format = Math.round(temp *100.0)/100.0;
 
             price= "$" +String.valueOf(format);
-           // price = "" + Math.round((startMarker.getPosition().distanceTo(endMarker.getPosition())));
+            // price = "" + Math.round((startMarker.getPosition().distanceTo(endMarker.getPosition())));
             priceEditText.setText(price);
         }
 

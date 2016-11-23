@@ -40,12 +40,12 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_requests);
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
-
         keyword  = (EditText) findViewById(R.id.keyword);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
 
+        RequestList openRequests = DriverRequestsController.getOpenRequests();
         requestList = new ArrayList<>();
+        requestList.addAll(openRequests);
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         browseRequestList.setAdapter(requestAdapter);
 
@@ -55,7 +55,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
                 setResult(RESULT_OK);
                 requestList.clear();
                 key = keyword.getText().toString();
-                requests = RequestListController.getKeywordList(key);
+                requests = DriverRequestsController.getRequestsByKeyword(key);
                 requestList.addAll(requests);
                 browseRequestList.setAdapter(requestAdapter);
                 requestAdapter.notifyDataSetChanged();
@@ -80,7 +80,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
                 Request request =  requestList.get(position);
-                intent.putExtra("User", user);
                 intent.putExtra("Request", request);
                 startActivity(intent);
             }

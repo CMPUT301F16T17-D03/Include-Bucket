@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import io.searchbox.annotations.JestId;
 
@@ -13,57 +14,63 @@ import io.searchbox.annotations.JestId;
 
 public class UserAccount implements Serializable {
 
-    /**
-     * User
-     * -newuser
-     * user id
-     * -password
-     * get unique username
-     * get Riderrequests
-     * get Driverrequests
-     * get contact info
-     * change contact info
-     * stays logged in
-     * save in file for offline
-     *
-     */
-
-    /**
-     * This returns the user id
-     * @return
-     */
-    public String getUid() {
-        return uid;
-    }
-
-    /**
-     * this sets the user id.
-     * @param uid
-     */
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
     @JestId
-    private String uid, uniqueUserName, email, phoneNumber;
-    private Boolean isLoggedIn,isRider;
-    private ArrayList<Request> riderRequests;
-    private ArrayList<Request> driverRequests;
+    private String userId;
+
+    private String uniqueUserName, email, phoneNumber;
+    private Boolean isLoggedIn;
+    private ArrayList<String> riderRequestIds  = new ArrayList<>();
+    private Collection<Request> driverRequests = new ArrayList<>();
+
+    private UserState userState;
 
     /**
-     * The initialization constructor (creates an empty user). Will later be filled with values.
+     * User can either be a rider or a driver.
      */
+    public enum UserState {
+        rider, driver
+    }
+
     public UserAccount() {}
 
     /**
-     * This is the constructor that creates a user with an id and sets values its values.
+     * This is the constructor that creates a user with an id and sets its values.
      * @param
      */
     public UserAccount(String userLogin, String userEmail, String userPhone) {
         this.uniqueUserName = userLogin;
         this.email = userEmail;
         this.phoneNumber = userPhone;
-        this.isLoggedIn = false;
+        this.isLoggedIn = true;
+        this.userState = null;
+    }
+
+    /**
+     * Constructor to create a copy of an existing user with all of information
+     * @param user
+     */
+    public UserAccount(UserAccount user) {
+        this.uniqueUserName = user.getUniqueUserName();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.isLoggedIn = true;
+        this.userState = user.getUserState();
+    }
+
+    /**
+     * This returns the user id
+     * @return
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * this sets the user id.
+     * @param userId
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 
@@ -122,31 +129,32 @@ public class UserAccount implements Serializable {
      * This returns the rider request list.
      * @return
      */
-    public ArrayList<Request> getRiderRequests() {
-        return riderRequests;
+    public ArrayList<String> getRiderRequestIds() {
+        return riderRequestIds;
     }
 
     /**
      * This sets the sets the list of requests.
-     * @param riderRequests
+     * @param riderRequestIds
      */
-    public void setRiderRequests(ArrayList<Request> riderRequests) {
-        this.riderRequests = riderRequests;
+    public void setRiderRequestIds(ArrayList<String> riderRequestIds) {
+        this.riderRequestIds = riderRequestIds;
     }
 
     /**
      * This adds a new request for a rider to the list
-     * @param request
+     * @param requestId
      */
-    public void addRiderRequest(Request request){
-        this.riderRequests.add(request);
+    public void addRiderRequestId(String requestId){
+        this.riderRequestIds.remove(requestId);
     }
 
+    public void clearRiderRequestIds() { this.riderRequestIds.clear(); }
     /**
      * This returns the list of requests
      * @return
      */
-    public ArrayList<Request> getDriverRequests() {
+    public Collection<Request> getDriverRequests() {
         return driverRequests;
     }
 
@@ -196,16 +204,18 @@ public class UserAccount implements Serializable {
     public void setLoginStatus(Boolean status) { this.isLoggedIn = status; }
 
     /**
-     * This returns whether user is a rider
+     * Gets the user category
+     * @return
      */
-    public boolean isRider() {
-        return this.isRider;
+    public UserState getUserState() {
+        return userState;
     }
 
     /**
-     * This sets the user type (Rider or Driver)
+     * Sets the user category
+     * @param userState
      */
-    public void setRider(Boolean userType) {
-        this.isRider = userType;
+    public void setUserState(UserState userState) {
+        this.userState = userState;
     }
 }
