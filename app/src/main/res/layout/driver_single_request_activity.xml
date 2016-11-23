@@ -58,7 +58,7 @@
         android:layout_alignEnd="@+id/DSRAAcceptButton"
         android:layout_above="@+id/DSRAmaptext"
         android:layout_toEndOf="@+id/DSRAstart"
-        android:layout_alignTop="@+id/DSRAend" />
+        android:layout_alignTop="@+id/DSRAend" /> 
 
     <Button
         android:layout_width="wrap_content"
