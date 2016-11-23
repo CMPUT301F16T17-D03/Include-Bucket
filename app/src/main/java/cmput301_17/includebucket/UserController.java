@@ -69,8 +69,6 @@ public class UserController {
      */
     public static void updateUser(UserAccount user) {
 
-        String oldUserId = user.getUserId();
-
         UserAccount newUser = user;
         newUser.setRiderRequestIds(user.getRiderRequestIds());
 

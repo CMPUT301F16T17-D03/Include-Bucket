@@ -33,7 +33,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private ArrayAdapter<Request> requestAdapter;
     private RequestList requests;
 
-    private RequestListController requestListController = new RequestListController();
+    private RiderRequestsController riderRequestsController = new RiderRequestsController();
     private UserController userController = new UserController();
     private UserAccount user = new UserAccount();
 
@@ -50,7 +50,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        requestListController.setContext(RiderCurrentRequestsActivity.this);
+        riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
         userController.setContext(RiderCurrentRequestsActivity.this);
 
         user = UserController.getUserAccount();
@@ -112,12 +112,18 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Request request = requestList.get(finalPosition);
-                        RiderRequestsController.deleteRequest(request);
-                        //UserController.updateUser(user);
-                        requestList.remove(request);
-                        requestsListView.setAdapter(requestAdapter);
-                        requestAdapter.notifyDataSetChanged();
+
+                    riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
+
+                    Request request = requestList.get(finalPosition);
+                    RiderRequestsController.deleteRequest(request);
+
+                    user.getRiderRequestIds().remove(request.getRequestID());
+                    UserController.updateUser(user);
+
+                    requestList.remove(request);
+                    requestsListView.setAdapter(requestAdapter);
+                    requestAdapter.notifyDataSetChanged();
                     }
                 });
                 // Add Cancel button to exit the dialog box

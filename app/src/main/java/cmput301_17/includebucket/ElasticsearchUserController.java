@@ -144,20 +144,18 @@ public class ElasticsearchUserController {
         protected Void doInBackground(UserAccount... users) {
             verifySettings();
 
-            for (UserAccount user : users) {
+            Delete deleteUser = new Delete
+                    .Builder(users[0].getUserId())
+                    .index("cmput301f16t17")
+                    .type("user")
+                    .build();
 
-                Delete deleteUser = new Delete
-                        .Builder(user.getUserId())
-                        .index("cmput301f16t17")
-                        .type("user")
-                        .build();
-
-                try {
-                    client.execute(deleteUser);
-                } catch (Exception e) {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the Elasticsearch!");
-                }
+            try {
+                client.execute(deleteUser);
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the Elasticsearch!");
             }
+
             return null;
         }
     }

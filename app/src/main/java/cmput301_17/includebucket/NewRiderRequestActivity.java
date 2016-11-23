@@ -87,6 +87,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
          */
 
+
+
         startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
         endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
         priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
@@ -229,31 +231,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 Request request = new Request(startLocation, endLocation, user.getUniqueUserName(), riderStory, drivers);
                 request.setFare(fare);
 
-                //user.addRiderRequestId(request.getRequestID());
-                //UserController.saveUserAccountInLocalFile(user, userController.getContext());
-
-                //requestListController.addRequest(request);
-
                 // Add the request to Elasticsearch and return the request's Jest ID
                 String requestId = RiderRequestsController.addRequest(request);
-
-                // When a new request is made by a rider, store the id in the riderRequestIds list
-                // This requires updating a user, which requires:
-                //  1. retrieving the user
-                //  2. deleting the user
-                //  3. and then creating a new doc with the new user's data.
                 user.getRiderRequestIds().add(requestId);
-
-                //UserAccount newUser = new UserAccount(user);
-                //newUser.setRiderRequestIds(user.getRiderRequestIds());
-                //UserController.createUserInElasticSearch(user);
-                //UserController.deleteUserFromElasticSearch(user);
-
                 UserController.updateUser(user);
-
-
-                // The user must be updated in Elasticsearch with the new request in the riderRequests list.
-
 
                 finish();
             }

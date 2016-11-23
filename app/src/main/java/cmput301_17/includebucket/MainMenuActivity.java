@@ -47,7 +47,8 @@ public class MainMenuActivity extends Activity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                UserController.logUserOut(getApplicationContext());
+                UserController.logUserOut(MainMenuActivity.this);
+                //RiderRequestsController.clearRiderRequests();
                 finish();
             }
         });

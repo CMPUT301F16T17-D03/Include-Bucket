@@ -24,7 +24,6 @@ public class UserAccount implements Serializable {
 
     private UserCategory userCategory;
 
-
     /**
      * User can either be a rider or a driver.
      */
@@ -77,16 +76,6 @@ public class UserAccount implements Serializable {
         this.userId = userId;
     }
 
-    /*
-     * Every user account has a request list
-     */
-    public RequestList getRequestList() {
-        return null;
-    }
-
-    public void setRequestList(RequestList requestList) {
-
-    }
 
     public String getUniqueUserName() {
         return uniqueUserName;
@@ -160,9 +149,10 @@ public class UserAccount implements Serializable {
      * @param requestId
      */
     public void addRiderRequestId(String requestId){
-        this.riderRequestIds.add(requestId);
+        this.riderRequestIds.remove(requestId);
     }
 
+    public void clearRiderRequestIds() { this.riderRequestIds.clear(); }
     /**
      * This returns the list of requests
      * @return

@@ -138,7 +138,6 @@ public class ElasticsearchRequestController {
         }
     }
 
-
     /**
      * This method retrieves all the requests in the database.
      */
@@ -183,9 +182,6 @@ public class ElasticsearchRequestController {
         }
     }
 
-
-
-
     /**
      * This get the keyword for searching requests by keyword.
      */
@@ -224,26 +220,23 @@ public class ElasticsearchRequestController {
     }
 
     /**
-     * This method deletes a Request specified by an ID.
+     * Delete a Request specified by an ID.
      */
     public static class DeleteRequest extends AsyncTask<Request, Void, Void> {
         @Override
         protected Void doInBackground(Request... requests) {
             verifySettings();
 
-            for (Request request : requests) {
+            Delete deleteRequest = new Delete
+                    .Builder(requests[0].getRequestID().toString())
+                    .index("cmput301f16t17")
+                    .type("request")
+                    .build();
 
-                Delete deleteRequest = new Delete
-                        .Builder(request.getRequestID())
-                        .index("cmput301f16t17")
-                        .type("request")
-                        .build();
-
-                try {
-                    DocumentResult result = client.execute(deleteRequest);
-                } catch (Exception e) {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                }
+            try {
+                client.execute(deleteRequest);
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
             return null;
         }

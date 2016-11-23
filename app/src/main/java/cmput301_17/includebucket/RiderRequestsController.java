@@ -59,7 +59,7 @@ public class RiderRequestsController {
             e.printStackTrace();
         }
 
-        getRiderRequests().add(request);
+        getRiderRequests().addRequest(request);
 
         return requestId;
     }
@@ -70,20 +70,10 @@ public class RiderRequestsController {
      */
     public static void deleteRequest(Request request) {
 
-        UserAccount user = UserController.getUserAccount();
-
         ElasticsearchRequestController.DeleteRequest deleteRequest;
         deleteRequest = new ElasticsearchRequestController.DeleteRequest();
         deleteRequest.execute(request);
 
-        ArrayList<String> requests = user.getRiderRequestIds();
-        for (String id : requests) {
-            if (id.equals(request))
-            {
-                requests.remove(id);
-            }
-        }
-        user.setRiderRequestIds(requests);
         getRiderRequests().deleteRequest(request);
     }
 
@@ -111,7 +101,6 @@ public class RiderRequestsController {
             }
             Log.i("The user is a ", user.getUserCategory() + " ELASTIC");
         }
-        riderRequests = requestList;
         return requestList;
     }
 }
