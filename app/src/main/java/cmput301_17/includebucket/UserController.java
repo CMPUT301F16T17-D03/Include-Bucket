@@ -42,6 +42,74 @@ public class UserController {
     }
 
     /**
+     * Create a user in ElasticSearch.
+     * @param user
+     */
+    public static void createUserInElasticSearch(UserAccount user) {
+
+        ElasticsearchUserController.CreateUser createUser;
+        createUser = new ElasticsearchUserController.CreateUser();
+        createUser.execute(user);
+    }
+
+    /**
+     * Delete a user from ElasticSearch.
+     * @param user
+     */
+    public static void deleteUserFromElasticSearch(UserAccount user) {
+
+        ElasticsearchUserController.DeleteUser deleteUser;
+        deleteUser = new ElasticsearchUserController.DeleteUser();
+        deleteUser.execute(user);
+    }
+
+    /**
+     * Update the user in Elasticsearch
+     * @param user
+     */
+    public static void updateUser(UserAccount user) {
+
+        UserAccount newUser = new UserAccount(user);
+        newUser.setRiderRequestIds(user.getRiderRequestIds());
+
+        // Create new
+        createUserInElasticSearch(newUser);
+
+        // Delete old
+        deleteUserFromElasticSearch(user);
+    }
+
+    /**
+     * Retrieve user from Elasticsearch.
+     * @return userAccount
+     */
+    public static UserAccount retrieveUserFromElasticSearch(String userId) {
+
+        ElasticsearchUserController.RetrieveUser retrieveUser;
+        retrieveUser = new ElasticsearchUserController.RetrieveUser();
+        retrieveUser.execute(userId);
+
+        UserAccount userAccount = new UserAccount();
+        try {
+            userAccount = retrieveUser.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return userAccount;
+    }
+
+    /**
+     * Log the user out of the app.
+     * @param context
+     */
+    public static void logUserOut(Context context) {
+        userAccount = null;
+        UserController.saveUserAccountInLocalFile(userAccount, context);
+    }
+
+    /**
      * This loads a user account from USER_FILE.
      */
     public static UserAccount loadUserAccountFromLocalFile() {
@@ -84,32 +152,6 @@ public class UserController {
         catch (IOException e) {
             throw new RuntimeException();
         }
-    }
-
-    /**
-     * Retrieve user from Elasticsearch.
-     * @return userAccount
-     */
-    public static UserAccount retrieveUserFromElasticSearch(String username) {
-
-        ElasticsearchUserController.RetrieveUser retrieveUser;
-        retrieveUser = new ElasticsearchUserController.RetrieveUser();
-        retrieveUser.execute(username);
-
-        UserAccount userAccount = new UserAccount();
-        try {
-            userAccount = retrieveUser.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return userAccount;
-    }
-
-    public static void logUserOut(Context context) {
-        userAccount = null;
-        UserController.saveUserAccountInLocalFile(userAccount, context);
     }
 
     /**

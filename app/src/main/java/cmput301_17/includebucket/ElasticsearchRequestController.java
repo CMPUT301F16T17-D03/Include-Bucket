@@ -7,9 +7,11 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
@@ -29,26 +31,37 @@ public class ElasticsearchRequestController {
 
     /**
      * This method creates a Request instance
+     * @return requestId
      */
-    public static class CreateRequest extends AsyncTask<Request, Void, Void> {
+    public static class CreateRequest extends AsyncTask<Request, Void, String> {
         @Override
-        protected Void doInBackground(Request... requests) {
+        protected String doInBackground(Request... requests) {
             verifySettings();
 
+            String requestId = null;
+
             for (Request request : requests) {
-                Index index = new Index
-                        .Builder(request)
+                Index index = new Index.Builder(request)
                         .index("cmput301f16t17")
                         .type("request")
                         .build();
                 try {
-                    client.execute(index);
+                    DocumentResult result = client.execute(index);
+
+                    if (result.isSucceeded())
+                    {
+                        requestId = result.getId();
+                    }
+                    else
+                    {
+                        Log.i("Error","Could not retrieve doc from Elasticsearch!");
+                    }
                 } catch(Exception e){
                     Log.i("Error", "Failed to add request to elasticsearch!");
                     e.printStackTrace();
                 }
             }
-            return null;
+            return requestId;
         }
     }
 
@@ -57,32 +70,34 @@ public class ElasticsearchRequestController {
      */
     public static class GetAllRequests extends AsyncTask<String, Void, RequestList> {
         @Override
-        protected RequestList doInBackground(String... uid) {
+        protected RequestList doInBackground(String... requestId) {
             verifySettings();
 
             RequestList requests = new RequestList();
-
-            String search_string = "{\"from\": 0, \"size\": 10000}";
-            //String search_string = "{\"query\": { \"match\": {\"uid\": \"" + uid[0] + "\" }}}}";
-            Search search = new Search.Builder(search_string)
-                    .addIndex("cmput301f16t17")
-                    .addType("request")
-                    .build();
+            JestResult result;
 
             try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded())
+                if (requestId.length==0)
+                {
+                    Search search = new Search.Builder("").addIndex("cmput301f16t17").addType("request").build();
+                    result = client.execute(search);
+                }
+                else
+                {
+                    Get search = new Get.Builder("cmput301f16t17", requestId[0]).type("request").build();
+                    result = client.execute(search);
+                }
+
+                if(result.isSucceeded())
                 {
                     List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundRequests);
-                    Log.i("Success", "Got the requests.");
                 }
                 else
                 {
                     Log.i("Error", "The search query did not match any requests in the database.");
                 }
-            }
-            catch (Exception e) {
+            } catch (IOException e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
             return requests;
@@ -107,7 +122,7 @@ public class ElasticsearchRequestController {
                 search_string = "{\"from\": 0, \"size\": 10000}";
             }
             else {
-                search_string = "{\"from\":0,\"size\":10000, \"query\": { \"term\": {\"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
+                search_string = "{\"query\": { \"term\": {\"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
             }
 
             Search search = new Search.Builder(search_string)

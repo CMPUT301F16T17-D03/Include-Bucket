@@ -62,6 +62,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private UserAccount user;
     private UserController userController;
     private RequestListController requestListController;
+    private RiderRequestsController riderRequestsController;
     //private UserAccount user = UserController.getUserAccount();
 
     /**
@@ -78,7 +79,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         user = UserController.getUserAccount();
         userController = new UserController();
         requestListController = new RequestListController();
-
+        riderRequestsController = new RiderRequestsController();
         /**
          * TODO : Fix this later.
          *
@@ -218,18 +219,35 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 userController.setContext(NewRiderRequestActivity.this);
                 requestListController.setContext(NewRiderRequestActivity.this);
+                riderRequestsController.setContext(NewRiderRequestActivity.this);
 
                 String startLocation = startEditText.getText().toString();
                 String endLocation = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
-                UserController.saveUserAccountInLocalFile(user, userController.getContext());
-
                 Request request = new Request(startLocation, endLocation, user, riderStory, drivers);
                 request.setFare(fare);
 
-                requestListController.addRequest(request);
+                //user.addRiderRequestId(request.getRequestID());
+                //UserController.saveUserAccountInLocalFile(user, userController.getContext());
+
+                //requestListController.addRequest(request);
+
+                // Add the request to Elasticsearch and return the request's Jest ID
+                String requestId = RiderRequestsController.addRequest(request);
+
+                // When a new request is made by a rider, store the id in the riderRequestIds list
+                // This requires updating a user, which requires:
+                //  1. retrieving the user
+                //  2. deleting the user
+                //  3. and then creating a new doc with the new user's data.
+                user.getRiderRequestIds().add(requestId);
+                UserController.updateUser(user);
+
+
+                // The user must be updated in Elasticsearch with the new request in the riderRequests list.
+
 
                 finish();
             }

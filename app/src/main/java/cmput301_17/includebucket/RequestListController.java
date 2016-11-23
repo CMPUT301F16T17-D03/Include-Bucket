@@ -25,8 +25,9 @@ public class RequestListController {
 
     private static RequestListController controller = new RequestListController();
 
-    private static RequestList requestListRider = new RequestList();
-    private static RequestList requestListDriver = new RequestList();
+    private static RequestList requestList = null;
+    private static RequestList requestListRider  = null;
+    private static RequestList requestListDriver = null;
 
     private static final String REQUESTS_RIDER  = "rider_requests.sav";
     private static final String REQUESTS_DRIVER = "driver_requests.sav";
@@ -38,28 +39,26 @@ public class RequestListController {
 
         UserAccount user = UserController.getUserAccount();
 
-        RequestList requestList = new RequestList();
-
-        if (requestList != null)
+        if (requestList == null)
+        {
+            requestListRider = new RequestList();
+            requestListDriver = new RequestList();
+        }
+        else
         {
             if (user.getUserCategory() == (UserAccount.UserCategory.rider))
             {
                 requestList = requestListRider;
                 Log.i("Success", "This user is a rider." + user.getUniqueUserName());
-            } else
+            }
+            else
             {
                 requestList = requestListDriver;
                 Log.i("Uh oh", "The fuck did you do...");
                 Log.i("User", " " + user.getUserCategory());
             }
         }
-        else
-        {
-            //requestList = getRequestsFromElasticSearch();
-            requestList = loadRequestsFromLocalFile();
-            Log.i("No!","You fucked up big time.");
-        }
-        return requestListRider;
+        return requestList;
     }
 
     /*
@@ -159,9 +158,8 @@ public class RequestListController {
      */
     public static RequestList loadRequestsFromLocalFile() {
 
-        Context context = controller.getContext();
-
         UserAccount user = UserController.getUserAccount();
+        Context context = controller.getContext();
 
         String file;
         if(user.getUserCategory()==(UserAccount.UserCategory.rider))
@@ -203,7 +201,7 @@ public class RequestListController {
         controller.setContext(context);
 
         String file;
-        if(user.getUserCategory()==(UserAccount.UserCategory.rider))
+        if(user.getUserCategory() == (UserAccount.UserCategory.rider))
         {
             file = REQUESTS_RIDER;
             Log.i("Saving"," " + user.getUniqueUserName());
@@ -232,26 +230,46 @@ public class RequestListController {
     public static RequestList getRequestsFromElasticSearch() {
 
         UserAccount user = UserController.getUserAccount();
+        RequestList requestList = new RequestList();
 
-        RequestList requests = new RequestList();
+        ArrayList<String> requestIds = user.getRiderRequestIds();
 
-        ElasticsearchRequestController.GetRequests foundRequests;
-        foundRequests = new ElasticsearchRequestController.GetRequests();
-        foundRequests.execute(user.getUniqueUserName());
 
-        try {
-            requests = foundRequests.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        ElasticsearchRequestController.GetAllRequests foundRequests;
+        foundRequests = new ElasticsearchRequestController.GetAllRequests();
+
+        if (user.getUserCategory() == (UserAccount.UserCategory.rider))
+        {
+            // Get requests specified by user login
+            foundRequests.execute(user.getUniqueUserName());
+            try {
+                requestListRider = foundRequests.get();
+                requestList = requestListRider;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            Log.i("The user is a ",user.getUserCategory() + " ELASTIC");
         }
-
-        requestListRider.addAll(requests);
-        Log.i("Success","GETTING RIDER LIST  " + user.getUniqueUserName());
-
-        return requests;
+        else
+        {
+            // Get all the requests
+            foundRequests.execute("");
+            try {
+                requestListDriver = foundRequests.get();
+                requestList = requestListDriver;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            Log.i("The user is a ","" + user.getUserCategory());
+        }
+        return requestList;
     }
+
+
 
     /**
      * This adds a request to Elasticsearch and the local list.
@@ -264,7 +282,7 @@ public class RequestListController {
         createRequest = new ElasticsearchRequestController.CreateRequest();
         createRequest.execute(request);
 
-        getRequestList().addRequest(request);
+        //getRequestList().addRequest(request);
     }
 
     /**

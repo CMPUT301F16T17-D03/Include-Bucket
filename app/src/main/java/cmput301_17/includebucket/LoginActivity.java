@@ -134,11 +134,16 @@ public class LoginActivity extends MainMenuActivity {
                     {
                         Log.i("Success", "User " + foundUser.getUniqueUserName() + " was found.");
 
-                        RequestListController.saveRequestsInLocalFile(
-                                RequestListController.getRequestsFromElasticSearch(),
-                                requestListController.getContext()
-                        );
+                        //RequestListController.saveRequestsInLocalFile(
+                          //      RequestListController.getRequestsFromElasticSearch(),
+                            //    requestListController.getContext()
+                        //);
                         //RequestListController.loadRequestsFromLocalFile();
+
+                        //requestListController.setContext(LoginActivity.this);
+                        //RequestListController.getRequestsFromElasticSearch();
+                        //
+                        // RequestListController.getRequestList();
 
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         //intent.putExtra("User", foundUser);

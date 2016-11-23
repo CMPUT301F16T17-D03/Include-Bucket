@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -53,14 +54,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         userController.setContext(RiderCurrentRequestsActivity.this);
 
         user = UserController.getUserAccount();
-        //UserController.saveUserAccountInLocalFile(user, userController.getContext());
-        //UserAccount foundUser = UserController.loadUserAccountFromLocalFile();
-
-        RequestListController.saveRequestsInLocalFile(
-                RequestListController.getRequestsFromElasticSearch(),
-                requestListController.getContext()
-        );
-        //RequestListController.loadRequestsFromLocalFile();
 
         Log.i("Success", "Got " + user.getUniqueUserName() + " Category: " + user.getUserCategory());
 
@@ -68,12 +61,13 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
          * TODO : create condition where if the user is offline get requests from a local file
          * instead of Elasticsearch.
          */
-        requests = RequestListController.getRequestList();
+        requests = RequestListController.getRequestsFromElasticSearch();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
 
         /**
          * Updates the ArrayAdapter when a request is added or deleted.
@@ -154,5 +148,11 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
     }
 }

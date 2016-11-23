@@ -19,7 +19,7 @@ public class UserAccount implements Serializable {
 
     private String uniqueUserName, email, phoneNumber;
     private Boolean isLoggedIn;
-    private Collection<Request> riderRequests;
+    private ArrayList<String> riderRequestIds = new ArrayList<>();
     private Collection<Request> driverRequests;
 
     private UserCategory userCategory;
@@ -46,7 +46,19 @@ public class UserAccount implements Serializable {
         this.email = userEmail;
         this.phoneNumber = userPhone;
         this.isLoggedIn = true;
-        this.userCategory = UserCategory.rider;
+        this.userCategory = null;
+    }
+
+    /**
+     * Constructor to create a copy of an existing user with all of information
+     * @param user
+     */
+    public UserAccount(UserAccount user) {
+        this.uniqueUserName = user.getUniqueUserName();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.isLoggedIn = true;
+        this.userCategory = user.getUserCategory();
     }
 
     /**
@@ -131,24 +143,24 @@ public class UserAccount implements Serializable {
      * This returns the rider request list.
      * @return
      */
-    public Collection<Request> getRiderRequests() {
-        return riderRequests;
+    public ArrayList<String> getRiderRequestIds() {
+        return riderRequestIds;
     }
 
     /**
      * This sets the sets the list of requests.
-     * @param riderRequests
+     * @param riderRequestIds
      */
-    public void setRiderRequests(ArrayList<Request> riderRequests) {
-        this.riderRequests = riderRequests;
+    public void setRiderRequestIds(ArrayList<String> riderRequestIds) {
+        this.riderRequestIds = riderRequestIds;
     }
 
     /**
      * This adds a new request for a rider to the list
-     * @param request
+     * @param requestId
      */
-    public void addRiderRequest(Request request){
-        this.riderRequests.add(request);
+    public void addRiderRequestId(String requestId){
+        this.riderRequestIds.add(requestId);
     }
 
     /**

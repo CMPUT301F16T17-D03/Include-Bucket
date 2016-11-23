@@ -68,12 +68,10 @@ public class RegisterActivity extends MainMenuActivity {
 
                     UserAccount user = new UserAccount(login, email, phone);
 
-                    ElasticsearchUserController.CreateUser createUser;
-                    createUser = new ElasticsearchUserController.CreateUser();
-                    createUser.execute(user);
+                    UserController.createUserInElasticSearch(user);
 
                     controller.setContext(RegisterActivity.this);
-                    UserController.saveUserAccountInLocalFile(user, controller.getContext());
+                    //UserController.saveUserAccountInLocalFile(user, controller.getContext());
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");
 

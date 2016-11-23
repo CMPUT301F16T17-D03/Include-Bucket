@@ -61,7 +61,6 @@ public class MainMenuActivity extends Activity {
 
                 user = UserController.getUserAccount();
                 user.setUserCategory(UserAccount.UserCategory.rider);
-
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
 
