@@ -15,7 +15,7 @@ import io.searchbox.annotations.JestId;
 public class UserAccount implements Serializable {
 
     @JestId
-    private String uid;
+    private String userId;
 
     private String uniqueUserName, email, phoneNumber;
     private Boolean isLoggedIn;
@@ -66,15 +66,15 @@ public class UserAccount implements Serializable {
      * @return
      */
     public String getUid() {
-        return uid;
+        return userId;
     }
 
     /**
      * this sets the user id.
-     * @param uid
+     * @param userId
      */
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUid(String userId) {
+        this.userId = userId;
     }
 
     /*

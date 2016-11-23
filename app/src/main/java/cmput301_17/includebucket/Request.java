@@ -17,11 +17,11 @@ import io.searchbox.annotations.JestId;
 public class Request implements Serializable {
 
     @JestId
-    String requestID;
+    String requestId;
 
     private String startLocation;
     private String endLocation;
-    private UserAccount user;
+    private String userId;
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
@@ -54,21 +54,21 @@ public class Request implements Serializable {
      * Intantiates a new Request.
      * @param loc1  The start location
      * @param loc2  The end location
-     * @param user The rider making a request
+     * @param userId The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount user, String story, ArrayList<UserAccount> drivers) {
-        this.requestID = null;
-        this.user = user;
+    public Request(String loc1, String loc2, String userId, String story, ArrayList<UserAccount> drivers) {
+        this.requestId = null;
+        this.userId = userId;
         this.startLocation = loc1;
         this.endLocation = loc2;
         this.riderStory = story;
         this.drivers = drivers;
     }
 
-    public String getRequestID() {return requestID; }
+    public String getRequestID() {return requestId; }
 
-    public void setRequestID(String requestID) { this.requestID = requestID; }
+    public void setRequestID(String requestID) { this.requestId = requestID; }
 
     public String getStartLocation() {
         return startLocation;
@@ -158,8 +158,8 @@ public class Request implements Serializable {
         isPaid = paid;
     }
 
-    public UserAccount getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
     //public void setUser(UserAccount user){this.rider = user;}
 

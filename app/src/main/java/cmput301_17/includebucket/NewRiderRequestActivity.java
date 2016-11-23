@@ -226,7 +226,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 String riderStory = storyEditText.getText().toString();
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
-                Request request = new Request(startLocation, endLocation, user, riderStory, drivers);
+                Request request = new Request(startLocation, endLocation, user.getUid(), riderStory, drivers);
                 request.setFare(fare);
 
                 //user.addRiderRequestId(request.getRequestID());
