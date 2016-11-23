@@ -70,7 +70,7 @@ public class UserController {
     public static void updateUser(UserAccount user) {
 
         UserAccount newUser = user;
-        newUser.setRiderRequestIds(user.getRiderRequestIds());
+        //newUser.setRiderRequestIds(user.getRiderRequestIds());
 
         // Delete old
         deleteUserFromElasticSearch(user);

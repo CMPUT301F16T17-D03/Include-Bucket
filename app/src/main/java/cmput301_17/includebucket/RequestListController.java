@@ -108,7 +108,7 @@ public class RequestListController {
 
         ElasticsearchRequestController.GetRiderRequests retrieveRequests;
         retrieveRequests = new ElasticsearchRequestController.GetRiderRequests();
-        retrieveRequests.execute(user.getUniqueUserName());
+        retrieveRequests.execute(user);
 
         RequestList requests = new RequestList();
 

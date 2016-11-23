@@ -60,6 +60,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
+        user = UserController.getUserAccount();
         request = (Request) getIntent().getSerializableExtra("Request");
         drivers= new ArrayList<UserAccount>();
         driver = new UserAccount();
@@ -131,7 +132,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
                 request.setDriverAccepted(true);
                 request.addDriver(user);
-                RequestListController.deleteRequestFromElasticSearch(request);
+                DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
@@ -161,17 +162,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-
-        //startPoint = new GeoPoint(53.5444, -113.4909); // TODO get from file/elasticsearch
-        //endPoint = new GeoPoint(53.6444, -113.5909);   // get from file/elasticsearch
-
-        startEditText.setText(startPoint.toString());  // get from file/elasticsearch
-        endEditText.setText(endPoint.toString());      // get from file/elasticsearch
-        String price = "" + startPoint.distanceTo(endPoint);
-        priceEditText.setText(price);                  // get from file/elasticsearch
-        storyText.setText("A Story goes here");        // get from file/elasticsearch
-
-
         double startLat= (Double.parseDouble(request.getStartLocation().split(",")[0]));
         double startLon= (Double.parseDouble(request.getStartLocation().split(",")[1]));
         double endLat= (Double.parseDouble(request.getEndLocation().split(",")[0]));

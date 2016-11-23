@@ -30,10 +30,10 @@ public class RiderRequestsController {
 
     public static RequestList getRiderRequests() {
 
-        if (riderRequests == null) {
+        //if (riderRequests == null) {
             riderRequests = getRequestsFromElasticSearch();
             //riderRequests = getRequestsFromLocalFile();
-        }
+        //}
         return riderRequests;
     }
 
@@ -101,7 +101,7 @@ public class RiderRequestsController {
 
         ElasticsearchRequestController.GetRiderRequests riderRequests;
         riderRequests = new ElasticsearchRequestController.GetRiderRequests();
-        riderRequests.execute(user.getUniqueUserName());
+        riderRequests.execute(user);
 
         try {
             requestList.addAll(riderRequests.get());

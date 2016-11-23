@@ -112,7 +112,7 @@ public class DriverRequestsController {
         // Get ALL the requests from the server
         ElasticsearchRequestController.GetDriverRequests driverRequests;
         driverRequests = new ElasticsearchRequestController.GetDriverRequests();
-        driverRequests.execute(user.getUniqueUserName());
+        driverRequests.execute(user);
 
         return requestList;
     }

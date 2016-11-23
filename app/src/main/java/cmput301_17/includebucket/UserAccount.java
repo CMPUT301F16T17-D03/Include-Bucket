@@ -19,7 +19,6 @@ public class UserAccount implements Serializable {
 
     private String uniqueUserName, email, phoneNumber;
     private Boolean isLoggedIn;
-    private ArrayList<String> riderRequestIds  = new ArrayList<>();
     private Collection<Request> driverRequests = new ArrayList<>();
 
     private UserState userState;
@@ -125,31 +124,6 @@ public class UserAccount implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    /**
-     * This returns the rider request list.
-     * @return
-     */
-    public ArrayList<String> getRiderRequestIds() {
-        return riderRequestIds;
-    }
-
-    /**
-     * This sets the sets the list of requests.
-     * @param riderRequestIds
-     */
-    public void setRiderRequestIds(ArrayList<String> riderRequestIds) {
-        this.riderRequestIds = riderRequestIds;
-    }
-
-    /**
-     * This adds a new request for a rider to the list
-     * @param requestId
-     */
-    public void addRiderRequestId(String requestId){
-        this.riderRequestIds.remove(requestId);
-    }
-
-    public void clearRiderRequestIds() { this.riderRequestIds.clear(); }
     /**
      * This returns the list of requests
      * @return
