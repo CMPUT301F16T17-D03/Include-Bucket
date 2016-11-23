@@ -130,6 +130,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
+
                 request.setDriverAccepted(true);
                 request.addDriver(user);
                 DriverRequestsController.deleteRequest(request);

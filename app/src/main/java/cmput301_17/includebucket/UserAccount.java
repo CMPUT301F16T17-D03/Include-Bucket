@@ -19,7 +19,7 @@ public class UserAccount implements Serializable {
 
     private String uniqueUserName, email, phoneNumber;
     private Boolean isLoggedIn;
-    private Collection<Request> driverRequests = new ArrayList<>();
+    //private ArrayList<Request> driverRequests = new ArrayList<>();
 
     private UserState userState;
 
@@ -128,15 +128,13 @@ public class UserAccount implements Serializable {
      * This returns the list of requests
      * @return
      */
-    public Collection<Request> getDriverRequests() {
-        return driverRequests;
-    }
+    //public Collection<Request> getDriverRequests() {return driverRequests;}
 
     /**
      * This sets the driver requests list.
      * @param driverRequests
      */
-    public void setDriverRequests(ArrayList<Request> driverRequests) {
+/*    public void setDriverRequests(ArrayList<Request> driverRequests) {
         this.driverRequests = driverRequests;
     }
 
@@ -144,7 +142,7 @@ public class UserAccount implements Serializable {
      * This adds a new request for the driver to the list.
      * @param request
      */
-
+/*
     public void addDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             return;
@@ -157,14 +155,14 @@ public class UserAccount implements Serializable {
      * This cancels the request.
      * @param request
      */
-    public void cancelDriverRequest(Request request){
+ /*   public void cancelDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             this.driverRequests.remove(request);
             request.removeDriver(this);
         }
         return;
     }
-
+*/
     /**
      * This returns the login status of the user
      * @return isLoggedIn

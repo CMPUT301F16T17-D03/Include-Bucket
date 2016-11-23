@@ -40,7 +40,7 @@ public class Request implements Serializable {
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
     public enum RequestStatus {
-        requestOpen, acceptedByDriver, requestPending, requestCompleted
+        Open, Accepted, Pending, Completed
     }
 
     private RequestStatus requestStatus;
@@ -65,6 +65,7 @@ public class Request implements Serializable {
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
+        requestStatus = RequestStatus.Open;
     }
 
     public String getRequestID() {return requestID; }
