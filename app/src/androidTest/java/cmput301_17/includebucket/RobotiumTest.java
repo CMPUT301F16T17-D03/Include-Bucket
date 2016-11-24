@@ -248,7 +248,7 @@ public class RobotiumTest {
         solo.clickInList(0);
         //select the first driver in the list
         solo.clickInList(0);
-        solo.assertCurrentActivity("Not In Correct Activity", ViewUserDataActivity.class);
+        solo.assertCurrentActivity("Not In Correct Activity", ViewDriverDataActivity.class);
     }
     @Test
     public void testBrowseAndSearchOpenRequests() throws Exception {

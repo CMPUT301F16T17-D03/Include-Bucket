@@ -16,7 +16,6 @@ public class UserAccount implements Serializable {
 
     @JestId
     private String userId;
-
     private String uniqueUserName, email, phoneNumber;
     private String vehicleMake, vehicleModel, vehicleYear;
     private Boolean isLoggedIn;
@@ -205,5 +204,10 @@ public class UserAccount implements Serializable {
 
     public void setVehicleYear(String vehicleYear) {
         this.vehicleYear = vehicleYear;
+    }
+
+    @Override
+    public String toString() {
+        return getUniqueUserName() + "\n\n" + "\nEmail: " + getEmail() + "\nPhone: " + getPhoneNumber();
     }
 }

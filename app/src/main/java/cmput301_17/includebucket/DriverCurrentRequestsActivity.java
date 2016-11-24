@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,7 +46,7 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getRequestList().getRequests();
+                Collection<Request> requests = DriverRequestsController.getDriverRequests().getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }

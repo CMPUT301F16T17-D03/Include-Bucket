@@ -40,6 +40,8 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_requests);
 
+        user = UserController.getUserAccount();
+
         keyword  = (EditText) findViewById(R.id.keyword);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
 
@@ -62,11 +64,11 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
             }
         });
 
-        RequestListController.getKeywordList(key).addListener(new Listener() {
+        DriverRequestsController.getRequestsByKeyword(key).addListener(new Listener() {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RequestListController.getKeywordList(key).getRequests();
+                Collection<Request> requests = DriverRequestsController.getRequestsByKeyword(key).getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -80,6 +82,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
                 Request request =  requestList.get(position);
+                intent.putExtra("User",user);
                 intent.putExtra("Request", request);
                 startActivity(intent);
             }

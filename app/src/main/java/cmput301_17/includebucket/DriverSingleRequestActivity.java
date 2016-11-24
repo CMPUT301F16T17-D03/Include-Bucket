@@ -59,7 +59,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
-        user = UserController.getUserAccount();
+        //user = UserController.getUserAccount();
+        user = (UserAccount) getIntent().getSerializableExtra("User");
         request = (Request) getIntent().getSerializableExtra("Request");
         drivers= new ArrayList<UserAccount>();
         driver = new UserAccount();
@@ -130,7 +131,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 setResult(RESULT_OK);
 
                 request.setRequestStatus(Request.RequestStatus.Accepted);
-                //request.setDriverAccepted(true);
+                request.setDriverAccepted(true);
                 request.addDriver(user);
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
