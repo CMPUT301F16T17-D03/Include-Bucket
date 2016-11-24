@@ -1,11 +1,8 @@
 package cmput301_17.includebucket;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import cmput301_17.includebucket.UserAccount;
 import io.searchbox.annotations.JestId;
 
 /**
@@ -22,7 +19,7 @@ public class Request implements Serializable {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
-    private UserAccount driver;
+    private UserAccount driver = new UserAccount();
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
@@ -104,7 +101,7 @@ public class Request implements Serializable {
         this.rider = rider;
     }
 
-    public String getRiderUserName() { return getRider().getUniqueUserName(); }
+    //public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
     public Double getFare() {
         return fare;
@@ -159,9 +156,7 @@ public class Request implements Serializable {
         return isCompleted;
     }
 
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
-    }
+    public void setIsCompleted(Boolean isCompleted) {this.isCompleted = isCompleted;}
 
     public boolean getIsPaid() {
         return isPaid;
@@ -179,6 +174,14 @@ public class Request implements Serializable {
         this.driver = user;
     }
 
+    public RequestStatus getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(RequestStatus requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+
     @Override
     public String toString() {
         String status = "Open";
@@ -194,6 +197,6 @@ public class Request implements Serializable {
             }
         }
 
-        return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
+        return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + getRequestStatus();
     }
 }

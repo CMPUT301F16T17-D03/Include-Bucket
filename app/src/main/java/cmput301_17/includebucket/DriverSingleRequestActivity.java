@@ -22,7 +22,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
@@ -130,8 +129,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                
-                request.setDriverAccepted(true);
+                request.setRequestStatus(Request.RequestStatus.Accepted);
+                //request.setDriverAccepted(true);
                 request.addDriver(user);
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
