@@ -50,7 +50,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
+        //riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
         userController.setContext(RiderCurrentRequestsActivity.this);
 
         user = UserController.getUserAccount();
@@ -144,6 +144,5 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        //RequestListController.saveRequestsInLocalFile(requests, requestListController.getContext());
     }
 }

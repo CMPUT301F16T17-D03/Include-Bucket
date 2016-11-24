@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
@@ -16,7 +17,8 @@ import android.widget.Toast;
  */
 public class RegisterActivity extends MainMenuActivity {
 
-    protected EditText userLogin, userEmail, userPhone;
+    protected EditText userLogin, userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
+
     UserController controller = new UserController();
 
     /**
@@ -36,6 +38,9 @@ public class RegisterActivity extends MainMenuActivity {
         userEmail = (EditText) findViewById(R.id.emailTextField);
         userPhone = (EditText) findViewById(R.id.phoneTextField);
 
+        vehicleMake  = (EditText) findViewById(R.id.makeTextField);
+        vehicleModel = (EditText) findViewById(R.id.modelTextField);
+        vehicleYear  = (EditText) findViewById(R.id.yearTextField);
 
         Button registerButton = (Button) findViewById(R.id.acceptButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +71,11 @@ public class RegisterActivity extends MainMenuActivity {
                     String email = userEmail.getText().toString();
                     String phone = userPhone.getText().toString();
 
-                    UserAccount user = new UserAccount(login, email, phone);
+                    String make  = vehicleMake.getText().toString();
+                    String model = vehicleModel.getText().toString();
+                    String year  = vehicleYear.getText().toString();
+
+                    UserAccount user = new UserAccount(login, email, phone, make, model, year);
 
                     UserController.createUserInElasticSearch(user);
 

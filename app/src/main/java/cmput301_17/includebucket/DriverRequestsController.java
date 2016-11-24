@@ -44,25 +44,13 @@ public class DriverRequestsController {
      * This adds a request to Elasticsearch and the riderRequests list.
      * @param request
      */
-    public static String addRequest(Request request) {
+    public static void addRequest(Request request) {
 
         ElasticsearchRequestController.CreateRequest createRequest;
         createRequest = new ElasticsearchRequestController.CreateRequest();
         createRequest.execute(request);
 
-        String requestId = null;
-
-        try {
-            requestId = createRequest.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
         getDriverRequests().addRequest(request);
-
-        return requestId;
     }
 
     /**

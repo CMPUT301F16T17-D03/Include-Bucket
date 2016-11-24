@@ -28,7 +28,7 @@ public class LauncherActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // TODO : fix these checks using GSON
-        UserAccount newUser = new UserAccount("Username","jemm@idk.com","null");
+        UserAccount newUser = new UserAccount("Username","jemm@idk.com","null",null,null,null);
 
         Intent intent;
         if (!newUser.getLoginStatus()){

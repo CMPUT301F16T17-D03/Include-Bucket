@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import io.searchbox.annotations.JestId;
 
@@ -19,14 +20,15 @@ public class Request implements Serializable {
     private String startLocation;
     private String endLocation;
     private UserAccount rider;
-    private UserAccount driver;
+    private UserAccount driver = new UserAccount();
     private String riderStory = null;
     private double fare;
     private ArrayList<String> keywords;
-    private ArrayList<UserAccount> pendingDrivers;
+    private Collection<UserAccount> pendingDrivers;
     private boolean driverAccepted;
     private boolean riderAccepted;
     private boolean isCompleted, isPaid;
+
 
     /**
      * Enums that specify the state of the status.
@@ -37,7 +39,7 @@ public class Request implements Serializable {
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
     public enum RequestStatus {
-        Open, Accepted, Pending, Completed
+        Open, Accepted, Pending, Closed
     }
 
     private RequestStatus requestStatus;
@@ -54,7 +56,7 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, Collection<UserAccount> pendingDrivers, UserAccount driver) {
         this.requestID = null;
         this.startLocation = loc1;
         this.endLocation = loc2;
@@ -62,12 +64,10 @@ public class Request implements Serializable {
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
-        requestStatus = RequestStatus.Open;
+        requestStatus = null;
     }
 
     public String getRequestID() {return requestID; }
-
-    public void setRequestID(String requestID) { this.requestID = requestID; }
 
     public String getStartLocation() {
         return startLocation;
@@ -101,7 +101,7 @@ public class Request implements Serializable {
         this.rider = rider;
     }
 
-    public String getRiderUserName() { return getRider().getUniqueUserName(); }
+    //public String getRiderUserName() { return getRider().getUniqueUserName(); }
 
     public Double getFare() {
         return fare;
@@ -119,12 +119,11 @@ public class Request implements Serializable {
         this.keywords = keywords;
     }
 
-    public ArrayList<UserAccount> getDrivers() {
+    public Collection<UserAccount> getDrivers() {
         return pendingDrivers;
     }
 
-
-    public void setDrivers(ArrayList<UserAccount> drivers) {
+    public void setDrivers(Collection<UserAccount> drivers) {
         this.pendingDrivers = pendingDrivers;
     }
 
@@ -156,9 +155,7 @@ public class Request implements Serializable {
         return isCompleted;
     }
 
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
-    }
+    public void setIsCompleted(Boolean isCompleted) {this.isCompleted = isCompleted;}
 
     public boolean getIsPaid() {
         return isPaid;
@@ -176,9 +173,18 @@ public class Request implements Serializable {
         this.driver = user;
     }
 
+    public RequestStatus getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(RequestStatus requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+
     @Override
     public String toString() {
-        String status = "Open";
+
+        String status = null;
         if (hasRiderAccepted()){
             status = "Closed";
         }
@@ -186,11 +192,16 @@ public class Request implements Serializable {
         else if (isDriverAccepted()) {
             if(getDrivers().size()== 1) {
                 status = "1 Pending Driver";
-            }else{
+            } else{
                 status = getDrivers().size() +" Pending Drivers";
             }
         }
 
-        return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
+/*        if (getRequestStatus() == RequestStatus.Pending) {
+            status = getDrivers().size() + " Pending Drivers";
+        }
+        else status = getRequestStatus().toString();
+*/
+        return "Driver: " + getRiderStory() + "\n" + "Price: " + getFare() + "\nStatus: " + status;
     }
 }

@@ -30,6 +30,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * In this class, the user should be able to specify the start and end locations by typing in an
@@ -54,7 +55,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private LocationListener locationListener;
     private GeoPoint currentPoint;
     private String price;
-    private ArrayList<UserAccount> pendingDrivers;
+    private Collection<UserAccount> pendingDrivers;
 
     private UserAccount driver;
 
@@ -64,7 +65,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
     private UserAccount user;
     private UserController userController;
-    private RequestListController requestListController;
     private RiderRequestsController riderRequestsController;
 
 
@@ -82,7 +82,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
         user = UserController.getUserAccount();
         userController = new UserController();
-        requestListController = new RequestListController();
         riderRequestsController = new RiderRequestsController();
 
         /**
@@ -222,7 +221,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 setResult(RESULT_OK);
 
                 userController.setContext(NewRiderRequestActivity.this);
-                requestListController.setContext(NewRiderRequestActivity.this);
+                //requestListController.setContext(NewRiderRequestActivity.this);
                 riderRequestsController.setContext(NewRiderRequestActivity.this);
 
                 String startLocation = startEditText.getText().toString();
@@ -231,11 +230,16 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
                 Request request = new Request(startLocation, endLocation, user, riderStory, pendingDrivers, driver);
-
+                request.setRequestStatus(Request.RequestStatus.Open);
                 request.setFare(fare);
 
                 // Add the request to Elasticsearch
+                RiderRequestsController.addRequestToElasticsearch(request);
                 RiderRequestsController.addRequest(request);
+
+                RequestList requests = RiderRequestsController.getRiderRequests();
+                RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
+
                 //user.getRiderRequestIds().add(requestId);
                 //UserController.updateUser(user);
 

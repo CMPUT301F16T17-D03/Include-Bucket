@@ -28,9 +28,9 @@ public class LoginActivity extends MainMenuActivity {
     private Button registerButton;
     private EditText userLogin;
     private UserAccount foundUser;
+    private RequestList requestList;
 
     UserController userController;
-    RequestListController requestListController;
 
     /**
      * This method get permissions to run and deals with button presses.
@@ -42,7 +42,6 @@ public class LoginActivity extends MainMenuActivity {
         setContentView(R.layout.activity_login);
 
         userController = new UserController();
-        requestListController = new RequestListController();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -108,7 +107,7 @@ public class LoginActivity extends MainMenuActivity {
             String textLogin  = userLogin.getText().toString();
 
             foundUser = UserController.retrieveUserFromElasticSearch(userLogin.getText().toString());
-
+            requestList = new RequestList();
             try {
                 String foundLogin = foundUser.getUniqueUserName();
 
@@ -183,7 +182,7 @@ public class LoginActivity extends MainMenuActivity {
     protected void onStop() {
         super.onStop();
         UserController.saveUserAccountInLocalFile(foundUser, LoginActivity.this);
-        //RequestList requestList = RiderRequestsController.getRequestsFromElasticSearch();
-        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+        requestList = RiderRequestsController.getRequestsFromElasticSearch();
+        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
     }
 }

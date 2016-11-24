@@ -22,7 +22,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
@@ -60,7 +59,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
-        user = UserController.getUserAccount();
+        //user = UserController.getUserAccount();
+        user = (UserAccount) getIntent().getSerializableExtra("User");
         request = (Request) getIntent().getSerializableExtra("Request");
         drivers= new ArrayList<UserAccount>();
         driver = new UserAccount();
@@ -130,7 +130,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-
+                request.setRequestStatus(Request.RequestStatus.Accepted);
                 request.setDriverAccepted(true);
                 request.addDriver(user);
                 DriverRequestsController.deleteRequest(request);

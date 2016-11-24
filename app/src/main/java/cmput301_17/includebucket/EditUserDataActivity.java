@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 /**
  * User data controller?
@@ -12,7 +13,7 @@ import android.widget.EditText;
 public class EditUserDataActivity extends MainMenuActivity {
 
 
-    protected EditText userName, userEmail, userPhone;
+    protected EditText userName, userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
 
     UserAccount user = new UserAccount();
 
@@ -40,21 +41,35 @@ public class EditUserDataActivity extends MainMenuActivity {
 
         String login = user.getUniqueUserName();
 
-        String email;
-        String phone;
+        String email, phone, make, model, year;
 
         if (userEmail.getText().toString().equals("")){
-             email= user.getEmail();
+             email = user.getEmail();
         } else{
              email = userEmail.getText().toString();
         }
         if (userPhone.getText().toString().equals("")){
-            phone= user.getPhoneNumber();
+            phone = user.getPhoneNumber();
         } else{
             phone = userPhone.getText().toString();
         }
+        if (vehicleMake.getText().toString().equals("")){
+            make = user.getVehicleMake();
+        } else{
+            make = vehicleMake.getText().toString();
+        }
+        if (vehicleModel.getText().toString().equals("")){
+            model = user.getVehicleModel();
+        } else{
+            model = vehicleModel.getText().toString();
+        }
+        if (vehicleYear.getText().toString().equals("")){
+            year = user.getVehicleYear();
+        } else{
+            year = vehicleYear.getText().toString();
+        }
 
-        UserAccount user = new UserAccount(login, email, phone);
+        UserAccount user = new UserAccount(login, email, phone, make, model, year);
 
         ElasticsearchUserController.CreateUser editUser;
         editUser = new ElasticsearchUserController.CreateUser();

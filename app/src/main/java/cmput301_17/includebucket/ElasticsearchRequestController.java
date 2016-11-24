@@ -34,9 +34,9 @@ public class ElasticsearchRequestController {
      * This method creates a Request instance
      * @return requestId
      */
-    public static class CreateRequest extends AsyncTask<Request, Void, String> {
+    public static class CreateRequest extends AsyncTask<Request, Void, Void> {
         @Override
-        protected String doInBackground(Request... requests) {
+        protected Void doInBackground(Request... requests) {
             verifySettings();
 
             String requestId = null;
@@ -47,22 +47,13 @@ public class ElasticsearchRequestController {
                         .type("request")
                         .build();
                 try {
-                    DocumentResult result = client.execute(index);
-
-                    if (result.isSucceeded())
-                    {
-                        requestId = result.getId();
-                    }
-                    else
-                    {
-                        Log.i("Error","Could not retrieve doc from Elasticsearch!");
-                    }
+                    client.execute(index);
                 } catch(Exception e){
                     Log.i("Error", "Failed to add request to elasticsearch!");
                     e.printStackTrace();
                 }
             }
-            return requestId;
+            return null;
         }
     }
 
@@ -229,7 +220,8 @@ public class ElasticsearchRequestController {
             RequestList requests = new RequestList();
 
             //String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = "{\"query\": { \"term\": {\"riderStory\": \"" + search_param[0] + "\" }}}}";
+            String search_string = "{\"from\": 0, \"size\": 10000," +
+                    "\"query\": { \"match\": {\"riderStory\": \"" + search_param[0] + "\" }}}";
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")

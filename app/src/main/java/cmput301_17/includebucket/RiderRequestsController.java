@@ -57,25 +57,20 @@ public class RiderRequestsController {
      * This adds a request to Elasticsearch and the riderRequests list.
      * @param request
      */
-    public static String addRequest(Request request) {
+    public static void addRequest(Request request) {
+
+        getRiderRequests().addRequest(request);
+    }
+
+    /**
+     * This adds a request to Elasticsearch and the riderRequests list.
+     * @param request
+     */
+    public static void addRequestToElasticsearch(Request request) {
 
         ElasticsearchRequestController.CreateRequest createRequest;
         createRequest = new ElasticsearchRequestController.CreateRequest();
         createRequest.execute(request);
-
-        String requestId = null;
-
-        try {
-            requestId = createRequest.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        getRiderRequests().addRequest(request);
-
-        return requestId;
     }
 
     /**
@@ -146,7 +141,7 @@ public class RiderRequestsController {
         controller.setContext(context);
 
         try {
-            FileOutputStream fos = context.openFileOutput(RIDER_REQUESTS_FILE, Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(RIDER_REQUESTS_FILE, 0);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
             gson.toJson(requestList, writer);
