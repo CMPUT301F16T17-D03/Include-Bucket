@@ -231,7 +231,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 Double fare = Double.parseDouble(priceEditText.getText().toString());
 
                 Request request = new Request(startLocation, endLocation, user, riderStory, pendingDrivers, driver);
-
+                request.setRequestStatus(Request.RequestStatus.Open);
                 request.setFare(fare);
 
                 // Add the request to Elasticsearch

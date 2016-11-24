@@ -21,6 +21,7 @@
 
     <!-- Strings related to register -->
     <string name="register_button">Register</string>
+    <string name="userInfo">You:</string>
 
     <!-- Strings related to user -->
     <string name="user_name">Name</string>
@@ -39,5 +40,11 @@
 
     <!-- String for titles -->
     <string name="requestTitle">Request Information</string>
+
+    <!-- String for Vehicle Description -->
+    <string name="vehicleMake">Make</string>
+    <string name="vehicleModel">Model</string>
+    <string name="vehicleYear">MMDDYY</string>
+    <string name="vehicleDescription">Plan on Driving?</string>
 
 </resources>

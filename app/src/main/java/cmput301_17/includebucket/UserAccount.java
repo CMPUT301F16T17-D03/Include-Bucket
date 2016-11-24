@@ -18,6 +18,7 @@ public class UserAccount implements Serializable {
     private String userId;
 
     private String uniqueUserName, email, phoneNumber;
+    private String vehicleMake, vehicleModel, vehicleYear;
     private Boolean isLoggedIn;
     //private ArrayList<Request> driverRequests = new ArrayList<>();
 
@@ -36,24 +37,15 @@ public class UserAccount implements Serializable {
      * This is the constructor that creates a user with an id and sets its values.
      * @param
      */
-    public UserAccount(String userLogin, String userEmail, String userPhone) {
+    public UserAccount(String userLogin, String userEmail, String userPhone, String make, String model, String year) {
         this.uniqueUserName = userLogin;
         this.email = userEmail;
         this.phoneNumber = userPhone;
         this.isLoggedIn = true;
         this.userState = null;
-    }
-
-    /**
-     * Constructor to create a copy of an existing user with all of information
-     * @param user
-     */
-    public UserAccount(UserAccount user) {
-        this.uniqueUserName = user.getUniqueUserName();
-        this.email = user.getEmail();
-        this.phoneNumber = user.getPhoneNumber();
-        this.isLoggedIn = true;
-        this.userState = user.getUserState();
+        this.vehicleMake = make;
+        this.vehicleModel = model;
+        this.vehicleYear = year;
     }
 
     /**
@@ -189,5 +181,29 @@ public class UserAccount implements Serializable {
      */
     public void setUserState(UserState userState) {
         this.userState = userState;
+    }
+
+    public String getVehicleMake() {
+        return vehicleMake;
+    }
+
+    public void setVehicleMake(String vehicleMake) {
+        this.vehicleMake = vehicleMake;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public String getVehicleYear() {
+        return vehicleYear;
+    }
+
+    public void setVehicleYear(String vehicleYear) {
+        this.vehicleYear = vehicleYear;
     }
 }

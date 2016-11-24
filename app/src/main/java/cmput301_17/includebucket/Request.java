@@ -37,7 +37,7 @@ public class Request implements Serializable {
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
     public enum RequestStatus {
-        Open, Accepted, Pending, Completed
+        Open, Accepted, Pending, Closed
     }
 
     private RequestStatus requestStatus;
@@ -62,12 +62,10 @@ public class Request implements Serializable {
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
-        requestStatus = RequestStatus.Open;
+        requestStatus = null;
     }
 
     public String getRequestID() {return requestID; }
-
-    public void setRequestID(String requestID) { this.requestID = requestID; }
 
     public String getStartLocation() {
         return startLocation;
@@ -122,7 +120,6 @@ public class Request implements Serializable {
     public ArrayList<UserAccount> getDrivers() {
         return pendingDrivers;
     }
-
 
     public void setDrivers(ArrayList<UserAccount> drivers) {
         this.pendingDrivers = pendingDrivers;
@@ -184,7 +181,8 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        String status = "Open";
+
+        String status = null;
         if (hasRiderAccepted()){
             status = "Closed";
         }
@@ -192,11 +190,16 @@ public class Request implements Serializable {
         else if (isDriverAccepted()) {
             if(getDrivers().size()== 1) {
                 status = "1 Pending Driver";
-            }else{
+            } else{
                 status = getDrivers().size() +" Pending Drivers";
             }
         }
 
-        return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + getRequestStatus();
+/*        if (getRequestStatus() == RequestStatus.Pending) {
+            status = getDrivers().size() + " Pending Drivers";
+        }
+        else status = getRequestStatus().toString();
+*/
+        return getRiderStory() + "\n\n" + "Price: " + getFare() + "\nStatus: " + status;
     }
 }
