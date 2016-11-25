@@ -22,6 +22,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
@@ -163,16 +164,29 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        double startLat= (Double.parseDouble(request.getStartLocation().split(",")[0]));
-        double startLon= (Double.parseDouble(request.getStartLocation().split(",")[1]));
-        double endLat= (Double.parseDouble(request.getEndLocation().split(",")[0]));
-        double endLon= (Double.parseDouble(request.getEndLocation().split(",")[1]));
-        startPoint = new GeoPoint(startLat,startLon);
-        endPoint = new GeoPoint(endLat,endLon);
-        startEditText.setText(startPoint.toString());
-        endEditText.setText(endPoint.toString());
-        priceEditText.setText(request.getFare().toString());
+
+        Request request = (Request) getIntent().getSerializableExtra("Request");
+        startEditText.setText(request.getStartAddress());
+        Double latdub = (Double.parseDouble(request.getStartLocation().split(",")[0]));
+        Double lngdub = (Double.parseDouble(request.getStartLocation().split(",")[1]));
+        startPoint = new GeoPoint(latdub, lngdub);
+
+        endEditText.setText(request.getEndAddress());
+        latdub = (Double.parseDouble(request.getEndLocation().split(",")[0]));
+        lngdub = (Double.parseDouble(request.getEndLocation().split(",")[1]));
+        endPoint = new GeoPoint(latdub, lngdub);
+
+        priceEditText.setText("$"+request.getFare().toString());
         storyText.setText(request.getRiderStory());
+
+        //startPoint = new GeoPoint(53.5444, -113.4909);
+        //endPoint = new GeoPoint(53.6444, -113.5909);
+        //startEditText.setText(startPoint.toString());
+        //endEditText.setText(endPoint.toString());
+        //String price = "" + startPoint.distanceTo(endPoint);
+        //priceEditText.setText(price);
+        //storyText.setText("A Story goes here");
+
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
         startMarker = new Marker(map);

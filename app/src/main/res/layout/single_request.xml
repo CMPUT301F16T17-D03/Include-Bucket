@@ -21,5 +21,16 @@
         android:layout_alignParentEnd="true"
         android:nestedScrollingEnabled="true"
         android:textSize="15dp" />
+        android:nestedScrollingEnabled="true" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/requestTextView">
+        <org.osmdroid.views.MapView android:id="@+id/SRMap"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
 
 </RelativeLayout>

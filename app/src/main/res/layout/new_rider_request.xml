@@ -37,7 +37,9 @@
         android:text="$0.00"
         android:id="@+id/NRRAPriceEditText"
         android:layout_toEndOf="@+id/priceTextView"
-        android:layout_alignBottom="@+id/textView15" />
+        android:layout_alignBottom="@+id/textView15" 
+        android:singleLine="true"
+        android:inputType="number|numberDecimal" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -46,7 +48,8 @@
         android:hint="Input Start Location"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/startLocTextView"
-        android:singleLine="true" />
+        android:singleLine="true" 
+        android:inputType="textNoSuggestions" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -55,7 +58,8 @@
         android:hint="Input End Location"
         android:layout_below="@+id/NRRAStartEditText"
         android:layout_alignStart="@+id/NRRAStartEditText"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:inputType="textNoSuggestions" />
 
     <Button
         android:layout_width="wrap_content"

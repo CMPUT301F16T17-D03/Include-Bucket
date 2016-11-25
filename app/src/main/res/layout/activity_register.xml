@@ -21,7 +21,8 @@
         android:nestedScrollingEnabled="false"
         android:hint="@string/user_login"
         android:singleLine="true"
-        android:layout_weight="0.14" />
+        android:layout_weight="0.14"
+        android:inputType="textNoSuggestions"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -30,7 +31,8 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/user_email"
         android:singleLine="true"
-        android:layout_weight="0.17" />
+        android:layout_weight="0.17"
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -39,7 +41,8 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/user_phone"
         android:singleLine="true"
-        android:layout_weight="0.17" />
+        android:layout_weight="0.17" 
+        android:inputType="phone"/>
 
     <CheckBox
         android:layout_width="match_parent"
@@ -77,8 +80,8 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/accept_button"
         android:id="@+id/acceptButton" />
 </LinearLayout>
