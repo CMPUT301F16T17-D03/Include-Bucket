@@ -3,16 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuActivity">
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:scaleType="centerCrop"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/app_background"/>
+    tools:context=".MainMenuActivity"
+    android:background="#000000">
 
     <Button
         android:text="Rider"

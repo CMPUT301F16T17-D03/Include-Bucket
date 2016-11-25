@@ -2,15 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:weightSum="1">
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:scaleType="centerCrop"
-        android:layout_alignParentTop="true" android:src="@drawable/app_background"/>
+    android:weightSum="1"
+    android:background="#000000">
 
     <TextView
         android:layout_width="match_parent"
