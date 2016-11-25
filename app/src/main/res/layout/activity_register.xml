@@ -4,6 +4,14 @@
     android:layout_height="fill_parent"
     android:weightSum="1">
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true" android:src="@drawable/app_background"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,7 +19,9 @@
         android:id="@+id/userInfo"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:layout_above="@+id/loginTextField"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -22,6 +32,8 @@
         android:hint="@string/user_login"
         android:singleLine="true"
         android:layout_weight="0.14"
+        android:layout_above="@+id/emailTextField"
+        android:layout_alignParentStart="true" 
         android:inputType="textNoSuggestions"/>
 
     <EditText
@@ -31,7 +43,9 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/user_email"
         android:singleLine="true"
-        android:layout_weight="0.17"
+        android:layout_alignBaseline="@+id/makeTextField"
+        android:layout_alignBottom="@+id/makeTextField"
+        android:layout_alignParentStart="true" 
         android:inputType="textEmailAddress"/>
 
     <EditText
@@ -41,7 +55,9 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/user_phone"
         android:singleLine="true"
-        android:layout_weight="0.17" 
+        android:layout_alignBaseline="@+id/modelTextField"
+        android:layout_alignBottom="@+id/modelTextField"
+        android:layout_alignParentStart="true" 
         android:inputType="phone"/>
 
     <CheckBox
@@ -54,14 +70,18 @@
         android:checked="false"
         android:clickable="true"
         android:contextClickable="false"
-        android:layout_weight="0.24" />
+        android:layout_above="@+id/makeTextField"
+        android:layout_below="@+id/loginTextField"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="89dp" />="0.24" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/makeTextField"
         android:hint="@string/vehicleMake"
-        android:layout_weight="0.08" />
+        android:layout_above="@+id/modelTextField"
+        android:layout_alignParentStart="true" />="0.08" />
 
     <EditText
         android:layout_width="match_parent"
@@ -69,19 +89,25 @@
         android:id="@+id/modelTextField"
         android:layout_gravity="center_horizontal"
         android:hint="@string/vehicleModel"
-        android:layout_weight="0.14" />
+        android:layout_above="@+id/yearTextField"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />="0.14" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/yearTextField"
         android:layout_gravity="center_horizontal"
-        android:hint="@string/vehicleYear" />
+        android:hint="@string/vehicleYear"
+        android:layout_above="@+id/accept"
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:text="@string/accept_button"
-        android:id="@+id/acceptButton" />
-</LinearLayout>
+        android:id="@+id/accept"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
