@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 /**
  * User data controller?
@@ -20,7 +19,7 @@ public class EditUserDataActivity extends MainMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_data);
+        setContentView(R.layout.edit_user_data);
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
 
