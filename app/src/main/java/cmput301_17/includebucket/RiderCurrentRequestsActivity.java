@@ -29,6 +29,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private UserController userController = new UserController();
     private UserAccount user = new UserAccount();
 
+    boolean connected;
+
     final String adbMessage = "Click More button for details.";
 
     /**
@@ -47,15 +49,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        requestList = RiderRequestsController.getRequestsFromElasticSearch();
-        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+        RiderRequestsController.loadRequestsFromElasticSearch();
+
+        RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
         requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
-
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
 
         RiderRequestsController.getRiderRequests().addListener(new Listener() {
             @Override
@@ -80,6 +83,13 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        requests = RiderRequestsController.getRiderRequests().getRequests();
+        requestList = new ArrayList<>();
+        requestList.addAll(requests);
+        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
+        requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -88,6 +98,13 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        requests = RiderRequestsController.getRiderRequests().getRequests();
+        requestList = new ArrayList<>();
+        requestList.addAll(requests);
+        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
+        requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
 
         requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,6 +124,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);
+                    RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    RiderRequestsController.loadRequestsFromElasticSearch();
+                    RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
                     requestList.remove(request);
                     requestsListView.setAdapter(requestAdapter);

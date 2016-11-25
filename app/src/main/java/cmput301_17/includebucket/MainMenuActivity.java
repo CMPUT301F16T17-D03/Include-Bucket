@@ -64,6 +64,7 @@ public class MainMenuActivity extends Activity {
                 user.setUserState(UserAccount.UserState.rider);
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
+                RiderRequestsController.loadRequestsFromElasticSearch();
 
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
                 startActivity(intent);

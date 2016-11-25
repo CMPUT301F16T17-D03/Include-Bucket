@@ -255,16 +255,18 @@ public class ElasticsearchRequestController {
         protected Void doInBackground(Request... requests) {
             verifySettings();
 
-            Delete deleteRequest = new Delete
-                    .Builder(requests[0].getRequestID().toString())
-                    .index("cmput301f16t17")
-                    .type("request")
-                    .build();
+            for (Request r : requests) {
+                Delete deleteRequest = new Delete
+                        .Builder(r.getRequestID().toString())
+                        .index("cmput301f16t17")
+                        .type("request")
+                        .build();
 
-            try {
-                client.execute(deleteRequest);
-            } catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                try {
+                    client.execute(deleteRequest);
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
             }
             return null;
         }
