@@ -7,46 +7,29 @@
     android:background="#000000">
 
     <Button
-        android:text="Rider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="84dp"
-        android:id="@+id/Rider" />
-
-    <Button
         android:text="@string/new_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/newRequest"
-        android:layout_below="@+id/Rider"
-        android:layout_alignStart="@+id/Browse" />
+        android:layout_alignTop="@+id/MyRequests"
+        android:layout_toStartOf="@+id/RiderText" />
 
     <Button
         android:text="My Requests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/MyRequests"
-        android:layout_above="@+id/Driver"
-        android:layout_toEndOf="@+id/Rider" />
-
-    <Button
-        android:text="Driver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="117dp"
-        android:id="@+id/Driver"
-        android:layout_below="@+id/newRequest"
-        android:layout_toStartOf="@+id/MyRequests" />
+        android:layout_below="@+id/RiderText"
+        android:layout_toEndOf="@+id/RiderText" />
 
     <Button
         android:text="Current"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Current"
-        android:layout_below="@+id/Driver"
-        android:layout_toEndOf="@+id/Driver" />
+        android:layout_below="@+id/DriverText"
+        android:layout_alignEnd="@+id/MyRequests"
+        android:layout_toEndOf="@+id/RiderText" />
 
     <Button
         android:text="Logout"
@@ -69,6 +52,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Browse"
-        android:layout_below="@+id/Driver"
-        android:layout_toStartOf="@+id/Driver" />
+        android:layout_below="@+id/DriverText"
+        android:layout_toStartOf="@+id/DriverText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Rider"
+        android:id="@+id/RiderText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="111dp"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Driver"
+        android:id="@+id/DriverText"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/RiderText"
+        android:textSize="30dp" />
 </RelativeLayout>
