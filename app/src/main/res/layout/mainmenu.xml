@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".MainMenuActivity">
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/app_background"/>
+
     <Button
         android:text="Rider"
         android:layout_width="wrap_content"

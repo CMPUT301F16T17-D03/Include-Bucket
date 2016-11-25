@@ -30,6 +30,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private UserController userController = new UserController();
     private UserAccount user = new UserAccount();
 
+    boolean connected;
+
     final String adbMessage = "Click More button for details.";
 
     /**
@@ -48,12 +50,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        requests = RiderRequestsController.getRiderRequests();
+        RiderRequestsController.loadRequestsFromElasticSearch();
+
+        RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
+
+        requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
-
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
 
         Log.i("Fail","" + RiderRequestsController.getRiderRequests().size());
 
@@ -61,7 +67,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RiderRequestsController.getRiderRequests();
+                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -83,8 +89,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     protected void onStart() {
         super.onStart();
 
+        requests = RiderRequestsController.getRiderRequests().getRequests();
+        requestList = new ArrayList<>();
+        requestList.addAll(requests);
+        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
+        requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
-        Log.i("Fail","" + RiderRequestsController.getRiderRequests().size());
     }
 
     /**
@@ -94,8 +104,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     protected void onResume() {
         super.onResume();
 
+        requests = RiderRequestsController.getRiderRequests().getRequests();
+        requestList = new ArrayList<>();
+        requestList.addAll(requests);
+        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
+        requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
-        Log.i("Fail","" + RiderRequestsController.getRiderRequests().size());
 
         requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,6 +129,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);
+                    RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    RiderRequestsController.loadRequestsFromElasticSearch();
+                    RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
                     requestList.remove(request);
                     requestsListView.setAdapter(requestAdapter);

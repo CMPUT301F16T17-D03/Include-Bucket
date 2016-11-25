@@ -45,15 +45,15 @@ public class RequestList extends ArrayList {
 
     /**
      * This adds all requests in a list to the object's list
-     * @param requests
+     * //@param requests
      */
-    public void addAll(List<Request> requests) {
-        for(Request r : requests) {
-            this.add(r);
+/*    public void addBulk(List<Request> requests) {
+        for(int i = 0; i < requests.size(); i++ ) {
+            this.add(requests.get(i));
         }
         notifyListeners();
     }
-
+*/
     public Request get(int i) {
         ArrayList<Request> list = new ArrayList<>();
         list.addAll(getRequests());

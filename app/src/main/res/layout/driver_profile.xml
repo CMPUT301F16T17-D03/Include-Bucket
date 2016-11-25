@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/app_background"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="match_parent"
@@ -13,17 +22,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/vehicleModel" />
+        android:id="@+id/vehicleModel"
+        android:layout_below="@+id/vehicleYear"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/vehicleYear" />
+        android:id="@+id/vehicleYear"
+        android:layout_below="@+id/vehicleComments"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/vehicleComments" />
-</LinearLayout>
+        android:id="@+id/vehicleComments"
+        android:layout_below="@+id/vehicleMake"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

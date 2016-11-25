@@ -45,7 +45,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSRAStartEditText"
         android:hint="Input Start Location"
-        android:singleLine="true"
         android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/DSRAAcceptButton"
         android:layout_above="@+id/DSRAend"
@@ -56,11 +55,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
-        android:singleLine="true"
         android:layout_alignEnd="@+id/DSRAAcceptButton"
         android:layout_above="@+id/DSRAmaptext"
         android:layout_toEndOf="@+id/DSRAstart"
-        android:layout_alignTop="@+id/DSRAend" />
+        android:layout_alignTop="@+id/DSRAend" /> 
 
     <Button
         android:layout_width="wrap_content"
