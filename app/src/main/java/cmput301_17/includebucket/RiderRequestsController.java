@@ -31,10 +31,10 @@ public class RiderRequestsController {
 
     public static RequestList getRiderRequests() {
 
-        //if (riderRequests == null) {
+        if (riderRequests == null) {
             riderRequests = getRequestsFromElasticSearch();
             //riderRequests = getRequestsFromLocalFile();
-        //}
+        }
         return riderRequests;
     }
 
@@ -137,6 +137,7 @@ public class RiderRequestsController {
      * This saves a request to USER_FILE.
      * @param
      */
+    /*
     public static void saveRequestInLocalFile(Collection<Request> requestList, Context context) {
 
         controller.setContext(context);
@@ -155,4 +156,5 @@ public class RiderRequestsController {
             throw new RuntimeException();
         }
     }
+    */
 }

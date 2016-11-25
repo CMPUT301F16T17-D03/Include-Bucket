@@ -31,7 +31,6 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         phoneTextView = (TextView) findViewById(R.id.phoneTextView);
         confirmButton = (Button) findViewById(R.id.confirmButton);
 
-
         String login = driver.getUniqueUserName();
         String email = driver.getEmail();
         String phone = driver.getPhoneNumber();

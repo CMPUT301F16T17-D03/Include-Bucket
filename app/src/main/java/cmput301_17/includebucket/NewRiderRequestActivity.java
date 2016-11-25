@@ -239,11 +239,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 // Add to the local list
                 RiderRequestsController.addRiderRequest(request);
 
-                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
-                RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
-
-                //user.getRiderRequestIds().add(requestId);
-                //UserController.updateUser(user);
+                //Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
+                //RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
 
                 finish();
             }
@@ -345,8 +342,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     @Override
     protected void onStop() {
         super.onStop();
-        RequestList requestList = RiderRequestsController.getRiderRequests();
-        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+        //RequestList requestList = RiderRequestsController.getRiderRequests();
+        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
     }
 
 

@@ -182,7 +182,7 @@ public class LoginActivity extends MainMenuActivity {
     protected void onStop() {
         super.onStop();
         UserController.saveUserAccountInLocalFile(foundUser, LoginActivity.this);
-        requestList = RiderRequestsController.getRequestsFromElasticSearch();
-        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+        //requestList = RiderRequestsController.getRequestsFromElasticSearch();
+        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
     }
 }
