@@ -2,23 +2,15 @@ package cmput301_17.includebucket;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -31,7 +23,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private ListView requestsListView;
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
-    private RequestList requests;
+    private Collection<Request> requests;
 
     private RiderRequestsController riderRequestsController = new RiderRequestsController();
     private UserController userController = new UserController();
@@ -50,7 +42,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        //riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
+        riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
         userController.setContext(RiderCurrentRequestsActivity.this);
 
         user = UserController.getUserAccount();
@@ -66,7 +58,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
+                Collection<Request> requests = RiderRequestsController.getRiderRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -108,7 +100,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                    riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
+                    //riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
 
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);
@@ -128,9 +120,18 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = requestList.get(finalPosition);
-                        Intent intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
-                        intent.putExtra("Request", request);
-                        startActivity(intent);
+                        Intent intent;
+
+                        if(request.hasRiderAccepted() == false){
+                            intent = new Intent(RiderCurrentRequestsActivity.this, RiderAcceptDriverActivity.class);
+                            intent.putExtra("Request", request);
+                            startActivity(intent);
+                        }
+                        else {
+                            intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
+                            intent.putExtra("Request", request);
+                            startActivity(intent);
+                        }
                     }
                 });
                 adb.show();

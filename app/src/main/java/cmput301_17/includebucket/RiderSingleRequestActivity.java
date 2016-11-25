@@ -19,7 +19,6 @@ import java.util.Collection;
 public class RiderSingleRequestActivity extends MainMenuActivity {
 
     private TextView requestTextView;
-    private ListView driversListView;
 
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverListAdapter;
@@ -32,7 +31,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity {
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
         requestTextView = (TextView) findViewById(R.id.requestTextView);
-        driversListView = (ListView) findViewById(R.id.driversListView);
 
         Double price    = request.getFare();
         String startLoc = request.getStartLocation();
@@ -41,28 +39,5 @@ public class RiderSingleRequestActivity extends MainMenuActivity {
 
         requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" + startLoc +
                 "\n\nEnd Location:\n" + endLoc + "\n\nRequest Description:\n" + story);
-
-        //requests = RiderRequestsController.getRiderRequests();
-
-        Collection<UserAccount> drivers = request.getDrivers();
-        driverList = new ArrayList<>();
-        driverList.addAll(drivers);
-
-        driverListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, driverList);
-        driversListView.setAdapter(driverListAdapter);
-
-        driversListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                final int finalPosition = position;
-
-                UserAccount user = driverList.get(finalPosition);
-                Intent intent = new Intent(RiderSingleRequestActivity.this, ViewDriverDataActivity.class);
-                intent.putExtra("User", user);
-                intent.putExtra("Request", request);
-                startActivity(intent);
-            }
-        });
     }
 }

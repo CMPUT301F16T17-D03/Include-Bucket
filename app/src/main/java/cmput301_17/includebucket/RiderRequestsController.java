@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -57,7 +58,7 @@ public class RiderRequestsController {
      * This adds a request to Elasticsearch and the riderRequests list.
      * @param request
      */
-    public static void addRequest(Request request) {
+    public static void addRiderRequest(Request request) {
 
         getRiderRequests().addRequest(request);
     }
@@ -99,7 +100,7 @@ public class RiderRequestsController {
         riderRequests.execute(user);
 
         try {
-            requestList.addAll(riderRequests.get());
+            requestList = riderRequests.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -121,7 +122,7 @@ public class RiderRequestsController {
 
             Gson gson = new Gson();
 
-            Type listType = new TypeToken<RequestList>() {}.getType();
+            Type listType = new TypeToken<Collection<Request>>() {}.getType();
             return gson.fromJson(in, listType);
         }
         catch (FileNotFoundException e) {
@@ -136,7 +137,7 @@ public class RiderRequestsController {
      * This saves a request to USER_FILE.
      * @param
      */
-    public static void saveRequestInLocalFile(RequestList requestList, Context context) {
+    public static void saveRequestInLocalFile(Collection<Request> requestList, Context context) {
 
         controller.setContext(context);
 
