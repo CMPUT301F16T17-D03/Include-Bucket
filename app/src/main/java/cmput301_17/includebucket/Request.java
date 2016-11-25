@@ -202,6 +202,6 @@ public class Request implements Serializable {
         }
         else status = getRequestStatus().toString();
 */
-        return "Driver: " + getRiderStory() + "\n" + "Price: " + getFare() + "\nStatus: " + status;
+        return "\"" + getRiderStory() + "\"" + "\n" + "Price: " + getFare() + "\nStatus: " + status;
     }
 }

@@ -1,6 +1,7 @@
 package cmput301_17.includebucket;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         phoneTextView = (TextView) findViewById(R.id.phoneTextView);
         confirmButton = (Button) findViewById(R.id.confirmButton);
 
+
         String login = driver.getUniqueUserName();
         String email = driver.getEmail();
         String phone = driver.getPhoneNumber();
@@ -54,7 +56,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // i.e. "Confirmed by... [rider's login]"
                 // This is not the same as a notification
                 Toast.makeText(ViewDriverDataActivity.this, "Request Confirmed", Toast.LENGTH_SHORT).show();
-                finish();
+                Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
+                startActivity(intent);
             }
         });
     }

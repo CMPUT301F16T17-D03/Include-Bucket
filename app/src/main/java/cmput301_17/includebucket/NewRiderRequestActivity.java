@@ -235,9 +235,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 // Add the request to Elasticsearch
                 RiderRequestsController.addRequestToElasticsearch(request);
-                RiderRequestsController.addRequest(request);
 
-                RequestList requests = RiderRequestsController.getRiderRequests();
+                // Add to the local list
+                RiderRequestsController.addRiderRequest(request);
+
+                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
                 RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
 
                 //user.getRiderRequestIds().add(requestId);
