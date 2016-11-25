@@ -3,8 +3,8 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="400dp"
-        android:layout_height="600dp"
+        android:layout_width="1000dp"
+        android:layout_height="1000dp"
         android:id="@+id/imageView"
         android:src="@drawable/app_background"
         android:scaleType="centerCrop"
@@ -22,13 +22,12 @@
         android:hint="Search by keyword" />
 
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
         android:id="@+id/searchButton"
         android:layout_alignParentEnd="true"
-        android:background="#05ffde"
+        style="@style/Widget.AppCompat.Button"
         android:layout_alignBottom="@+id/keyword" />
 
     <TextView

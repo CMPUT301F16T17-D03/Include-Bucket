@@ -6,8 +6,8 @@
     tools:context="cmput301_17.includebucket.ViewUserDataActivity">
 
     <ImageView
-        android:layout_width="400dp"
-        android:layout_height="600dp"
+        android:layout_width="1000dp"
+        android:layout_height="1000dp"
         android:id="@+id/imageView"
         android:src="@drawable/app_background"
         android:scaleType="centerCrop"
@@ -41,5 +41,6 @@
         android:id="@+id/saveButton"
         android:layout_below="@+id/editPhone"
         android:layout_alignParentStart="true"
-        android:background="#2752ff" />
+        style="@style/Widget.AppCompat.Button" />
+
 </RelativeLayout>
