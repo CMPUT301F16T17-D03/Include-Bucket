@@ -5,8 +5,8 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="400dp"
-        android:layout_height="600dp"
+        android:layout_width="1000dp"
+        android:layout_height="1000dp"
         android:id="@+id/imageView"
         android:src="@drawable/app_background"
         android:scaleType="centerCrop"
