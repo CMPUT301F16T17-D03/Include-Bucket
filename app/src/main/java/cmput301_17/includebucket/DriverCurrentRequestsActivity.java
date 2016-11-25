@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * DriverCurrentRequestsActivity
+ *
  * Activity for viewing current requests a driver is involved in
  */
 public class DriverCurrentRequestsActivity extends MainMenuActivity {

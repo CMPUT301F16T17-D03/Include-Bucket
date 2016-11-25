@@ -6,9 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by michelletagarino on 16-11-12.
+ * RequestList
  *
- * Thsi si a list of requests.
+ * This is a list of requests.
  */
 public class RequestList extends ArrayList {
 
@@ -16,7 +16,7 @@ public class RequestList extends ArrayList {
     protected Collection<Listener> listeners;
 
     /**
-     * Thsi constructor creates a new empty request list.
+     * This constructor creates a new empty request list.
      */
     public RequestList(){
         requestList = new ArrayList<>();

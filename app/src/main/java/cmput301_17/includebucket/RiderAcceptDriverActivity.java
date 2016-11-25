@@ -15,7 +15,9 @@ import java.util.ArrayList;
 
 
 /**
- * Created by scobie on 11/23/16.
+ * RiderAcceptDriverActivity
+ *
+ * This is an activity for a rider viewing the drivers who have accepted their request
  */
 public class RiderAcceptDriverActivity extends MainMenuActivity {
 
@@ -26,6 +28,10 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
     final String adbMessage = "Click More button for details.";
     Request request = new Request();
 
+    /**
+     * This sets the data of the request on the screen
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +57,10 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         driverAdapter = new ArrayAdapter<UserAccount>(this, android.R.layout.simple_list_item_1, driverList);
         driverListView.setAdapter(driverAdapter);
     }
+
+    /**
+     * This deals with a click on a driver.
+     */
     @Override
     protected void onResume() {
         super.onResume();

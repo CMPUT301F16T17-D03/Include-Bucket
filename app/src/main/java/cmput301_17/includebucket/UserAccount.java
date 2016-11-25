@@ -7,6 +7,8 @@ import java.util.Collection;
 import io.searchbox.annotations.JestId;
 
 /**
+ * UserAccount
+ *
  * This is the UserAccount class
  *
  * It holds and controls the information that is attached to the user's profile.

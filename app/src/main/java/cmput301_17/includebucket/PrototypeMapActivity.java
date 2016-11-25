@@ -27,7 +27,7 @@ import org.osmdroid.views.overlay.Polyline;
 import java.util.ArrayList;
 
 /**
- * Created by Owner on 11/9/2016.
+ * PrototypeMapActivity
  *
  * This is a test for the map.
  */

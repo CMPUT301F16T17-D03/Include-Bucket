@@ -5,7 +5,9 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * Created by michelletagarino on 16-11-23.
+ * DriverProfileActivity
+ *
+ * An activity for viewing a driver's profile.
  */
 public class DriverProfileActivity extends MainMenuActivity {
 

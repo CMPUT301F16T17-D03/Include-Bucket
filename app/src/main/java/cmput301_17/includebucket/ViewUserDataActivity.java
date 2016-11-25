@@ -23,7 +23,7 @@ public class ViewUserDataActivity extends MainMenuActivity {
     UserAccount user = new UserAccount();
 
     /**
-     * This is the onCreate method.
+     * This is the onCreate method. It sets the user data on the screen.
      * @param savedInstanceState
      */
     @Override

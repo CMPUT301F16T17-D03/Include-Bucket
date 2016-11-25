@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Collection;
 
 /**
+ * NewRiderRequestActivity
+ *
  * In this class, the user should be able to specify the start and end locations by typing in an
  * address or by clicking on the map (clicking on the map should automatically fill in the start
  * and end locations). These locations are values for instantiating a new Request.

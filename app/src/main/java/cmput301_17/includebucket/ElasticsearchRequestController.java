@@ -21,9 +21,9 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
 /**
- * Created by michelletagarino on 16-11-12.
+ * ElasticsearchRequestController
  *
- * This class controls how the Requests in Elasticsearch are added, retrieved, and deleted.
+ * This class controls how the Requests in ElasticSearch are added, retrieved, and deleted.
  */
 
 public class ElasticsearchRequestController {

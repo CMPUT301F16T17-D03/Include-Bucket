@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Created by michelletagarino on 16-10-29.
+ * LoginActivity
  *
  * This deals with login functionality.
  */
@@ -177,7 +177,9 @@ public class LoginActivity extends MainMenuActivity {
     }
 
 
-
+    /**
+     * This saves the user in a local file, when exiting the view.
+     */
 
     @Override
     protected void onStop() {

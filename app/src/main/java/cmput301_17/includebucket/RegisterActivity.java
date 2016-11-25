@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by michelletagarino on 16-10-29.
+ * RegisterActivity
  *
  * This deals with registering a new user.
  */

@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * ViewDriverDataActivity
+ *
  * This is a view to see the driver's data. It shows contact information: phone number and email address.
  */
 public class ViewDriverDataActivity extends MainMenuActivity {

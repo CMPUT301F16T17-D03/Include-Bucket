@@ -6,7 +6,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
- * User data controller?
+ *
+ * EditUserDataActivity
+ *
+ * Controller class for user data. Deals with a user editing their data.
  *
  */
 public class EditUserDataActivity extends MainMenuActivity {

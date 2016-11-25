@@ -21,9 +21,9 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
 /**
- * Created by michelletagarino on 16-11-02.
+ * ElasticsearchUserController
  *
- * This class controls how UserAccounts are added and retrieved in Elasticsearch.
+ * This class controls how UserAccounts are added and retrieved in ElasticSearch.
  */
 public class ElasticsearchUserController {
 

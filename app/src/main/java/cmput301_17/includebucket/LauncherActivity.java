@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
- * Created by michelletagarino on 16-10-30.
+ * LauncherActivity
  *
  * This class is the first activity called when the application starts.
  * It has no UI (as stated in the AndroidManifest.xml file on line 27).
