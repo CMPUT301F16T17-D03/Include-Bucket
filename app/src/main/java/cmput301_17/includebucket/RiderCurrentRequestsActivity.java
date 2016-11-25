@@ -47,7 +47,10 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        requests = RiderRequestsController.getRiderRequests();
+        requestList = RiderRequestsController.getRequestsFromElasticSearch();
+        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+
+        requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
 
@@ -58,7 +61,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
             @Override
             public void update() {
                 requestList.clear();
-                Collection<Request> requests = RiderRequestsController.getRiderRequests();
+                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
                 requestList.addAll(requests);
                 requestAdapter.notifyDataSetChanged();
             }

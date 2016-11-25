@@ -178,12 +178,13 @@ public class LoginActivity extends MainMenuActivity {
         });
     }
 
+
+
+
     @Override
     protected void onStop() {
         super.onStop();
         UserController.saveUserAccountInLocalFile(foundUser, LoginActivity.this);
         //TODO handle the first registration
-        //requestList = RiderRequestsController.getRequestsFromElasticSearch();
-        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
     }
 }

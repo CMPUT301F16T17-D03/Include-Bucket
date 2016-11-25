@@ -31,10 +31,10 @@ public class RiderRequestsController {
 
     public static RequestList getRiderRequests() {
 
-        //if (riderRequests == null) {
-            riderRequests = getRequestsFromElasticSearch();
-            //riderRequests = getRequestsFromLocalFile();
-        //}
+        if (riderRequests == null) {
+            //riderRequests = getRequestsFromElasticSearch();
+            riderRequests = getRequestsFromLocalFile();
+        }
         return riderRequests;
     }
 
@@ -122,7 +122,7 @@ public class RiderRequestsController {
 
             Gson gson = new Gson();
 
-            Type listType = new TypeToken<Collection<Request>>() {}.getType();
+            Type listType = new TypeToken<RequestList>() {}.getType();
             return gson.fromJson(in, listType);
         }
         catch (FileNotFoundException e) {

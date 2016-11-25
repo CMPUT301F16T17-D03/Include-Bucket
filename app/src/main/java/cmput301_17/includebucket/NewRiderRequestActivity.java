@@ -71,6 +71,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private UserAccount user;
     private UserController userController;
     private RiderRequestsController riderRequestsController;
+    private RequestList requestList;
 
 
     /**
@@ -263,9 +264,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 setResult(RESULT_OK);
 
                 userController.setContext(NewRiderRequestActivity.this);
-                //requestListController.setContext(NewRiderRequestActivity.this);
                 riderRequestsController.setContext(NewRiderRequestActivity.this);
-
 
                 String startLocation = startPoint.toString();
                 String endLocation = endPoint.toString();
@@ -281,9 +280,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 request.setStartAddress(startAddress);
                 request.setEndAddress(endAddress);
                 request.setRoadLength(distance);
-                //ElasticsearchRequestController.CreateRequest createRequest;
-                //createRequest = new ElasticsearchRequestController.CreateRequest();
-                //createRequest.execute(request);
 
                 // Add the request to Elasticsearch
                 RiderRequestsController.addRequestToElasticsearch(request);
@@ -291,7 +287,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 // Add to the local list
                 RiderRequestsController.addRiderRequest(request);
 
-                Collection<Request> requests = RiderRequestsController.getRiderRequests().getRequests();
+                Collection<Request> requests = new RequestList();
+                requests.addAll(RiderRequestsController.getRiderRequests().getRequests());
                 RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
 
                 //user.getRiderRequestIds().add(requestId);
