@@ -1,6 +1,8 @@
 package cmput301_17.includebucket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import io.searchbox.annotations.JestId;
 
@@ -10,58 +12,55 @@ import io.searchbox.annotations.JestId;
  * It holds and controls the information that is attached to the user's profile.
  */
 
-public class UserAccount implements UserAccountInterface {
+public class UserAccount implements Serializable {
+
+    @JestId
+    private String userId;
+    private String uniqueUserName, email, phoneNumber;
+    private String vehicleMake, vehicleModel, vehicleYear;
+    private Boolean isLoggedIn;
+    //private ArrayList<Request> driverRequests = new ArrayList<>();
+
+    private UserState userState;
 
     /**
-     * User
-     * -newuser
-     * user id
-     * -password
-     * get unique username
-     * get Riderrequests
-     * get Driverrequests
-     * get contact info
-     * change contact info
-     * stays logged in
-     * save in file for offline
-     *
+     * User can either be a rider or a driver.
      */
+    public enum UserState {
+        rider, driver
+    }
+
+    public UserAccount() {}
+
+    /**
+     * This is the constructor that creates a user with an id and sets its values.
+     * @param
+     */
+    public UserAccount(String userLogin, String userEmail, String userPhone, String make, String model, String year) {
+        this.uniqueUserName = userLogin;
+        this.email = userEmail;
+        this.phoneNumber = userPhone;
+        this.isLoggedIn = true;
+        this.userState = null;
+        this.vehicleMake = make;
+        this.vehicleModel = model;
+        this.vehicleYear = year;
+    }
 
     /**
      * This returns the user id
      * @return
      */
-    public String getUid() {
-        return uid;
+    public String getUserId() {
+        return userId;
     }
 
     /**
      * this sets the user id.
-     * @param uid
+     * @param userId
      */
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    @JestId
-    private String uid, uniqueUserName, name, email, phoneNumber;
-    private ArrayList<UserRequest> riderRequests;
-    private ArrayList<UserRequest> driverRequests;
-
-    /**
-     * The initialization constructor (creates an empty user). Will later be filled with values.
-     */
-    public UserAccount() {}
-
-    /**
-     * This is the constructor that creates a user with an id and sets values its values.
-     * @param
-     */
-    public UserAccount(String userLogin, String userName, String userEmail, String userPhone) {
-        this.uniqueUserName = userLogin;
-        this.name = userName;
-        this.email = userEmail;
-        this.phoneNumber = userPhone;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 
@@ -93,7 +92,7 @@ public class UserAccount implements UserAccountInterface {
     }
 
     /**
-     * This sets the emila address.
+     * This sets the email address.
      * @param email
      */
     public void setEmail(String email) {
@@ -117,42 +116,16 @@ public class UserAccount implements UserAccountInterface {
     }
 
     /**
-     * This returns the rider request list.
+     * This returns the list of requests
      * @return
      */
-    public ArrayList<UserRequest> getRiderRequests() {
-        return riderRequests;
-    }
-
-    /**
-     * This sets the sets the list of requests.
-     * @param riderRequests
-     */
-    public void setRiderRequests(ArrayList<UserRequest> riderRequests) {
-        this.riderRequests = riderRequests;
-    }
-
-    /**
-     * This adds a new request for a rider to the list
-     * @param request
-     */
-    public void addRiderRequest(UserRequest request){
-        this.riderRequests.add(request);
-    }
-
-    /**
-     * Tgis returns the list of requests
-     * @return
-     */
-    public ArrayList<UserRequest> getDriverRequests() {
-        return driverRequests;
-    }
+    //public Collection<Request> getDriverRequests() {return driverRequests;}
 
     /**
      * This sets the driver requests list.
      * @param driverRequests
      */
-    public void setDriverRequests(ArrayList<UserRequest> driverRequests) {
+/*    public void setDriverRequests(ArrayList<Request> driverRequests) {
         this.driverRequests = driverRequests;
     }
 
@@ -160,28 +133,81 @@ public class UserAccount implements UserAccountInterface {
      * This adds a new request for the driver to the list.
      * @param request
      */
-
-    public void addDriverRequest(UserRequest request){
+/*
+    public void addDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             return;
         }
         this.driverRequests.add(request);
-        request.addDriver(this.getUniqueUserName());
+        request.addDriver(this);
     }
 
     /**
      * This cancels the request.
      * @param request
      */
-    public void cancelDriverRequest(UserRequest request){
+ /*   public void cancelDriverRequest(Request request){
         if (this.driverRequests.contains(request)){
             this.driverRequests.remove(request);
-            request.removeDriver(this.getUniqueUserName());
+            request.removeDriver(this);
         }
         return;
     }
+*/
+    /**
+     * This returns the login status of the user
+     * @return isLoggedIn
+     */
+    public boolean getLoginStatus() { return this.isLoggedIn; }
 
-    public boolean isLoggedIn() {
-        return Boolean.FALSE;
+    /**
+     * This changes the user's login status
+     * @param status
+     */
+    public void setLoginStatus(Boolean status) { this.isLoggedIn = status; }
+
+    /**
+     * Gets the user category
+     * @return
+     */
+    public UserState getUserState() {
+        return userState;
+    }
+
+    /**
+     * Sets the user category
+     * @param userState
+     */
+    public void setUserState(UserState userState) {
+        this.userState = userState;
+    }
+
+    public String getVehicleMake() {
+        return vehicleMake;
+    }
+
+    public void setVehicleMake(String vehicleMake) {
+        this.vehicleMake = vehicleMake;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public String getVehicleYear() {
+        return vehicleYear;
+    }
+
+    public void setVehicleYear(String vehicleYear) {
+        this.vehicleYear = vehicleYear;
+    }
+
+    @Override
+    public String toString() {
+        return getUniqueUserName() + "\n\n" + "\nEmail: " + getEmail() + "\nPhone: " + getPhoneNumber();
     }
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/DSRAstart"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End"
+        android:id="@+id/DSRAend"
+        android:textSize="25dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/DSRAstart" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:id="@+id/DSRApricetext"
+        android:textSize="25dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"
+        android:id="@+id/DSRAPriceEditText"
+        android:layout_alignBottom="@+id/DSRAmaptext"
+        android:layout_toRightOf="@+id/DSRApricetext"
+        android:layout_toStartOf="@+id/DSRAAcceptButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DSRAStartEditText"
+        android:hint="Input Start Location"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/DSRAAcceptButton"
+        android:layout_above="@+id/DSRAend"
+        android:layout_toEndOf="@+id/DSRAstart" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DSRAEndEditText"
+        android:hint="Input End Location"
+        android:layout_alignEnd="@+id/DSRAAcceptButton"
+        android:layout_above="@+id/DSRAmaptext"
+        android:layout_toEndOf="@+id/DSRAstart"
+        android:layout_alignTop="@+id/DSRAend" /> 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accept"
+        android:id="@+id/DSRAAcceptButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DSRAstory"
+        android:layout_alignParentStart="true"
+        android:hint="Rider Story"
+        android:layout_alignBottom="@+id/DSRAAcceptButton"
+        android:layout_toStartOf="@+id/DSRAAcceptButton"
+        android:layout_alignTop="@+id/DSRAAcceptButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAP"
+        android:id="@+id/DSRAmaptext"
+        android:textSize="40dp"
+        tools:layout_width="200dp"
+        android:layout_below="@+id/DSRAend"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/DSRApricetext" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/DSRAmaptext"
+        android:layout_above="@+id/DSRAstory"
+        android:id="@+id/linearLayout">
+        <org.osmdroid.views.MapView android:id="@+id/DSRAmap"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

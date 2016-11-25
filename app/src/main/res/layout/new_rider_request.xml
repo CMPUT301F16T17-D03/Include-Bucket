@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/startLocTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End"
+        android:id="@+id/endLocTextView"
+        android:textSize="25dp"
+        android:layout_alignBottom="@+id/NRRAEndEditText"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:id="@+id/priceTextView"
+        android:textSize="25dp"
+        android:layout_alignBottom="@+id/textView15"
+        android:layout_toEndOf="@+id/textView15" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"
+        android:id="@+id/NRRAPriceEditText"
+        android:layout_toEndOf="@+id/priceTextView"
+        android:layout_alignBottom="@+id/textView15" 
+        android:singleLine="true"
+        android:inputType="number|numberDecimal" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/NRRAStartEditText"
+        android:hint="Input Start Location"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/startLocTextView"
+        android:singleLine="true" 
+        android:inputType="textNoSuggestions" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/NRRAEndEditText"
+        android:hint="Input End Location"
+        android:layout_below="@+id/NRRAStartEditText"
+        android:layout_alignStart="@+id/NRRAStartEditText"
+        android:singleLine="true"
+        android:inputType="textNoSuggestions" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_button"
+        android:id="@+id/saveButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/riderStoryEditText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/saveButton"
+        android:hint="Rider Story" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAP"
+        android:id="@+id/textView15"
+        android:layout_below="@+id/endLocTextView"
+        android:layout_alignParentStart="true"
+        android:textSize="40dp"
+        tools:layout_width="200dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/priceTextView"
+        android:layout_above="@+id/riderStoryEditText">
+        <org.osmdroid.views.MapView android:id="@+id/NRRAMap"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

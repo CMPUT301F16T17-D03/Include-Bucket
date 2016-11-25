@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".PrototypeMapActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainMenuActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".PrototypeMapActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".NewRiderRequestActivity" />
         <activity android:name=".DriverCurrentRequestsActivity" />
@@ -35,7 +35,9 @@
         <activity android:name=".DriverSingleRequestActivity" />
         <activity android:name=".EditUserDataActivity" />
         <activity android:name=".RiderCurrentRequestsActivity" />
-        <activity android:name=".ViewUserDataActivity" />
+        <activity android:name=".ViewDriverDataActivity" />
+        <activity android:name=".RiderSingleRequestActivity" />
+        <activity android:name=".RiderAcceptDriverActivity" />
 
 
         <!--
