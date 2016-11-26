@@ -59,8 +59,9 @@ public class ViewDriverDataActivity extends MainMenuActivity {
 
                 request.chooseDriver(driver);
 
-                request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
-                request.chooseDriver(driver);
+                request.setRiderAccepted(true);
+                request.clearDrivers();
+
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
@@ -72,7 +73,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // i.e. "Confirmed by... [rider's login]"
                 // This is not the same as a notification
 
-                Toast.makeText(ViewDriverDataActivity.this, "Request Confirmed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
+
 
                 finish();
             }

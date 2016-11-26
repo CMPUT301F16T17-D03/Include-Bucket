@@ -75,6 +75,7 @@ public class Request implements Serializable {
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
         requestStatus = RequestStatus.Open;
+
         listeners = new ArrayList<>();
     }
 
@@ -154,6 +155,10 @@ public class Request implements Serializable {
 
     public void setDrivers(Collection<UserAccount> drivers) {
         this.pendingDrivers = pendingDrivers;
+    }
+
+    public void clearDrivers(){
+        this.pendingDrivers.clear();
     }
 
     public void addDriver(UserAccount driver){
@@ -250,11 +255,8 @@ public class Request implements Serializable {
     @Override
     public String toString() {
 
-
-        String status = this.requestStatus.toString();
-
-        if (hasRiderAccepted())
-        {
+        String status = "Open";
+        if (hasRiderAccepted()){
 
             status = "Closed";
         }
