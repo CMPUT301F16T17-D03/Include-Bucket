@@ -19,7 +19,9 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by michelletagarino on 16-11-22.
+ * RiderRequestsController
+ *
+ * This is a controller class for a rider's request.
  */
 public class RiderRequestsController {
 
@@ -29,6 +31,10 @@ public class RiderRequestsController {
     private static RequestList riderRequests = null;
     private static final String RIDER_REQUESTS_FILE = "rider_requests.sav";
 
+    /**
+     * This returns a list of requests.
+     * @return RequestList
+     */
     public static RequestList getRiderRequests() {
 
         if (riderRequests == null) {
@@ -136,9 +142,6 @@ public class RiderRequestsController {
         }
         catch (FileNotFoundException e) {
             riderRequests = new RequestList();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
         }
     }
 

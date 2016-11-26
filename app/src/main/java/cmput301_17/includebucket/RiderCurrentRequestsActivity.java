@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * RiderCurrentRequestsActivity
+ *
  * This class displays the list of the rider's requests.
  */
 public class RiderCurrentRequestsActivity extends MainMenuActivity {

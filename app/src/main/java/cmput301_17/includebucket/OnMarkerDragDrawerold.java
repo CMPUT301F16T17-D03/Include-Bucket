@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 
 /**
- * Created by Owner on 11/11/2016.
+ * OnMarkerDragDrawerold
+ *
+ * This class deals with dragging the marker on the map.
  */
 
 public class OnMarkerDragDrawerold implements Marker.OnMarkerDragListener {

@@ -19,7 +19,9 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by michelletagarino on 16-11-22.
+ * DriverRequestsController
+ *
+ * A controller class for requests that a driver is involved in.
  */
 public class DriverRequestsController {
 
@@ -118,7 +120,7 @@ public class DriverRequestsController {
     }
 
     /**
-     * Gets a list of requests the driver is involved in.
+     * Gets a list of current requests the driver is involved in.
      */
     public static void loadInvolvedRequestsFromElasticsearch() {
 
@@ -181,9 +183,6 @@ public class DriverRequestsController {
         }
         catch (FileNotFoundException e) {
             driverRequests = new RequestList();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
         }
     }
 

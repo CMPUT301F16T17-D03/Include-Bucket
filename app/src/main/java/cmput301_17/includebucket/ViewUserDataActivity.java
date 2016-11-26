@@ -2,11 +2,9 @@ package cmput301_17.includebucket;
 
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -25,13 +23,13 @@ public class ViewUserDataActivity extends MainMenuActivity {
     UserAccount user = new UserAccount();
 
     /**
-     * This is the onCreate method.
+     * This is the onCreate method. It sets the user data on the screen.
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_user_data);
+        setContentView(R.layout.view_user_data);
 
         user = (UserAccount) getIntent().getSerializableExtra("User");
 

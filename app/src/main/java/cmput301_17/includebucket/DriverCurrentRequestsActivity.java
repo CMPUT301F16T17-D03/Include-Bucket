@@ -10,6 +10,7 @@ import java.util.Collection;
 
 /**
  * Activity for viewing current requests a driver is involved in.
+ * DriverCurrentRequestsActivity
  */
 public class DriverCurrentRequestsActivity extends MainMenuActivity {
 

@@ -21,9 +21,9 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
 /**
- * Created by michelletagarino on 16-11-02.
+ * ElasticsearchUserController
  *
- * This class controls how UserAccounts are added and retrieved in Elasticsearch.
+ * This class controls how UserAccounts are added and retrieved in ElasticSearch.
  */
 public class ElasticsearchUserController {
 
@@ -67,7 +67,7 @@ public class ElasticsearchUserController {
      */
     public static class RetrieveUser extends AsyncTask<String, Void, UserAccount> {
         @Override
-        protected UserAccount doInBackground(String... userLogin) {
+        protected UserAccount doInBackground(String... user) {
             verifySettings();
 
             UserAccount foundUser = new UserAccount();
@@ -77,8 +77,7 @@ public class ElasticsearchUserController {
              */
             String search_string =
                     "{\"from\":0,\"size\":10000, " +
-                        "\"query\": { \"term\": {" +
-                            "\"uniqueUserName\": \"" + userLogin[0] + "\" }}}";
+                        "\"query\": { \"match\": { \"uniqueUserName\": \"" + user[0] + "\" }}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")

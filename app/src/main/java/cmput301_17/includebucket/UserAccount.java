@@ -7,6 +7,8 @@ import java.util.Collection;
 import io.searchbox.annotations.JestId;
 
 /**
+ * UserAccount
+ *
  * This is the UserAccount class
  *
  * It holds and controls the information that is attached to the user's profile.
@@ -19,9 +21,10 @@ public class UserAccount implements Serializable {
     private String uniqueUserName, email, phoneNumber;
     private String vehicleMake, vehicleModel, vehicleYear;
     private Boolean isLoggedIn;
-    //private ArrayList<Request> driverRequests = new ArrayList<>();
 
     private UserState userState;
+
+    protected Collection<Listener> listeners;
 
     /**
      * User can either be a rider or a driver.
@@ -30,7 +33,7 @@ public class UserAccount implements Serializable {
         rider, driver
     }
 
-    public UserAccount() {}
+    public UserAccount(){}
 
     /**
      * This is the constructor that creates a user with an id and sets its values.
@@ -45,6 +48,12 @@ public class UserAccount implements Serializable {
         this.vehicleMake = make;
         this.vehicleModel = model;
         this.vehicleYear = year;
+    }
+
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
+        }
     }
 
     /**

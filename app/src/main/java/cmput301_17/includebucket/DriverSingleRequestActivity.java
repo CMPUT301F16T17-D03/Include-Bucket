@@ -27,7 +27,7 @@ import org.osmdroid.views.overlay.Polyline;
 import java.util.ArrayList;
 
 /**
- * Created by orlick on 11/7/16.
+ * DriverSingleRequestActivity
  *
  * In this class, the user should be able to specify the start and end locations by typing in an
  * address or by clicking on the map (clicking on the map should automatically fill in the start

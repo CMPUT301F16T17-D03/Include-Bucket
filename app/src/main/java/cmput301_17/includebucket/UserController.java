@@ -1,6 +1,7 @@
 package cmput301_17.includebucket;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,14 +18,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by michelletagarino on 16-11-11.
+ * UserController
  *
  * This is a controller for a UserAccount.
- *     Although somehow not implemented yet, this class will be used to control when the data of a
+ *     This class will be used to control when the data of a
  *     user is changed (i.e. when the user updates their contact information) --> many changes
  *     to the Login/Register activities will be done later to follow the UML diagram.
- *         Also when a user creates or deletes a request, this class should be communicated with via
- *         an observer/listener class so that the UserAccount model is also updated).
+ *     Also when a user creates or deletes a request, this class should be communicated with via
+ *     an observer/listener class so that the UserAccount model is also updated).
  */
 public class UserController {
 
@@ -34,9 +35,11 @@ public class UserController {
 
     private static UserController controller = new UserController();
 
+
+
     public static UserAccount getUserAccount() {
         if (userAccount == null) {
-            userAccount = loadUserAccountFromLocalFile();
+            loadUserAccountFromLocalFile();
         }
         return userAccount;
     }
@@ -64,40 +67,24 @@ public class UserController {
     }
 
     /**
-     * Update the user in Elasticsearch
-     * @param user
-     */
-    public static void updateUser(UserAccount user) {
-
-        UserAccount newUser = user;
-        //newUser.setRiderRequestIds(user.getRiderRequestIds());
-
-        // Delete old
-        deleteUserFromElasticSearch(user);
-
-        // Create new
-        createUserInElasticSearch(newUser);
-    }
-
-    /**
      * Retrieve user from Elasticsearch.
      * @return userAccount
      */
-    public static UserAccount retrieveUserFromElasticSearch(String userId) {
+    public static void loadUserFromElasticSearch(String userId) {
 
         ElasticsearchUserController.RetrieveUser retrieveUser;
         retrieveUser = new ElasticsearchUserController.RetrieveUser();
         retrieveUser.execute(userId);
 
-        UserAccount userAccount = new UserAccount();
         try {
-            userAccount = retrieveUser.get();
+            UserAccount user = retrieveUser.get();
+            userAccount = user;
+            Log.i("SUCCESS","Got " + user.getUniqueUserName());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return userAccount;
     }
 
     /**
@@ -112,7 +99,7 @@ public class UserController {
     /**
      * This loads a user account from USER_FILE.
      */
-    public static UserAccount loadUserAccountFromLocalFile() {
+    public static void loadUserAccountFromLocalFile() {
 
         try {
             FileInputStream fis = controller.getContext().openFileInput(USER_FILE);
@@ -121,13 +108,10 @@ public class UserController {
             Gson gson = new Gson();
 
             Type listType = new TypeToken<UserAccount>() {}.getType();
-            return gson.fromJson(in, listType);
+            userAccount = gson.fromJson(in, listType);
         }
         catch (FileNotFoundException e) {
-            return new UserAccount();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
+            userAccount = new UserAccount();
         }
     }
 
@@ -136,8 +120,6 @@ public class UserController {
      * @param
      */
     public static void saveUserAccountInLocalFile(UserAccount user, Context context) {
-
-        controller.setContext(context);
 
         try {
             FileOutputStream fos = context.openFileOutput(USER_FILE, 0);

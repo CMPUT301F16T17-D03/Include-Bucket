@@ -3,10 +3,11 @@ package cmput301_17.includebucket;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 /**
- * Created by michelletagarino on 16-11-23.
+ * DriverProfileActivity
+ *
+ * An activity for viewing a driver's profile.
  */
 public class DriverProfileActivity extends MainMenuActivity {
 
@@ -17,7 +18,7 @@ public class DriverProfileActivity extends MainMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_data);
+        setContentView(R.layout.edit_user_data);
 
         user = UserController.getUserAccount();
         driverController.setContext(DriverProfileActivity.this);

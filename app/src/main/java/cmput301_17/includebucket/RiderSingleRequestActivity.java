@@ -29,6 +29,8 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 
 /**
+ * RiderSingleRequestActivity
+ *
  * This class displays a request's information in full when it is invoked by the user in the
  * RiderCurrentRequestsActivity.
  */

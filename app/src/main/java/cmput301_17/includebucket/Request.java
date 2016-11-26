@@ -7,7 +7,7 @@ import java.util.Collection;
 import io.searchbox.annotations.JestId;
 
 /**
- * Created by Owner on 10/20/2016.
+ * Request
  *
  * This is the Request class. It holds the data that is attached to each request made by a specific
  * UserAccount.

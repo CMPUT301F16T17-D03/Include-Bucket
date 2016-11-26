@@ -13,9 +13,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by Owner on 11/9/2016.
+ * BuildRoadTask
  *
- * Builds the road for a geolocation path
+ * Builds the road for a geolocation path.
  *
  */
 

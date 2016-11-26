@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by michelletagarino on 16-10-20.
+ * DriverBrowseRequestsActivity
  *
  * Activity for dealing with browsing requests as a driver.
  *

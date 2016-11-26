@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Owner on 11/22/2016.
+ * GetGeoPointFromAddressTask
+ *
+ * This class deals with getting a set of coordinates from an address.
  */
 
 public class GetGeoPointFromAddressTask extends AsyncTask<String, Void, GeoPoint>

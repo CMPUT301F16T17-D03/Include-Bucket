@@ -2,15 +2,15 @@ package cmput301_17.includebucket;
 
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * ViewDriverDataActivity
+ *
  * This is a view to see the driver's data. It shows contact information: phone number and email address.
  */
 public class ViewDriverDataActivity extends MainMenuActivity {
@@ -21,9 +21,9 @@ public class ViewDriverDataActivity extends MainMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_user_data);
+        setContentView(R.layout.view_user_data);
 
-        UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
+        final UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
         loginTextView = (TextView) findViewById(R.id.loginTextView);
@@ -43,6 +43,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 request.setRequestStatus(Request.RequestStatus.Closed);
+                request.chooseDriver(driver);
                 request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
