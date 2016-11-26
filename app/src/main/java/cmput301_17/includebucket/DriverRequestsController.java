@@ -27,8 +27,6 @@ public class DriverRequestsController {
 
     private Context context;
 
-    private static DriverRequestsController controller = new DriverRequestsController();
-
     private static RequestList driverRequests = null;
     private static final String DRIVER_REQUESTS_FILE = "driver_requests.sav";
 
@@ -177,25 +175,6 @@ public class DriverRequestsController {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * This loads requests from DRIVER_REQUESTS_FILE.
-     */
-    public static void loadRequestsFromLocalFile() {
-
-        try {
-            FileInputStream fis = controller.getContext().openFileInput(DRIVER_REQUESTS_FILE);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
-            Gson gson = new Gson();
-
-            Type listType = new TypeToken<RequestList>() {}.getType();
-            driverRequests = gson.fromJson(in, listType);
-        }
-        catch (FileNotFoundException e) {
-            driverRequests = new RequestList();
         }
     }
 

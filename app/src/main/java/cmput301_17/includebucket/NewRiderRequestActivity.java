@@ -61,7 +61,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private LocationListener locationListener;
     private GeoPoint currentPoint;
     private String price;
-    private Collection<UserAccount> pendingDrivers;
+    private ArrayList<UserAccount> pendingDrivers;
     private Double roadLength;
 
     private UserAccount driver;

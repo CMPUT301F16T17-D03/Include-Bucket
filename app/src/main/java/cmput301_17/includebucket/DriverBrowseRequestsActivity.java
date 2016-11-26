@@ -97,6 +97,8 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        requestAdapter.notifyDataSetChanged();
     }
 
     @Override

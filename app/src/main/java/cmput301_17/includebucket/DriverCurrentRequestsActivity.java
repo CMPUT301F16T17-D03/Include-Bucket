@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +18,8 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
     private ListView requestsListView;
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
-    private Collection<Request> requests;
-
-    private DriverRequestsController driverRequestsController = new DriverRequestsController();
-    private UserController userController = new UserController();
+    private Collection<Request> requests, allRequests;
     private UserAccount user = new UserAccount();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +30,6 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         requestsListView = (ListView) findViewById(R.id.driverCurrentList);
-
-        driverRequestsController.setContext(DriverCurrentRequestsActivity.this);
-        userController.setContext(DriverCurrentRequestsActivity.this);
 
         user = UserController.getUserAccount();
 

@@ -58,8 +58,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // i.e. "Confirmed by... [rider's login]"
                 // This is not the same as a notification
                 Toast.makeText(ViewDriverDataActivity.this, "Request Confirmed", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

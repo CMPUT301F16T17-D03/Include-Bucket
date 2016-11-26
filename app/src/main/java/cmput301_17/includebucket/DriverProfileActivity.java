@@ -12,8 +12,6 @@ import android.widget.Button;
 public class DriverProfileActivity extends MainMenuActivity {
 
     private UserAccount user = new UserAccount();
-    private UserController userController = new UserController();
-    private DriverRequestsController driverController = new DriverRequestsController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +22,6 @@ public class DriverProfileActivity extends MainMenuActivity {
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         user = UserController.getUserAccount();
-        driverController.setContext(DriverProfileActivity.this);
-        userController.setContext(DriverProfileActivity.this);
 
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {

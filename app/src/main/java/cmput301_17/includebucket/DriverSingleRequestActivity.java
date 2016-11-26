@@ -50,8 +50,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     private UserAccount driver;
 
     private UserAccount user = new UserAccount();
-    private UserController userController = new UserController();
-    private DriverRequestsController driverController = new DriverRequestsController();
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -67,8 +65,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         user = UserController.getUserAccount();
-        driverController.setContext(DriverSingleRequestActivity.this);
-        userController.setContext(DriverSingleRequestActivity.this);
         request = (Request) getIntent().getSerializableExtra("Request");
 
         drivers= new ArrayList<UserAccount>();
@@ -147,6 +143,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
                 Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+
+                DriverRequestsController.loadOpenRequestsFromElasticsearch();
+
                 finish();
             }
         });
