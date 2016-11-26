@@ -53,12 +53,6 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
-                // Do not delete request yet
-                // US 05.03.01 As a driver, I want to see if my acceptance was accepted.
-                // This means that when the driver goes to his Current requests (DriverCurrentRequestActivity)
-                // the Driver has to see that the request is now closed and was confirmed by the rider
-                // i.e. "Confirmed by... [rider's login]"
-                // This is not the same as a notification
                 Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
 
                 finish();
