@@ -67,7 +67,7 @@ public class Request implements Serializable {
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
-        requestStatus = null;
+        requestStatus = RequestStatus.Open;
     }
 
     public String getRequestID() {return requestID; }
@@ -211,7 +211,7 @@ public class Request implements Serializable {
     @Override
     public String toString() {
 
-        String status = null;
+        String status = getRequestStatus().toString();
         if (hasRiderAccepted()){
             status = "Closed";
         }

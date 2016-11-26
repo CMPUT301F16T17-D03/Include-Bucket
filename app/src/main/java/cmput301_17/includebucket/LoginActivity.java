@@ -180,11 +180,9 @@ public class LoginActivity extends MainMenuActivity {
     /**
      * This saves the user in a local file, when exiting the view.
      */
-
     @Override
     protected void onStop() {
         super.onStop();
         UserController.saveUserAccountInLocalFile(foundUser, LoginActivity.this);
-        //TODO handle the first registration
     }
 }
