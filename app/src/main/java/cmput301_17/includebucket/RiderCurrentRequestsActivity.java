@@ -59,8 +59,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
 
-        Log.i("Fail","" + RiderRequestsController.getRiderRequests().size());
-
         RiderRequestsController.getRiderRequests().addListener(new Listener() {
             @Override
             public void update() {
@@ -70,8 +68,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 requestAdapter.notifyDataSetChanged();
             }
         });
-
-        Log.i("Fail","" + RiderRequestsController.getRiderRequests().size());
 
         Button newButton = (Button) findViewById(R.id.newRequestButton);
         newButton.setOnClickListener(new View.OnClickListener() {
@@ -121,8 +117,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
-                    //RiderRequestsController.loadRequestsFromElasticSearch();
-                    //RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
                     requestList.remove(request);
                     requestsListView.setAdapter(requestAdapter);

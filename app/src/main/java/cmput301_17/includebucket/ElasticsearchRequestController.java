@@ -221,9 +221,15 @@ public class ElasticsearchRequestController {
 
             RequestList requests = new RequestList();
 
-            //String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = "{\"from\": 0, \"size\": 10000," +
+            String search_string;
+
+            if (search_param[0].length() == 0)
+            {
+                search_string = "{\"from\": 0, \"size\": 10000}";
+            }
+            else search_string = "{\"from\": 0, \"size\": 10000," +
                     "\"query\": { \"match\": {\"riderStory\": \"" + search_param[0] + "\" }}}";
+
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")

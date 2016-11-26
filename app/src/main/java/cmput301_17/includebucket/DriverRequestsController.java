@@ -162,7 +162,7 @@ public class DriverRequestsController {
      * This returns a list of requests from ElasticSearch specified by a keyword.
      * @return requests
      */
-    public static RequestList loadRequestsByKeyword(String keyword) {
+    public static void loadRequestsByKeyword(String keyword) {
 
         ElasticsearchRequestController.GetKeywordList requestList;
         requestList = new ElasticsearchRequestController.GetKeywordList();
@@ -178,7 +178,6 @@ public class DriverRequestsController {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return requests;
     }
 
     /**

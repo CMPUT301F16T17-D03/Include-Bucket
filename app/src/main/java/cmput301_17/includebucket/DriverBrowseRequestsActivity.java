@@ -33,8 +33,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     private ArrayAdapter<Request> requestAdapter;
     private Collection<Request> requests;
     private UserAccount user = new UserAccount();
-    private DriverRequestsController driverController = new DriverRequestsController();
-    private RiderRequestsController riderController = new RiderRequestsController();
 
     /**
      * Controls the list of requests and handles button clicks.
@@ -50,9 +48,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
         keyword = (EditText) findViewById(R.id.keyword);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
-
-        riderController.setContext(DriverBrowseRequestsActivity.this);
-        driverController.setContext(DriverBrowseRequestsActivity.this);
 
         user = UserController.getUserAccount();
 
@@ -72,11 +67,15 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
                 requestList.clear();
 
-                key = keyword.getText().toString();
+                if (keyword.getText().toString() == null)
+                {
+                    key = "";
+                }
+                else key = keyword.getText().toString();
 
-                requests = DriverRequestsController.loadRequestsByKeyword(key);
+                DriverRequestsController.loadRequestsByKeyword(key);
 
-                requestList = new ArrayList<>();
+                requests = DriverRequestsController.getDriverRequests().getRequests();
                 requestList.addAll(requests);
                 Log.i("SIZE", "" + requestList.size());
                 browseRequestList.setAdapter(requestAdapter);
@@ -98,18 +97,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        if (keyword.hasFocus() && keyword.toString().equals(null))
-        {
-            requests.clear();
-            DriverRequestsController.loadOpenRequestsFromElasticsearch();
-            requests = DriverRequestsController.getDriverRequests().getRequests();
-            requestList = new ArrayList<>();
-            requestList.addAll(requests);
-            requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
-            browseRequestList.setAdapter(requestAdapter);
-            requestAdapter.notifyDataSetChanged();
-        }
     }
 
     @Override
@@ -123,12 +110,9 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
                 Request request =  requestList.get(position);
-                //intent.putExtra("User",user);
                 intent.putExtra("Request", request);
                 startActivity(intent);
             }
         });
-
     }
-
 }
