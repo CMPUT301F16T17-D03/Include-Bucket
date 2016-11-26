@@ -35,20 +35,21 @@ import java.util.ArrayList;
  */
 public class DriverSingleRequestActivity extends Activity implements MapEventsReceiver {
 
-    TextView startEditText;
-    TextView endEditText;
-    TextView priceEditText;
-    TextView storyText;
-    Marker startMarker;
-    Marker endMarker;
-    GeoPoint startPoint;
-    GeoPoint endPoint;
-    MapView map;
-    RoadManager roadManager;
-    UserAccount user = new UserAccount();
-    Request request = new Request();
+    private TextView startEditText;
+    private TextView endEditText;
+    private TextView priceEditText;
+    private TextView storyText;
+    private Marker startMarker;
+    private Marker endMarker;
+    private GeoPoint startPoint;
+    private GeoPoint endPoint;
+    private MapView map;
+    private RoadManager roadManager;
+    private Request request = new Request();
     private ArrayList<UserAccount> drivers;
     private UserAccount driver;
+
+    private UserAccount user = new UserAccount();
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -60,9 +61,12 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
-        //user = UserController.getUserAccount();
-        user = (UserAccount) getIntent().getSerializableExtra("User");
+        UserFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
+        user = UserController.getUserAccount();
         request = (Request) getIntent().getSerializableExtra("Request");
+
         drivers= new ArrayList<UserAccount>();
         driver = new UserAccount();
 
@@ -139,6 +143,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);
                 Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+
+                DriverRequestsController.loadOpenRequestsFromElasticsearch();
+
                 finish();
             }
         });

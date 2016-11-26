@@ -1,5 +1,8 @@
 package cmput301_17.includebucket;
 
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,10 +13,10 @@ import java.util.List;
  *
  * This is a list of requests.
  */
-public class RequestList extends ArrayList {
+public class RequestList extends ArrayList implements Serializable {
 
-    protected Collection<Request> requestList;
-    protected Collection<Listener> listeners;
+    protected Collection<Request> requestList = null;
+    protected transient ArrayList<Listener> listeners = null;
 
     /**
      * This constructor creates a new empty request list.
@@ -28,9 +31,16 @@ public class RequestList extends ArrayList {
     }
 
     private void notifyListeners() {
-        for (Listener listener : listeners) {
+        for (Listener listener : getListeners()) {
             listener.update();
         }
+    }
+
+    private ArrayList<Listener> getListeners() {
+        if (listeners == null) {
+            listeners = new ArrayList<>();
+        }
+        return listeners;
     }
 
     public void addRequest(Request request) {
@@ -43,17 +53,6 @@ public class RequestList extends ArrayList {
         notifyListeners();
     }
 
-    /**
-     * This adds all requests in a list to the object's list
-     * //@param requests
-     */
-/*    public void addBulk(List<Request> requests) {
-        for(int i = 0; i < requests.size(); i++ ) {
-            this.add(requests.get(i));
-        }
-        notifyListeners();
-    }
-*/
     public Request get(int i) {
         ArrayList<Request> list = new ArrayList<>();
         list.addAll(getRequests());
@@ -69,8 +68,8 @@ public class RequestList extends ArrayList {
     }
 
     public void addListener(Listener l) {
-        listeners.add(l);
+        getListeners().add(l);
     }
 
-    public void removeListener(Listener l) { listeners.remove(l); }
+    public void removeListener(Listener l) { getListeners().remove(l); }
 }

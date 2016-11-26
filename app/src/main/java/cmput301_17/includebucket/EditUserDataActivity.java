@@ -24,6 +24,8 @@ public class EditUserDataActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_data);
 
+        UserFileManager.initManager(this.getApplicationContext());
+
         user = (UserAccount) getIntent().getSerializableExtra("User");
 
         userEmail = (EditText) findViewById(R.id.editEmail);

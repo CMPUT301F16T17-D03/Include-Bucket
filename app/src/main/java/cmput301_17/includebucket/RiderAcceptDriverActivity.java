@@ -37,6 +37,9 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.accept_driver);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+
         request = (Request) getIntent().getSerializableExtra("Request");
 
         startTitle = (TextView) findViewById(R.id.startLocTextView);

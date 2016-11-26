@@ -24,7 +24,9 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         setContentView(R.layout.view_user_data);
 
 
-        driver = UserController.getUserAccount();
+        UserFileManager.initManager(this.getApplicationContext());
+
+        final UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
 
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
@@ -49,6 +51,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
 
                 request.setRequestStatus(Request.RequestStatus.Closed);
 
+                request.chooseDriver(driver);
+
                 request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
                 request.chooseDriver(driver);
                 DriverRequestsController.deleteRequest(request);
@@ -61,7 +65,9 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // the Driver has to see that the request is now closed and was confirmed by the rider
                 // i.e. "Confirmed by... [rider's login]"
                 // This is not the same as a notification
-                Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(ViewDriverDataActivity.this, "Request Confirmed", Toast.LENGTH_SHORT).show();
+
                 finish();
             }
         });

@@ -11,12 +11,15 @@ import android.widget.Button;
  */
 public class DriverProfileActivity extends MainMenuActivity {
 
-    UserAccount user = new UserAccount();
+    private UserAccount user = new UserAccount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_data);
+
+        UserFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         user = UserController.getUserAccount();
 
