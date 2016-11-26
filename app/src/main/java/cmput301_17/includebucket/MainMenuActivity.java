@@ -48,6 +48,8 @@ public class MainMenuActivity extends Activity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
+                UserController.logUserOut();
                 finish();
             }
         });

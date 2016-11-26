@@ -50,10 +50,7 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
-        userController.setContext(RiderCurrentRequestsActivity.this);
-
-        //user = UserController.getUserAccount();
+        RiderRequestsController.loadRequestsFromElasticSearch();
 
         requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();

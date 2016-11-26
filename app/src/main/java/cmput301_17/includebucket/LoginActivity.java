@@ -120,6 +120,7 @@ public class LoginActivity extends MainMenuActivity {
                     user = retrieveUser.get();
 
                     UserFileManager.getUserFileManager().saveUser(user);
+
                     UserAccount u = UserController.getUserAccount();
 
                     Log.i("HELLLO","This user is "+ u.getUniqueUserName());

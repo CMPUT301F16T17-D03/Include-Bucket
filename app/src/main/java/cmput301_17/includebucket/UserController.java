@@ -134,6 +134,13 @@ public class UserController {
     }
 
     /**
+     * Log the user out of the app.
+     */
+    public static void logUserOut() {
+        userAccount = null;
+    }
+
+    /**
      * Add user ride request ID's to riderRequests list.
      * @return
      */

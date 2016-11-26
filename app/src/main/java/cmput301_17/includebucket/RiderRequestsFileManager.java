@@ -18,8 +18,8 @@ import java.io.ObjectOutputStream;
  */
 public class RiderRequestsFileManager {
 
-    private static final String prefFile = "DRIVER_REQUESTS_FILE";
-    private static final String rrKey = "DRIVER_REQUESTS_KEY";
+    private static final String prefFile = "RIDER_REQUESTS_FILE";
+    private static final String rrKey = "RIDER_REQUESTS_KEY";
 
     private Context context;
 

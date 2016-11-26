@@ -124,7 +124,7 @@ public class RiderRequestsController {
     /**
      * Get list of current requests made by the rider.
      */
-    public static RequestList loadRequestsFromElasticSearch() {
+    public static void loadRequestsFromElasticSearch() {
 
         UserAccount user = UserController.getUserAccount();
 
@@ -136,14 +136,14 @@ public class RiderRequestsController {
 
         RequestList requestList = new RequestList();
         try {
-            requestList = riderList.get();
-            Log.i("SUCCESS","list size " + requestList.size());
+            requestList.getRequests().addAll(riderList.get());
+            riderRequests = requestList;
+            Log.i("SUCCESS","list size " + riderRequests.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return requestList;
     }
 
     /**
