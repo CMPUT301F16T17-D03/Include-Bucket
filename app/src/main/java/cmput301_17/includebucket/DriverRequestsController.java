@@ -138,8 +138,8 @@ public class DriverRequestsController {
 
         UserAccount user = UserController.getUserAccount();
 
-        ElasticsearchRequestController.GetRiderRequests driverList;
-        driverList = new ElasticsearchRequestController.GetRiderRequests();
+        ElasticsearchRequestController.GetDriverRequests driverList;
+        driverList = new ElasticsearchRequestController.GetDriverRequests();
         driverList.execute(user);
 
         Log.i("SUCCESS","Found " + user.getUniqueUserName());

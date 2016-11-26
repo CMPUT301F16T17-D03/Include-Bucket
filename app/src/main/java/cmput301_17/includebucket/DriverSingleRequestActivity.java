@@ -144,6 +144,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 createRequest.execute(request);
                 Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
 
+                //not sure what this does??
                 DriverRequestsController.loadOpenRequestsFromElasticsearch();
 
                 finish();

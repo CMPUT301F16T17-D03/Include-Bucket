@@ -16,8 +16,8 @@ import android.widget.Toast;
 public class ViewDriverDataActivity extends MainMenuActivity {
 
     private TextView loginTextView, emailTextView, phoneTextView;
-    private Button confirmButton;
-
+    private Button acceptButton;
+    private UserAccount driver = new UserAccount();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +31,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         loginTextView = (TextView) findViewById(R.id.loginTextView);
         emailTextView = (TextView) findViewById(R.id.emailTextView);
         phoneTextView = (TextView) findViewById(R.id.phoneTextView);
-        confirmButton = (Button) findViewById(R.id.confirmButton);
+        acceptButton = (Button) findViewById(R.id.confirmButton);
+
 
         String login = driver.getUniqueUserName();
         String email = driver.getEmail();
@@ -41,12 +42,13 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         emailTextView.setText(email);
         phoneTextView.setText(phone);
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 request.setRequestStatus(Request.RequestStatus.Closed);
                 request.chooseDriver(driver);
-                request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
+                request.setRiderAccepted(true);
+                request.clearDrivers();
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
@@ -57,7 +59,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // the Driver has to see that the request is now closed and was confirmed by the rider
                 // i.e. "Confirmed by... [rider's login]"
                 // This is not the same as a notification
-                Toast.makeText(ViewDriverDataActivity.this, "Request Confirmed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
+
                 finish();
             }
         });
