@@ -48,6 +48,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 request.setRequestStatus(Request.RequestStatus.Closed);
                 request.chooseDriver(driver);
                 request.setRiderAccepted(true);
+                request.clearDrivers();
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();

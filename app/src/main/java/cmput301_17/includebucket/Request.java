@@ -157,6 +157,10 @@ public class Request implements Serializable {
         this.pendingDrivers = pendingDrivers;
     }
 
+    public void clearDrivers(){
+        this.pendingDrivers.clear();
+    }
+
     public void addDriver(UserAccount driver){
         this.pendingDrivers.add(driver);
         notifyListeners();
