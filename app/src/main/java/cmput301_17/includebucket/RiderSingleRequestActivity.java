@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +39,7 @@ import java.util.ArrayList;
 public class RiderSingleRequestActivity extends MainMenuActivity implements MapEventsReceiver {
 
     private TextView requestTextView;
-
+    private Button completeButton;
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverListAdapter;
 
@@ -69,7 +71,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
         
         requestTextView = (TextView) findViewById(R.id.requestTextView);
-
+        completeButton = (Button) findViewById(R.id.completeRequestButton);
         Double price    = request.getFare();
         String startLoc = request.getStartLocation();
         String endLoc   = request.getEndLocation();
@@ -112,7 +114,15 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" + startLoc +
                 "\n"+startAddress+"\nEnd Location:\n" + endLoc + "\n"+endAddress+"\nRequest Description:\n" + story);
 
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
+                RiderRequestsController.deleteRequest(request);
+                RiderRequestsController.deleteRequestFromElasticsearch(request);
+                Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
     @Override
     public boolean longPressHelper(GeoPoint p) {
