@@ -185,10 +185,12 @@ public class LoginActivity extends MainMenuActivity {
         });
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
     }
+
 
     @Override
     protected void onStop() {
