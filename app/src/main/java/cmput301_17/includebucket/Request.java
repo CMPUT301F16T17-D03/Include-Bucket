@@ -213,6 +213,7 @@ public class Request implements Serializable {
 
         //String status = getRequestStatus().toString();
         String status = "open";
+
         if (hasRiderAccepted()){
             status = "Closed";
         }

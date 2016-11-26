@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Include-Bucket.iml" filepath="$PROJECT_DIR$/Include-Bucket.iml" />
-      <module fileurl="file://$PROJECT_DIR$/IncludeBucket.iml" filepath="$PROJECT_DIR$/IncludeBucket.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
