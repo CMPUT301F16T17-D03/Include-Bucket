@@ -21,9 +21,10 @@ public class UserAccount implements Serializable {
     private String uniqueUserName, email, phoneNumber;
     private String vehicleMake, vehicleModel, vehicleYear;
     private Boolean isLoggedIn;
-    //private ArrayList<Request> driverRequests = new ArrayList<>();
 
     private UserState userState;
+
+    protected ArrayList<Listener> listeners;
 
     /**
      * User can either be a rider or a driver.
@@ -32,7 +33,14 @@ public class UserAccount implements Serializable {
         rider, driver
     }
 
-    public UserAccount() {}
+    public UserAccount(){}
+
+    public UserAccount(String userLogin, String userEmail, String userPhone) {
+        this.uniqueUserName = userLogin;
+        this.email = userEmail;
+        this.phoneNumber = userPhone;
+        listeners = new ArrayList<>();
+    }
 
     /**
      * This is the constructor that creates a user with an id and sets its values.
@@ -47,6 +55,20 @@ public class UserAccount implements Serializable {
         this.vehicleMake = make;
         this.vehicleModel = model;
         this.vehicleYear = year;
+        listeners = new ArrayList<>();
+    }
+
+    private void notifyListeners() {
+        for (Listener listener : getListeners()) {
+            listener.update();
+        }
+    }
+
+    private ArrayList<Listener> getListeners() {
+        if (listeners == null) {
+            listeners = new ArrayList<>();
+        }
+        return listeners;
     }
 
     /**
@@ -63,6 +85,7 @@ public class UserAccount implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+        notifyListeners();
     }
 
 
@@ -99,6 +122,7 @@ public class UserAccount implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
+        notifyListeners();
     }
 
     /**
@@ -115,6 +139,7 @@ public class UserAccount implements Serializable {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        notifyListeners();
     }
 
     /**
@@ -166,7 +191,10 @@ public class UserAccount implements Serializable {
      * This changes the user's login status
      * @param status
      */
-    public void setLoginStatus(Boolean status) { this.isLoggedIn = status; }
+    public void setLoginStatus(Boolean status) {
+        this.isLoggedIn = status;
+        notifyListeners();
+    }
 
     /**
      * Gets the user category
@@ -182,6 +210,7 @@ public class UserAccount implements Serializable {
      */
     public void setUserState(UserState userState) {
         this.userState = userState;
+        notifyListeners();
     }
 
     public String getVehicleMake() {
@@ -190,6 +219,7 @@ public class UserAccount implements Serializable {
 
     public void setVehicleMake(String vehicleMake) {
         this.vehicleMake = vehicleMake;
+        notifyListeners();
     }
 
     public String getVehicleModel() {
@@ -198,6 +228,7 @@ public class UserAccount implements Serializable {
 
     public void setVehicleModel(String vehicleModel) {
         this.vehicleModel = vehicleModel;
+        notifyListeners();
     }
 
     public String getVehicleYear() {
@@ -206,10 +237,29 @@ public class UserAccount implements Serializable {
 
     public void setVehicleYear(String vehicleYear) {
         this.vehicleYear = vehicleYear;
+        notifyListeners();
     }
 
     @Override
     public String toString() {
         return getUniqueUserName() + "\n\n" + "\nEmail: " + getEmail() + "\nPhone: " + getPhoneNumber();
     }
+
+    public boolean equals(Object compareUserAccount) {
+        if (compareUserAccount != null &&
+                compareUserAccount.getClass()==this.getClass())
+        {
+            return this.equals((UserAccount)compareUserAccount);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void addListener(Listener l) {
+        getListeners().add(l);
+    }
+
+    public void removeListener(Listener l) { getListeners().remove(l); }
 }

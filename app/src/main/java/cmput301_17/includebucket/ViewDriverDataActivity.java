@@ -24,12 +24,15 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         setContentView(R.layout.view_user_data);
 
         driver = UserController.getUserAccount();
+        UserFileManager.initManager(this.getApplicationContext());
+
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
         loginTextView = (TextView) findViewById(R.id.loginTextView);
         emailTextView = (TextView) findViewById(R.id.emailTextView);
         phoneTextView = (TextView) findViewById(R.id.phoneTextView);
         acceptButton = (Button) findViewById(R.id.confirmButton);
+
 
         String login = driver.getUniqueUserName();
         String email = driver.getEmail();
@@ -43,8 +46,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 request.setRequestStatus(Request.RequestStatus.Closed);
-                request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
                 request.chooseDriver(driver);
+                request.setRiderAccepted(true);
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
@@ -56,6 +59,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // i.e. "Confirmed by... [rider's login]"
                 // This is not the same as a notification
                 Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
+
                 finish();
             }
         });

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.sql.Driver;
+
 /**
  *
  * MainMenuActivity
@@ -20,26 +22,22 @@ public class MainMenuActivity extends Activity {
 
     private UserAccount user;
     private UserController userController;
+    private RiderRequestsController riderController;
+    private DriverRequestsController driverController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
 
-        userController = new UserController();
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
-                userController.setContext(MainMenuActivity.this);
-
-                user = UserController.getUserAccount();
-                user.setUserState(UserAccount.UserState.rider);
-
-                UserController.saveUserAccountInLocalFile(user, userController.getContext());
-                UserController.loadUserAccountFromLocalFile();
 
                 Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
                 startActivity(intent);
@@ -50,8 +48,8 @@ public class MainMenuActivity extends Activity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                UserController.logUserOut(MainMenuActivity.this);
-                //RiderRequestsController.clearRiderRequests();
+
+                UserController.logUserOut();
                 finish();
             }
         });
@@ -61,13 +59,8 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(MainMenuActivity.this);
-
-                user = UserController.getUserAccount();
+                UserAccount user = UserController.getUserAccount();
                 user.setUserState(UserAccount.UserState.rider);
-                UserController.saveUserAccountInLocalFile(user, userController.getContext());
-                UserController.loadUserAccountFromLocalFile();
-                RiderRequestsController.loadRequestsFromElasticSearch();
 
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
                 startActivity(intent);
@@ -79,16 +72,7 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(MainMenuActivity.this);
-
-                user = UserController.getUserAccount();
-                user.setUserState(UserAccount.UserState.driver);
-
-                UserController.saveUserAccountInLocalFile(user, userController.getContext());
-                UserController.loadUserAccountFromLocalFile();
-
                 Intent intent = new Intent(MainMenuActivity.this, DriverBrowseRequestsActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -98,16 +82,7 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(MainMenuActivity.this);
-
-                user = UserController.getUserAccount();
-                user.setUserState(UserAccount.UserState.driver);
-
-                UserController.saveUserAccountInLocalFile(user, userController.getContext());
-                UserController.loadUserAccountFromLocalFile();
-
                 Intent intent = new Intent(MainMenuActivity.this, DriverCurrentRequestsActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -116,8 +91,8 @@ public class MainMenuActivity extends Activity {
         accountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
+
                 Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
-                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });

@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -44,16 +45,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_requests);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
-        userController.setContext(RiderCurrentRequestsActivity.this);
-
-        user = UserController.getUserAccount();
-
         RiderRequestsController.loadRequestsFromElasticSearch();
-
-        RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
         requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();
@@ -101,11 +98,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     protected void onResume() {
         super.onResume();
 
-        requests = RiderRequestsController.getRiderRequests().getRequests();
-        requestList = new ArrayList<>();
-        requestList.addAll(requests);
-        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
-        requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
 
         requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -122,13 +114,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                    //riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
-
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
-                    RiderRequestsController.loadRequestsFromElasticSearch();
-                    RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
                     requestList.remove(request);
                     requestsListView.setAdapter(requestAdapter);

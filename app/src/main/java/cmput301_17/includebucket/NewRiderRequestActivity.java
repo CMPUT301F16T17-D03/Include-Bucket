@@ -61,7 +61,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private LocationListener locationListener;
     private GeoPoint currentPoint;
     private String price;
-    private Collection<UserAccount> pendingDrivers;
+    private ArrayList<UserAccount> pendingDrivers;
     private Double roadLength;
 
     private UserAccount driver;
@@ -85,6 +85,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
+
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
 
         pendingDrivers = new ArrayList<>();
 
@@ -265,8 +268,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(NewRiderRequestActivity.this);
-                riderRequestsController.setContext(NewRiderRequestActivity.this);
+
 
                 String startLocation = startPoint.toString();
                 String endLocation = endPoint.toString();
@@ -288,13 +290,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 // Add to the local list
                 RiderRequestsController.addRiderRequest(request);
-
-                Collection<Request> requests = new RequestList();
-                requests.addAll(RiderRequestsController.getRiderRequests().getRequests());
-                RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
-
-                //user.getRiderRequestIds().add(requestId);
-                //UserController.updateUser(user);
 
                 finish();
             }
@@ -404,8 +399,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     @Override
     protected void onStop() {
         super.onStop();
-        RequestList requestList = RiderRequestsController.getRiderRequests();
-        RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
+        //RequestList requestList = RiderRequestsController.getRiderRequests();
+        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
     }
 
 

@@ -54,6 +54,10 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_request);
+
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */

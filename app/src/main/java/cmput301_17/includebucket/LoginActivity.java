@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * LoginActivity
  *
@@ -32,12 +34,17 @@ public class LoginActivity extends MainMenuActivity {
 
     /**
      * This method get permissions to run and deals with button presses.
+     *
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         userController = new UserController();
 
@@ -100,26 +107,33 @@ public class LoginActivity extends MainMenuActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            setResult(RESULT_OK);
+                setResult(RESULT_OK);
 
-            String textLogin  = userLogin.getText().toString();
+                ElasticsearchUserController.RetrieveUser retrieveUser;
+                retrieveUser = new ElasticsearchUserController.RetrieveUser();
+                retrieveUser.execute(userLogin.getText().toString());
 
-            foundUser = UserController.retrieveUserFromElasticSearch(userLogin.getText().toString());
-            requestList = new RequestList();
-            try {
-                String foundLogin = foundUser.getUniqueUserName();
+                UserAccount user = new UserAccount();
 
-                if (textLogin.equals(foundLogin))
-                {
-                    Log.i("Success", "User " + foundUser.getUniqueUserName() + " was found.");
+                try {
 
-                    Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                    startActivity(intent);
+                    user = retrieveUser.get();
+
+                    UserFileManager.getUserFileManager().saveUser(user);
+
+                    UserAccount u = UserController.getUserAccount();
+
+                    Log.i("HELLLO","This user is "+ u.getUniqueUserName());
+
+                    if (userLogin.getText().toString().equals(user.getUniqueUserName()))
+                    {
+                        Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
+                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                        startActivity(intent);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
                 }
-            }
-            catch (Exception e) {
-                Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
-            }
             }
         });
 
@@ -127,7 +141,7 @@ public class LoginActivity extends MainMenuActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -146,28 +160,23 @@ public class LoginActivity extends MainMenuActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // if you are inside the userLogin EditText and press enter, this runs
+                    ElasticsearchUserController.RetrieveUser retrieveUser;
+                    retrieveUser = new ElasticsearchUserController.RetrieveUser();
+                    retrieveUser.execute(userLogin.getText().toString());
 
-                    String textLogin  = userLogin.getText().toString();
-
-                    ElasticsearchUserController.RetrieveUser findUser;
-                    findUser = new ElasticsearchUserController.RetrieveUser();
-                    findUser.execute(userLogin.getText().toString());
+                    UserAccount user = new UserAccount();
 
                     try {
-                        UserAccount foundUser = findUser.get();
-                        String foundLogin = foundUser.getUniqueUserName();
 
-                        if (textLogin.equals(foundLogin))
+                        user = retrieveUser.get();
+
+                        if (userLogin.getText().toString().equals(user.getUniqueUserName()))
                         {
-                            Log.i("Success", "User " + textLogin + " was found.");
-
+                            Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
                             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                            intent.putExtra("User", foundUser);
                             startActivity(intent);
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -176,15 +185,14 @@ public class LoginActivity extends MainMenuActivity {
         });
     }
 
-
-    /**
-     * This saves the user in a local file, when exiting the view.
-     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        UserController.saveUserAccountInLocalFile(foundUser, LoginActivity.this);
-        //TODO handle the first registration
+
     }
 }

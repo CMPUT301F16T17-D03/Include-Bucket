@@ -1,6 +1,7 @@
 package cmput301_17.includebucket;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,11 +33,27 @@ public class UserController {
     private static UserAccount userAccount = null;
     private static final String USER_FILE  = "user.sav";
 
-    private static UserController controller = new UserController();
+    //private static UserController controller = new UserController();
 
     public static UserAccount getUserAccount() {
         if (userAccount == null) {
-            userAccount = loadUserAccountFromLocalFile();
+            try {
+                userAccount = UserFileManager.getUserFileManager().loadUser();
+                Log.i("what","This user is " + userAccount.getUniqueUserName());
+                userAccount.addListener(new Listener() {
+                    @Override
+                    public void update() {
+                        saveUserAccountInLocalFile();
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            }
         }
         return userAccount;
     }
@@ -64,55 +81,30 @@ public class UserController {
     }
 
     /**
-     * Update the user in Elasticsearch
-     * @param user
-     */
-    public static void updateUser(UserAccount user) {
-
-        UserAccount newUser = user;
-        //newUser.setRiderRequestIds(user.getRiderRequestIds());
-
-        // Delete old
-        deleteUserFromElasticSearch(user);
-
-        // Create new
-        createUserInElasticSearch(newUser);
-    }
-
-    /**
      * Retrieve user from Elasticsearch.
      * @return userAccount
      */
-    public static UserAccount retrieveUserFromElasticSearch(String userId) {
+    public static void loadUserFromElasticSearch(String userId) {
 
         ElasticsearchUserController.RetrieveUser retrieveUser;
         retrieveUser = new ElasticsearchUserController.RetrieveUser();
         retrieveUser.execute(userId);
 
-        UserAccount userAccount = new UserAccount();
         try {
-            userAccount = retrieveUser.get();
+            UserAccount user = retrieveUser.get();
+            userAccount = user;
+            Log.i("SUCCESS","Got " + user.getUniqueUserName());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return userAccount;
-    }
-
-    /**
-     * Log the user out of the app.
-     * @param context
-     */
-    public static void logUserOut(Context context) {
-        userAccount = null;
-        UserController.saveUserAccountInLocalFile(userAccount, context);
     }
 
     /**
      * This loads a user account from USER_FILE.
      */
-    public static UserAccount loadUserAccountFromLocalFile() {
+    /*public static void loadUserAccountFromLocalFile() {
 
         try {
             FileInputStream fis = controller.getContext().openFileInput(USER_FILE);
@@ -121,13 +113,10 @@ public class UserController {
             Gson gson = new Gson();
 
             Type listType = new TypeToken<UserAccount>() {}.getType();
-            return gson.fromJson(in, listType);
+            userAccount = gson.fromJson(in, listType);
         }
         catch (FileNotFoundException e) {
-            return new UserAccount();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
+            userAccount = new UserAccount();
         }
     }
 
@@ -135,23 +124,20 @@ public class UserController {
      * This saves a user account in to USER_FILE.
      * @param
      */
-    public static void saveUserAccountInLocalFile(UserAccount user, Context context) {
-
-        controller.setContext(context);
-
+    public static void saveUserAccountInLocalFile() {
         try {
-            FileOutputStream fos = context.openFileOutput(USER_FILE, 0);
-            OutputStreamWriter writer = new OutputStreamWriter(fos);
-            Gson gson = new Gson();
-            gson.toJson(user, writer);
-            writer.flush();
+            UserFileManager.getUserFileManager().saveUser(getUserAccount());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not deserialize User from UserFileManagaer");
         }
-        catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
-        }
+    }
+
+    /**
+     * Log the user out of the app.
+     */
+    public static void logUserOut() {
+        userAccount = null;
     }
 
     /**

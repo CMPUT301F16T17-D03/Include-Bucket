@@ -120,6 +120,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
+                    requestList = new RequestList();
                     Log.i("Error", "The search query did not match any requests in the database.");
                 }
             } catch (IOException e) {
@@ -159,6 +160,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
+                    requests = new RequestList();
                     Log.i("Error", rider[0].getUniqueUserName() + " The search query did not match any requests in the database.");
                 }
             }
@@ -219,9 +221,15 @@ public class ElasticsearchRequestController {
 
             RequestList requests = new RequestList();
 
-            //String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = "{\"from\": 0, \"size\": 10000," +
+            String search_string;
+
+            if (search_param[0].length() == 0)
+            {
+                search_string = "{\"from\": 0, \"size\": 10000}";
+            }
+            else search_string = "{\"from\": 0, \"size\": 10000," +
                     "\"query\": { \"match\": {\"riderStory\": \"" + search_param[0] + "\" }}}";
+
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")
@@ -237,6 +245,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
+                    requests = new RequestList();
                     Log.i("Error", "The search query did not match any requests in the database.");
                 }
             }
