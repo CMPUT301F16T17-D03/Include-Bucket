@@ -63,6 +63,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
         user = UserController.getUserAccount();
         driverController.setContext(DriverSingleRequestActivity.this);
         userController.setContext(DriverSingleRequestActivity.this);

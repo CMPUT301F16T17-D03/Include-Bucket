@@ -20,6 +20,9 @@ public class DriverProfileActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_data);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
         user = UserController.getUserAccount();
         driverController.setContext(DriverProfileActivity.this);
         userController.setContext(DriverProfileActivity.this);

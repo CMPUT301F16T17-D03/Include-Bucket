@@ -38,8 +38,21 @@ public class RiderRequestsController {
     public static RequestList getRiderRequests() {
 
         if (riderRequests == null) {
-            //riderRequests = getRequestsFromElasticSearch();
-            loadRequestsFromLocalFile();
+            try {
+                riderRequests = RiderRequestsFileManager.getRequestListFileManager().loadRequestList();
+                riderRequests.addListener(new Listener() {
+                    @Override
+                    public void update() {
+                        saveRequestsInLocalFile();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            }
         }
         return riderRequests;
     }
@@ -67,6 +80,13 @@ public class RiderRequestsController {
     public static void addRiderRequest(Request request) {
 
         getRiderRequests().addRequest(request);
+    }
+
+    /**
+     * Adds a bulk of requests to the list
+     */
+    public static void addBulkRequests(RequestList requestList) {
+        getRiderRequests().getRequests().addAll(requestList);
     }
 
     /**
@@ -104,7 +124,7 @@ public class RiderRequestsController {
     /**
      * Get list of current requests made by the rider.
      */
-    public static void loadRequestsFromElasticSearch() {
+    public static RequestList loadRequestsFromElasticSearch() {
 
         UserAccount user = UserController.getUserAccount();
 
@@ -116,14 +136,14 @@ public class RiderRequestsController {
 
         RequestList requestList = new RequestList();
         try {
-            requestList.getRequests().addAll(riderList.get());
-            riderRequests = requestList;
+            requestList = riderList.get();
             Log.i("SUCCESS","list size " + requestList.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        return requestList;
     }
 
     /**
@@ -149,31 +169,13 @@ public class RiderRequestsController {
      * This saves a request to USER_FILE.
      * @param
      */
-    public static void saveRequestInLocalFile(Collection<Request> requestList, Context context) {
-
-        controller.setContext(context);
+    public static void saveRequestsInLocalFile() {
 
         try {
-            FileOutputStream fos = context.openFileOutput(RIDER_REQUESTS_FILE, 0);
-            OutputStreamWriter writer = new OutputStreamWriter(fos);
-            Gson gson = new Gson();
-            gson.toJson(requestList, writer);
-            writer.flush();
+            RiderRequestsFileManager.getRequestListFileManager().saveRequestList(getRiderRequests());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManagaer");
         }
-        catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    /**
-     * Log the user out of the app.
-     * @param context
-     */
-    public static void clearRiderRequests(Context context) {
-        riderRequests = null;
-        RiderRequestsController.saveRequestInLocalFile(riderRequests, context);
     }
 }

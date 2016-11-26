@@ -35,7 +35,21 @@ public class DriverRequestsController {
     public static RequestList getDriverRequests() {
 
         if (driverRequests == null) {
-            loadRequestsFromLocalFile();
+            try {
+                driverRequests = DriverRequestsFileManager.getRequestListFileManager().loadRequestList();
+                driverRequests.addListener(new Listener() {
+                    @Override
+                    public void update() {
+                        saveRequestsInLocalFile();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            }
         }
         return driverRequests;
     }
@@ -187,25 +201,15 @@ public class DriverRequestsController {
     }
 
     /**
-     * This saves a request to USER_FILE.
+     * This saves a request to DRIVER_REQUESTS_FILE.
      * @param
      */
-    public static void saveRequestInLocalFile(Collection<Request> requestList, Context context) {
-
-        controller.setContext(context);
-
+    public static void saveRequestsInLocalFile() {
         try {
-            FileOutputStream fos = context.openFileOutput(DRIVER_REQUESTS_FILE, 0);
-            OutputStreamWriter writer = new OutputStreamWriter(fos);
-            Gson gson = new Gson();
-            gson.toJson(requestList, writer);
-            writer.flush();
-        }
-        catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
+            DriverRequestsFileManager.getRequestListFileManager().saveRequestList(getDriverRequests());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManagaer");
         }
     }
 

@@ -45,16 +45,15 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_requests);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
         riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
         userController.setContext(RiderCurrentRequestsActivity.this);
 
-        user = UserController.getUserAccount();
-
-        RiderRequestsController.loadRequestsFromElasticSearch();
-
-        RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
+        //user = UserController.getUserAccount();
 
         requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();
@@ -125,8 +124,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
-                    RiderRequestsController.loadRequestsFromElasticSearch();
-                    RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
+                    //RiderRequestsController.loadRequestsFromElasticSearch();
+                    //RiderRequestsController.saveRequestInLocalFile(RiderRequestsController.getRiderRequests().getRequests(), RiderCurrentRequestsActivity.this);
 
                     requestList.remove(request);
                     requestsListView.setAdapter(requestAdapter);

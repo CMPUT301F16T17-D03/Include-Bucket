@@ -30,24 +30,14 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
 
-        userController = new UserController();
-        riderController = new RiderRequestsController();
-        driverController = new DriverRequestsController();
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
-                userController.setContext(MainMenuActivity.this);
-                riderController.setContext(MainMenuActivity.this);
-                driverController.setContext(MainMenuActivity.this);
-
-                //user = UserController.getUserAccount();
-                //user.setUserState(UserAccount.UserState.rider);
-
-                //UserController.saveUserAccountInLocalFile(user, userController.getContext());
-                //UserController.loadUserAccountFromLocalFile();
 
                 Intent intent = new Intent(MainMenuActivity.this, NewRiderRequestActivity.class);
                 startActivity(intent);
@@ -58,8 +48,6 @@ public class MainMenuActivity extends Activity {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                UserController.logUserOut(MainMenuActivity.this);
-                //RiderRequestsController.clearRiderRequests();
                 finish();
             }
         });
@@ -68,17 +56,6 @@ public class MainMenuActivity extends Activity {
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
-                userController.setContext(MainMenuActivity.this);
-                riderController.setContext(MainMenuActivity.this);
-                driverController.setContext(MainMenuActivity.this);
-
-
-                user = UserController.getUserAccount();
-                //user.setUserState(UserAccount.UserState.rider);
-                UserController.saveUserAccountInLocalFile(user, MainMenuActivity.this);
-                //UserController.loadUserAccountFromLocalFile();
-                RiderRequestsController.loadRequestsFromElasticSearch();
 
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
                 startActivity(intent);
@@ -90,21 +67,7 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(MainMenuActivity.this);
-                riderController.setContext(MainMenuActivity.this);
-                driverController.setContext(MainMenuActivity.this);
-
-                user = UserController.getUserAccount();
-                //
-                // user.setUserState(UserAccount.UserState.driver);
-
-                UserController.saveUserAccountInLocalFile(user, MainMenuActivity.this);
-                UserController.loadUserAccountFromLocalFile();
-                DriverRequestsController.loadOpenRequestsFromElasticsearch();
-                DriverRequestsController.saveRequestInLocalFile(DriverRequestsController.getDriverRequests().getRequests(), driverController.getContext());
-
                 Intent intent = new Intent(MainMenuActivity.this, DriverBrowseRequestsActivity.class);
-                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -114,20 +77,7 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(MainMenuActivity.this);
-                riderController.setContext(MainMenuActivity.this);
-                driverController.setContext(MainMenuActivity.this);
-
-                user = UserController.getUserAccount();
-                user.setUserState(UserAccount.UserState.driver);
-
-                UserController.saveUserAccountInLocalFile(user, MainMenuActivity.this);
-                UserController.loadUserAccountFromLocalFile();
-                DriverRequestsController.loadOpenRequestsFromElasticsearch();
-                DriverRequestsController.saveRequestInLocalFile(DriverRequestsController.getDriverRequests().getRequests(), driverController.getContext());
-
                 Intent intent = new Intent(MainMenuActivity.this, DriverCurrentRequestsActivity.class);
-                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -137,12 +87,7 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(MainMenuActivity.this);
-                riderController.setContext(MainMenuActivity.this);
-                driverController.setContext(MainMenuActivity.this);
-
                 Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
-                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });

@@ -32,6 +32,10 @@ public class RegisterActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
         userLogin = (EditText) findViewById(R.id.loginTextField);
         userEmail = (EditText) findViewById(R.id.emailTextField);
         userPhone = (EditText) findViewById(R.id.phoneTextField);
@@ -78,7 +82,6 @@ public class RegisterActivity extends MainMenuActivity {
                     UserController.createUserInElasticSearch(user);
 
                     controller.setContext(RegisterActivity.this);
-                    UserController.saveUserAccountInLocalFile(user, RegisterActivity.this);
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");
 

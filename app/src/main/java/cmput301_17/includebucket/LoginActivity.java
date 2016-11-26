@@ -42,6 +42,10 @@ public class LoginActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
         userController = new UserController();
 
         if (ContextCompat.checkSelfPermission(this,
@@ -115,11 +119,14 @@ public class LoginActivity extends MainMenuActivity {
 
                     user = retrieveUser.get();
 
+                    UserFileManager.getUserFileManager().saveUser(user);
+                    UserAccount u = UserController.getUserAccount();
+
+                    Log.i("HELLLO","This user is "+ u.getUniqueUserName());
+
                     if (userLogin.getText().toString().equals(user.getUniqueUserName()))
                     {
-                        userController.setContext(getApplicationContext());
                         Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
-                        UserController.saveUserAccountInLocalFile(user, getApplicationContext());
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
                     }
@@ -165,7 +172,6 @@ public class LoginActivity extends MainMenuActivity {
                         if (userLogin.getText().toString().equals(user.getUniqueUserName()))
                         {
                             Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
-                            UserController.saveUserAccountInLocalFile(user, getApplicationContext());
                             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                             startActivity(intent);
                         }

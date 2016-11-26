@@ -52,6 +52,9 @@ public class Request implements Serializable {
      */
     public Request() {}
 
+    public Request(String story) {
+        this.riderStory = story;
+    }
     /**
      * Intantiates a new Request.
      * @param loc1  The start location

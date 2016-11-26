@@ -33,13 +33,27 @@ public class UserController {
     private static UserAccount userAccount = null;
     private static final String USER_FILE  = "user.sav";
 
-    private static UserController controller = new UserController();
-
-
+    //private static UserController controller = new UserController();
 
     public static UserAccount getUserAccount() {
         if (userAccount == null) {
-            loadUserAccountFromLocalFile();
+            try {
+                userAccount = UserFileManager.getUserFileManager().loadUser();
+                Log.i("what","This user is " + userAccount.getUniqueUserName());
+                userAccount.addListener(new Listener() {
+                    @Override
+                    public void update() {
+                        saveUserAccountInLocalFile();
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManager");
+            }
         }
         return userAccount;
     }
@@ -88,18 +102,9 @@ public class UserController {
     }
 
     /**
-     * Log the user out of the app.
-     * @param context
-     */
-    public static void logUserOut(Context context) {
-        userAccount = null;
-        UserController.saveUserAccountInLocalFile(userAccount, context);
-    }
-
-    /**
      * This loads a user account from USER_FILE.
      */
-    public static void loadUserAccountFromLocalFile() {
+    /*public static void loadUserAccountFromLocalFile() {
 
         try {
             FileInputStream fis = controller.getContext().openFileInput(USER_FILE);
@@ -119,20 +124,12 @@ public class UserController {
      * This saves a user account in to USER_FILE.
      * @param
      */
-    public static void saveUserAccountInLocalFile(UserAccount user, Context context) {
-
+    public static void saveUserAccountInLocalFile() {
         try {
-            FileOutputStream fos = context.openFileOutput(USER_FILE, 0);
-            OutputStreamWriter writer = new OutputStreamWriter(fos);
-            Gson gson = new Gson();
-            gson.toJson(user, writer);
-            writer.flush();
-        }
-        catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        }
-        catch (IOException e) {
-            throw new RuntimeException();
+            UserFileManager.getUserFileManager().saveUser(getUserAccount());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not deserialize User from UserFileManagaer");
         }
     }
 

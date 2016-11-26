@@ -31,6 +31,7 @@ public class ViewUserDataActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_user_data);
 
+        UserFileManager.initManager(this.getApplicationContext());
         user = (UserAccount) getIntent().getSerializableExtra("User");
 
 

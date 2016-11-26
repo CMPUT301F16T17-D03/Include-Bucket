@@ -1,5 +1,7 @@
 package cmput301_17.includebucket;
 
+import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.List;
 public class RequestList extends ArrayList implements Serializable {
 
     protected Collection<Request> requestList = null;
-    protected transient Collection<Listener> listeners = null;
+    protected transient ArrayList<Listener> listeners = null;
 
     /**
      * This constructor creates a new empty request list.
@@ -34,7 +36,7 @@ public class RequestList extends ArrayList implements Serializable {
         }
     }
 
-    private Collection<Listener> getListeners() {
+    private ArrayList<Listener> getListeners() {
         if (listeners == null) {
             listeners = new ArrayList<>();
         }
@@ -66,8 +68,8 @@ public class RequestList extends ArrayList implements Serializable {
     }
 
     public void addListener(Listener l) {
-        listeners.add(l);
+        getListeners().add(l);
     }
 
-    public void removeListener(Listener l) { listeners.remove(l); }
+    public void removeListener(Listener l) { getListeners().remove(l); }
 }

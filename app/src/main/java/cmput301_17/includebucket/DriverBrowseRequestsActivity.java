@@ -45,6 +45,9 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_requests);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
         keyword = (EditText) findViewById(R.id.keyword);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
 
@@ -54,10 +57,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         user = UserController.getUserAccount();
 
         DriverRequestsController.loadOpenRequestsFromElasticsearch();
-
-        DriverRequestsController.saveRequestInLocalFile(
-                DriverRequestsController.getDriverRequests().getRequests(),
-                DriverBrowseRequestsActivity.this);
 
         requests = DriverRequestsController.getDriverRequests().getRequests();
         requestList = new ArrayList<>();

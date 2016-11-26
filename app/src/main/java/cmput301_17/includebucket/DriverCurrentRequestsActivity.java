@@ -29,6 +29,9 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_requests);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        DriverRequestsFileManager.initManager(this.getApplicationContext());
+
         requestsListView = (ListView) findViewById(R.id.driverCurrentList);
 
         driverRequestsController.setContext(DriverCurrentRequestsActivity.this);
@@ -37,8 +40,6 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
         user = UserController.getUserAccount();
 
         DriverRequestsController.loadOpenRequestsFromElasticsearch();
-
-        DriverRequestsController.saveRequestInLocalFile(DriverRequestsController.getDriverRequests().getRequests(), DriverCurrentRequestsActivity.this);
 
         requests = DriverRequestsController.getDriverRequests().getRequests();
         requestList = new ArrayList<>();

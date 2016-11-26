@@ -86,6 +86,9 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
 
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+
         pendingDrivers = new ArrayList<>();
 
         user = UserController.getUserAccount();
@@ -265,8 +268,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                userController.setContext(NewRiderRequestActivity.this);
-                riderRequestsController.setContext(NewRiderRequestActivity.this);
+
 
                 String startLocation = startPoint.toString();
                 String endLocation = endPoint.toString();
@@ -288,10 +290,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 // Add to the local list
                 RiderRequestsController.addRiderRequest(request);
-
-                Collection<Request> requests = new RequestList();
-                requests.addAll(RiderRequestsController.getRiderRequests().getRequests());
-                RiderRequestsController.saveRequestInLocalFile(requests, NewRiderRequestActivity.this);
 
                 finish();
             }

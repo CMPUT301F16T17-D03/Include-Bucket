@@ -23,6 +23,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_user_data);
 
+        UserFileManager.initManager(this.getApplicationContext());
+
         final UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
