@@ -30,7 +30,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
     private String key;
     private EditText keyword;
-    private boolean keywordFound = Boolean.FALSE;
     private ListView browseRequestList;
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;

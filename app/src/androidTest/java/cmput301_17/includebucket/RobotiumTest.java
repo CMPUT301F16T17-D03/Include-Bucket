@@ -84,7 +84,7 @@ public class RobotiumTest {
         solo.clickOnButton("Login");
         //view requests
         solo.clickOnButton("MyRequests");
-        solo.assertCurrentActivity("Not In Correct Activity", RiderBrowseRequestsActivity.class); //name might need to be changed
+        solo.assertCurrentActivity("Not In Correct Activity", RiderCurrentRequestsActivity.class); //name might need to be changed
     }
     @Test
     public void testNotifyRequestAccepted() throws Exception {
