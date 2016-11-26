@@ -29,7 +29,7 @@ public class ViewUserDataActivity extends MainMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_user_data);
+        setContentView(R.layout.view_driver_data);
 
         UserFileManager.initManager(this.getApplicationContext());
         user = (UserAccount) getIntent().getSerializableExtra("User");

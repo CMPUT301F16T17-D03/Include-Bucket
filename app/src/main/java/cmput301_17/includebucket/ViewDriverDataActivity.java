@@ -2,11 +2,17 @@ package cmput301_17.includebucket;
 
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * ViewDriverDataActivity
@@ -15,13 +21,13 @@ import android.widget.Toast;
  */
 public class ViewDriverDataActivity extends MainMenuActivity {
 
-    private TextView loginTextView, emailTextView, phoneTextView;
-    private Button acceptButton;
+    private TextView loginTextView;
+    private Button acceptButton, emailButton, phoneButton;
     private UserAccount driver = new UserAccount();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_user_data);
+        setContentView(R.layout.view_driver_data);
 
 
         UserFileManager.initManager(this.getApplicationContext());
@@ -31,8 +37,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
         loginTextView = (TextView) findViewById(R.id.loginTextView);
-        emailTextView = (TextView) findViewById(R.id.emailTextView);
-        phoneTextView = (TextView) findViewById(R.id.phoneTextView);
+        emailButton = (Button) findViewById(R.id.emailTextView);
+        phoneButton = (Button) findViewById(R.id.phoneTextView);
 
         acceptButton = (Button) findViewById(R.id.confirmButton);
 
@@ -42,8 +48,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         String phone = driver.getPhoneNumber();
 
         loginTextView.setText(login);
-        emailTextView.setText(email);
-        phoneTextView.setText(phone);
+        emailButton.setText(email);
+        phoneButton.setText(phone);
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -70,6 +76,32 @@ public class ViewDriverDataActivity extends MainMenuActivity {
 
                 finish();
             }
+
+
         });
+
+        emailButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {driver.getEmail()});
+                startActivity(intent);
+
+            }
+        });
+
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + driver.getPhoneNumber()));
+                startActivity(intent);
+
+            }
+        });
+
     }
 }
