@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Activity for viewing current requests a driver is involved in
+ * Activity for viewing current requests a driver is involved in.
  */
 public class DriverCurrentRequestsActivity extends MainMenuActivity {
 
@@ -35,12 +35,16 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        requests = DriverRequestsController.getDriverRequests(); // Get all requests
+        DriverRequestsController.loadOpenRequestsFromElasticsearch();
+
+        DriverRequestsController.saveRequestInLocalFile(DriverRequestsController.getDriverRequests().getRequests(), DriverCurrentRequestsActivity.this);
+
+        requests = DriverRequestsController.getDriverRequests().getRequests();
         requestList = new ArrayList<>();
         requestList.addAll(requests);
-
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
+        requestAdapter.notifyDataSetChanged();
 
         DriverRequestsController.getDriverRequests().addListener(new Listener() {
             @Override
@@ -56,5 +60,14 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        requestAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        requestAdapter.notifyDataSetChanged();
     }
 }

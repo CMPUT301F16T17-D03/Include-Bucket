@@ -35,20 +35,23 @@ import java.util.ArrayList;
  */
 public class DriverSingleRequestActivity extends Activity implements MapEventsReceiver {
 
-    TextView startEditText;
-    TextView endEditText;
-    TextView priceEditText;
-    TextView storyText;
-    Marker startMarker;
-    Marker endMarker;
-    GeoPoint startPoint;
-    GeoPoint endPoint;
-    MapView map;
-    RoadManager roadManager;
-    UserAccount user = new UserAccount();
-    Request request = new Request();
+    private TextView startEditText;
+    private TextView endEditText;
+    private TextView priceEditText;
+    private TextView storyText;
+    private Marker startMarker;
+    private Marker endMarker;
+    private GeoPoint startPoint;
+    private GeoPoint endPoint;
+    private MapView map;
+    private RoadManager roadManager;
+    private Request request = new Request();
     private ArrayList<UserAccount> drivers;
     private UserAccount driver;
+
+    private UserAccount user = new UserAccount();
+    private UserController userController = new UserController();
+    private DriverRequestsController driverController = new DriverRequestsController();
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -60,9 +63,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_single_request_activity);
 
-        //user = UserController.getUserAccount();
-        user = (UserAccount) getIntent().getSerializableExtra("User");
+        user = UserController.getUserAccount();
+        driverController.setContext(DriverSingleRequestActivity.this);
+        userController.setContext(DriverSingleRequestActivity.this);
         request = (Request) getIntent().getSerializableExtra("Request");
+
         drivers= new ArrayList<UserAccount>();
         driver = new UserAccount();
 

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.sql.Driver;
+
 /**
  * The view for the main menu
  *
@@ -17,6 +19,8 @@ public class MainMenuActivity extends Activity {
 
     private UserAccount user;
     private UserController userController;
+    private RiderRequestsController riderController;
+    private DriverRequestsController driverController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +28,17 @@ public class MainMenuActivity extends Activity {
         setContentView(R.layout.mainmenu);
 
         userController = new UserController();
+        riderController = new RiderRequestsController();
+        driverController = new DriverRequestsController();
+
+        userController.setContext(MainMenuActivity.this);
+        riderController.setContext(MainMenuActivity.this);
+        driverController.setContext(MainMenuActivity.this);
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
-                userController.setContext(MainMenuActivity.this);
 
                 user = UserController.getUserAccount();
                 user.setUserState(UserAccount.UserState.rider);
@@ -83,9 +91,11 @@ public class MainMenuActivity extends Activity {
 
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
+                DriverRequestsController.loadOpenRequestsFromElasticsearch();
+                DriverRequestsController.saveRequestInLocalFile(DriverRequestsController.getDriverRequests().getRequests(), driverController.getContext());
 
                 Intent intent = new Intent(MainMenuActivity.this, DriverBrowseRequestsActivity.class);
-                intent.putExtra("User", user);
+                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -102,9 +112,11 @@ public class MainMenuActivity extends Activity {
 
                 UserController.saveUserAccountInLocalFile(user, userController.getContext());
                 UserController.loadUserAccountFromLocalFile();
+                DriverRequestsController.loadOpenRequestsFromElasticsearch();
+                DriverRequestsController.saveRequestInLocalFile(DriverRequestsController.getDriverRequests().getRequests(), driverController.getContext());
 
                 Intent intent = new Intent(MainMenuActivity.this, DriverCurrentRequestsActivity.class);
-                intent.putExtra("User", user);
+                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });
@@ -114,7 +126,7 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
-                intent.putExtra("User", user);
+                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });

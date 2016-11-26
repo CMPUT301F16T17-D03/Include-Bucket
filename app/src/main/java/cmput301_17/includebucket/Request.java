@@ -45,7 +45,7 @@ public class Request implements Serializable {
         Open, Accepted, Pending, Closed
     }
 
-    private RequestStatus requestStatus;
+    private RequestStatus requestStatus = RequestStatus.Open;
 
     /**
      * The empty constructor.

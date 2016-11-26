@@ -104,11 +104,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     protected void onResume() {
         super.onResume();
 
-        requests = RiderRequestsController.getRiderRequests().getRequests();
-        requestList = new ArrayList<>();
-        requestList.addAll(requests);
-        requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
-        requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
 
         requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -124,8 +119,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                    //riderRequestsController.setContext(RiderCurrentRequestsActivity.this);
 
                     Request request = requestList.get(finalPosition);
                     RiderRequestsController.deleteRequest(request);

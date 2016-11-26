@@ -120,6 +120,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
+                    requestList = new RequestList();
                     Log.i("Error", "The search query did not match any requests in the database.");
                 }
             } catch (IOException e) {
@@ -159,6 +160,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
+                    requests = new RequestList();
                     Log.i("Error", rider[0].getUniqueUserName() + " The search query did not match any requests in the database.");
                 }
             }
@@ -237,6 +239,7 @@ public class ElasticsearchRequestController {
                 }
                 else
                 {
+                    requests = new RequestList();
                     Log.i("Error", "The search query did not match any requests in the database.");
                 }
             }

@@ -3,6 +3,17 @@ package cmput301_17.includebucket;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
@@ -14,12 +25,15 @@ public class DriverRequestsController {
 
     private Context context;
 
+    private static DriverRequestsController controller = new DriverRequestsController();
+
     private static RequestList driverRequests = null;
+    private static final String DRIVER_REQUESTS_FILE = "driver_requests.sav";
 
     public static RequestList getDriverRequests() {
 
         if (driverRequests == null) {
-            driverRequests = getOpenRequests();
+            loadRequestsFromLocalFile();
         }
         return driverRequests;
     }
@@ -46,10 +60,6 @@ public class DriverRequestsController {
      */
     public static void addRequest(Request request) {
 
-        ElasticsearchRequestController.CreateRequest createRequest;
-        createRequest = new ElasticsearchRequestController.CreateRequest();
-        createRequest.execute(request);
-
         getDriverRequests().addRequest(request);
     }
 
@@ -59,66 +69,94 @@ public class DriverRequestsController {
      */
     public static void deleteRequest(Request request) {
 
-        ElasticsearchRequestController.DeleteRequest deleteRequest;
-        deleteRequest = new ElasticsearchRequestController.DeleteRequest();
-        deleteRequest.execute(request);
-
         getDriverRequests().deleteRequest(request);
     }
 
     /**
-     * Get open requests
+     * This adds a request to Elasticsearch.
+     * @param request
      */
-    public static RequestList getOpenRequests() {
+    public static void addRequestToElasticsearch(Request request) {
 
-        UserAccount user = UserController.getUserAccount();
-        RequestList requests = new RequestList();
+        ElasticsearchRequestController.CreateRequest createRequest;
+        createRequest = new ElasticsearchRequestController.CreateRequest();
+        createRequest.execute(request);
+    }
+
+    /**
+     * This deletes a request from Elasticsearch.
+     * @param request
+     */
+    public static void deleteRequestFromElasticsearch(Request request) {
+
+        ElasticsearchRequestController.DeleteRequest deleteRequest;
+        deleteRequest = new ElasticsearchRequestController.DeleteRequest();
+        deleteRequest.execute(request);
+        Log.i("FAIL", "This is " + request.getRequestID());
+    }
+
+    /**
+     * Gets open requests.
+     */
+    public static void loadOpenRequestsFromElasticsearch() {
 
         // Get ALL the open requests from the server
         ElasticsearchRequestController.GetOpenRequests openRequests;
         openRequests = new ElasticsearchRequestController.GetOpenRequests();
         openRequests.execute("");
 
+        RequestList requestList = new RequestList();
         try {
-            requests = openRequests.get();
+            requestList.getRequests().addAll(openRequests.get());
+            driverRequests = requestList;
+            Log.i("SUCCESS","list size " + requestList.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return requests;
     }
 
     /**
-     * TODO Get list of current requests the driver is involved in.
+     * Gets a list of requests the driver is involved in.
      */
-    public static RequestList getDriverInvolvedRequests() {
+    public static void loadInvolvedRequestsFromElasticsearch() {
 
         UserAccount user = UserController.getUserAccount();
+
+        ElasticsearchRequestController.GetRiderRequests driverList;
+        driverList = new ElasticsearchRequestController.GetRiderRequests();
+        driverList.execute(user);
+
+        Log.i("SUCCESS","Found " + user.getUniqueUserName());
+
         RequestList requestList = new RequestList();
-
-        // Get ALL the requests from the server
-        ElasticsearchRequestController.GetDriverRequests driverRequests;
-        driverRequests = new ElasticsearchRequestController.GetDriverRequests();
-        driverRequests.execute(user);
-
-        return requestList;
+        try {
+            requestList.getRequests().addAll(driverList.get());
+            driverRequests = requestList;
+            Log.i("SUCCESS","list size " + requestList.size());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * This returns a list of requests from ElasticSearch specified by a keyword.
      * @return requests
      */
-    public static RequestList getRequestsByKeyword(String keyword) {
+    public static RequestList loadRequestsByKeyword(String keyword) {
 
-        ElasticsearchRequestController.GetKeywordList retrieveRequests;
-        retrieveRequests = new ElasticsearchRequestController.GetKeywordList();
-        retrieveRequests.execute(keyword);
+        ElasticsearchRequestController.GetKeywordList requestList;
+        requestList = new ElasticsearchRequestController.GetKeywordList();
+        requestList.execute(keyword);
 
         RequestList requests = new RequestList();
-
         try {
-            requests = retrieveRequests.get();
+            requests.getRequests().addAll(requestList.get());
+            driverRequests = requests;
+            Log.i("SUCCESS","keyword list size " + requests.get(0).getRiderStory());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -126,4 +164,50 @@ public class DriverRequestsController {
         }
         return requests;
     }
+
+    /**
+     * This loads requests from DRIVER_REQUESTS_FILE.
+     */
+    public static void loadRequestsFromLocalFile() {
+
+        try {
+            FileInputStream fis = controller.getContext().openFileInput(DRIVER_REQUESTS_FILE);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+
+            Type listType = new TypeToken<RequestList>() {}.getType();
+            driverRequests = gson.fromJson(in, listType);
+        }
+        catch (FileNotFoundException e) {
+            driverRequests = new RequestList();
+        }
+        catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    /**
+     * This saves a request to USER_FILE.
+     * @param
+     */
+    public static void saveRequestInLocalFile(Collection<Request> requestList, Context context) {
+
+        controller.setContext(context);
+
+        try {
+            FileOutputStream fos = context.openFileOutput(DRIVER_REQUESTS_FILE, 0);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new Gson();
+            gson.toJson(requestList, writer);
+            writer.flush();
+        }
+        catch (FileNotFoundException e) {
+            throw new RuntimeException();
+        }
+        catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
 }
