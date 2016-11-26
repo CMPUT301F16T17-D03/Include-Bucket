@@ -23,7 +23,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_user_data);
 
-        UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
+        final UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
         loginTextView = (TextView) findViewById(R.id.loginTextView);
@@ -43,6 +43,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 request.setRequestStatus(Request.RequestStatus.Closed);
+                request.chooseDriver(driver);
                 request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
                 DriverRequestsController.deleteRequest(request);
                 ElasticsearchRequestController.CreateRequest createRequest;
