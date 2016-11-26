@@ -14,6 +14,7 @@ public class RequestListFileManagerTest extends AndroidTestCase {
     /**
      * Tests that a request was written to file correctly
      */
+    /*
     @Test
     public void requestListFileManager() {
         try {
@@ -49,6 +50,6 @@ public class RequestListFileManagerTest extends AndroidTestCase {
             e.printStackTrace();
             assertTrue("ClasNotFoundException " +e,false);
         }
-    }
+    } */
 }
 
