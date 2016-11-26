@@ -211,8 +211,7 @@ public class Request implements Serializable {
     @Override
     public String toString() {
 
-        //String status = getRequestStatus().toString();
-        String status = "open";
+        String status = "Open";
 
         if (hasRiderAccepted()){
             status = "Closed";
