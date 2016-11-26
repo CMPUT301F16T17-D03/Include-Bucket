@@ -33,7 +33,7 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        DriverRequestsController.loadOpenRequestsFromElasticsearch();
+        DriverRequestsController.loadInvolvedRequestsFromElasticsearch();
 
         requests = DriverRequestsController.getDriverRequests().getRequests();
         requestList = new ArrayList<>();

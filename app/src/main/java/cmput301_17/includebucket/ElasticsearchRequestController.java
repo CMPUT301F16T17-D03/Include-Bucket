@@ -181,10 +181,11 @@ public class ElasticsearchRequestController {
 
             RequestList requests = new RequestList();
 
-            //String search_string = "{\"from\": 0, \"size\": 10000}";
             String search_string =
-                    "{\"from\": 0,\"size\": 10000," +
-                        "\"query\": { \"match\": { \"driver.uniqueUserName\": \"" + driver[0].getUniqueUserName() + "\"}}}";
+                        "{\"query\": { \"bool\": { \"should\": [{\"term\": {\"driver.uniqueUserName\": \""
+                                + driver[0].getUniqueUserName() +
+                                "\"}},{\"term\": {\"pendingDrivers.uniqueUserName\":\""
+                                + driver[0].getUniqueUserName() + "\"}}]}}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
