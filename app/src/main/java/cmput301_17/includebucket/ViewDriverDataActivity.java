@@ -42,7 +42,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                request.setRequestStatus(Request.RequestStatus.Pending);
+                request.setRequestStatus(Request.RequestStatus.Closed);
                 request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
                 request.chooseDriver(driver);
                 DriverRequestsController.deleteRequest(request);
