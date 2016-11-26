@@ -1,8 +1,11 @@
 package cmput301_17.includebucket;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -33,6 +36,8 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     private ArrayAdapter<Request> requestAdapter;
     private Collection<Request> requests;
     private UserAccount user = new UserAccount();
+    private ConnectivityManager connectivityManager;
+    private boolean connected;
 
     /**
      * Controls the list of requests and handles button clicks.
@@ -51,7 +56,25 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
         user = UserController.getUserAccount();
 
-        DriverRequestsController.loadOpenRequestsFromElasticsearch();
+        /**
+         * Taken from: http://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
+         * Accessed: November 26, 2016
+         * Author: binnyb
+         */
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+        {
+            connected = true;
+        }
+        else connected = false;
+
+
+        if (connected)
+        {
+            DriverRequestsController.loadOpenRequestsFromElasticsearch();
+        }
 
         requests = DriverRequestsController.getDriverRequests().getRequests();
         requestList = new ArrayList<>();
