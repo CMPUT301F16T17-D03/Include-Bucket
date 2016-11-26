@@ -1,10 +1,17 @@
 package cmput301_17.includebucket;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.net.ConnectivityManagerCompat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import android.content.Intent;
@@ -28,13 +35,13 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     private ArrayAdapter<Request> requestAdapter;
     private Collection<Request> requests;
 
-    private RiderRequestsController riderRequestsController = new RiderRequestsController();
-    private UserController userController = new UserController();
     private UserAccount user = new UserAccount();
 
-    boolean connected;
+    private ConnectivityManager connectivityManager;
 
-    final String adbMessage = "Click More button for details.";
+    boolean connected, messageSeen;
+
+    private final String adbMessage = "Click More button for details.";
 
     /**
      * This deals with viewing the current requests and updates  when a request is added or deleted.
@@ -48,9 +55,29 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         UserFileManager.initManager(this.getApplicationContext());
         RiderRequestsFileManager.initManager(this.getApplicationContext());
 
+
+
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
-        RiderRequestsController.loadRequestsFromElasticSearch();
+        /**
+         * Taken from: http://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
+         * Accessed: November 26, 2016
+         * Author: binnyb
+         */
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+        {
+            connected = true;
+        }
+        else connected = false;
+
+
+        if (connected)
+        {
+            RiderRequestsController.loadRequestsFromElasticSearch();
+        }
 
         requests = RiderRequestsController.getRiderRequests().getRequests();
         requestList = new ArrayList<>();
@@ -109,7 +136,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 adb.setCancelable(true);
                 final int finalPosition = position;
 
-                // Add Delete button to delete the request invoked
                 adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

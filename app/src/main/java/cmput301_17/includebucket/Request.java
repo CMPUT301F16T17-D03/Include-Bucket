@@ -74,7 +74,7 @@ public class Request implements Serializable {
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
-        requestStatus = RequestStatus.Open;
+        this.requestStatus = RequestStatus.Open;
 
         listeners = new ArrayList<>();
     }
@@ -255,9 +255,11 @@ public class Request implements Serializable {
     @Override
     public String toString() {
 
-        String status = "Open";
-        if (hasRiderAccepted()){
 
+        String status = this.requestStatus.toString();
+
+        if (hasRiderAccepted())
+        {
             status = "Closed";
         }
 
