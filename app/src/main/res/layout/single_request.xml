@@ -65,35 +65,47 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
-        android:layout_alignEnd="@+id/completeRequestButton"
-        android:layout_toEndOf="@+id/startLocTextView"
-        android:layout_alignTop="@+id/endLocTextView"
         android:layout_alignBottom="@+id/endLocTextView"
         android:textSize="25dp"
         android:paddingLeft="20dp"
-        android:fontFamily="sans-serif-light" />
+        android:fontFamily="sans-serif-light"
+        android:layout_alignEnd="@+id/DSRAPriceEditText"
+        android:layout_alignTop="@+id/endLocTextView"
+        android:layout_toEndOf="@+id/startLocTextView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/DSRAstory"
         android:hint="Rider Story"
-        android:layout_above="@+id/completeRequestButton"
-        android:layout_alignParentStart="true"
         android:textSize="25dp"
         android:fontFamily="sans-serif-light"
-        android:layout_alignEnd="@+id/DSRAPriceEditText" />
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/DSRAPriceEditText"
+        android:layout_above="@+id/completeRequestButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Complete Request"
+        android:text="Complete"
         android:id="@+id/completeRequestButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:textSize="25dp"
-        android:fontFamily="sans-serif-light" />
+        android:fontFamily="sans-serif-light"
+        android:layout_toStartOf="@+id/viewDriverData" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Driver"
+        android:id="@+id/viewDriverData"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignTop="@+id/completeRequestButton"
+        android:textSize="25dp"
+        android:width="205dp" />
 
     <LinearLayout
         android:orientation="vertical"

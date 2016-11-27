@@ -27,7 +27,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainMenuActivity" />
-        <activity android:name=".PrototypeMapActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".NewRiderRequestActivity" />
         <activity android:name=".DriverCurrentRequestsActivity" />

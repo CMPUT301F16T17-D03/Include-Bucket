@@ -30,6 +30,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
     private String key;
     private EditText keyword;
+    private EditText nearby;
     private ListView browseRequestList;
     private ArrayList<Request> requestList;
     private ArrayAdapter<Request> requestAdapter;
@@ -51,6 +52,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         keyword = (EditText) findViewById(R.id.keyword);
+        nearby = (EditText) findViewById(R.id.nearby);
         browseRequestList = (ListView) findViewById(R.id.browseRequestList);
 
         user = UserController.getUserAccount();
@@ -96,6 +98,29 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
                 else key = keyword.getText().toString();
 
                 DriverRequestsController.loadRequestsByKeyword(key);
+
+                requests = DriverRequestsController.getDriverRequests().getRequests();
+                requestList.addAll(requests);
+                Log.i("SIZE", "" + requestList.size());
+                browseRequestList.setAdapter(requestAdapter);
+                requestAdapter.notifyDataSetChanged();
+            }
+        });
+
+        Button searchNearbyButton = (Button) findViewById(R.id.searchNearbyButton);
+        searchNearbyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+
+                requestList.clear();
+
+                if (nearby.getText().toString() == null)
+                {
+                    key = "";
+                }
+                else key = nearby.getText().toString();
+
+                DriverRequestsController.loadRequestsByDistance(key);
 
                 requests = DriverRequestsController.getDriverRequests().getRequests();
                 requestList.addAll(requests);

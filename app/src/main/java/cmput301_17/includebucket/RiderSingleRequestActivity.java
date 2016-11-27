@@ -39,7 +39,7 @@ import java.util.Formatter;
  */
 public class RiderSingleRequestActivity extends MainMenuActivity implements MapEventsReceiver {
 
-    private TextView startEditText, endEditText, priceEditText, storyText, dummyTextView;
+    private TextView startEditText, endEditText, priceEditText, storyText;
     private Button completeButton;
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverListAdapter;
@@ -81,14 +81,16 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         mapController.setZoom(15);
 
         Double price    = request.getFare();
-        String startLoc = request.getStartLocation();
-        String endLoc   = request.getEndLocation();
+
         String story    = request.getRiderStory();
         String startAddress = request.getStartAddress();
         String endAddress = request.getEndAddress();
+        String make = request.getDriver().getVehicleMake();
+        String model = request.getDriver().getVehicleModel();
+        String year = request.getDriver().getVehicleYear();
 
-        startPoint = new GeoPoint(Double.parseDouble(startLoc.split(",")[0]), Double.parseDouble(startLoc.split(",")[1]));
-        endPoint = new GeoPoint(Double.parseDouble(endLoc.split(",")[0]), Double.parseDouble(endLoc.split(",")[1]));
+        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),Double.parseDouble(request.getStartLocation().split(",")[1]));
+        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),Double.parseDouble(request.getEndLocation().split(",")[1]));
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
@@ -119,10 +121,9 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             }
         }).execute(waypoints);
 
-        startEditText.setText(request.getStartAddress());
-        endEditText.setText(endLoc);
-        storyText.setText(request.getRiderStory());
-        endEditText.setText(request.getEndAddress());
+        startEditText.setText(startAddress);
+        endEditText.setText(endAddress);
+        storyText.setText(story);
 
         Formatter formatter = new Formatter();
         String p = formatter.format("%.2f%n", request.getFare()).toString();
@@ -134,7 +135,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
                     RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
-                    Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -143,7 +143,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         {
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            completeButton.setText("BACK TO YOUR REQUESTS");
+            completeButton.setText("REQUESTS");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
@@ -152,6 +152,21 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                 }
             });
         }
+/*
+        requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" +
+               startAddress+"\nEnd Location:\n" + endAddress+"\nRequest Description:\n" +
+                story + "\n"+ "Driver car details:\n" + make + "\n" + model + "\n" + year);
+*/
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                RiderRequestsController.deleteRequest(request);
+                RiderRequestsController.deleteRequestFromElasticsearch(request);
+                Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
     }
     @Override
     public boolean longPressHelper(GeoPoint p) {

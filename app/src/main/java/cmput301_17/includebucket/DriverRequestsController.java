@@ -170,7 +170,51 @@ public class DriverRequestsController {
         try {
             requests.getRequests().addAll(requestList.get());
             driverRequests = requests;
-            Log.i("SUCCESS","keyword list size " + requests.get(0).getRiderStory());
+            if (requests.size()>0) {
+            Log.i("SUCCESS","keyword list size " + 0 + requests.get(0).getRiderStory());}
+            else{
+                Log.i("SUCCESS","No results found");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadRequestsByPrice(String keyword) {
+
+        ElasticsearchRequestController.GetKeywordList requestList;
+        requestList = new ElasticsearchRequestController.GetKeywordList();
+        requestList.execute(keyword);
+
+        RequestList requests = new RequestList();
+        try {
+            requests.getRequests().addAll(requestList.get());
+            driverRequests = requests;
+            //Log.i("SUCCESS","keyword list size " + requests.get(0).getRiderStory());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadRequestsByDistance(String keyword) {
+
+        ElasticsearchRequestController.GetNearbyList requestList;
+        requestList = new ElasticsearchRequestController.GetNearbyList();
+        requestList.execute(keyword);
+
+        RequestList requests = new RequestList();
+        try {
+            requests.getRequests().addAll(requestList.get());
+            driverRequests = requests;
+            if (requests.size()>0) {
+                Log.i("SUCCESS","nearby list size " + 0 + requests.get(0).getStartLocation());}
+            else{
+                Log.i("SUCCESS","No nearby results found");
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

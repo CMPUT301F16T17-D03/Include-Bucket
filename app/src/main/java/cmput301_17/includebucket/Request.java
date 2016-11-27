@@ -1,5 +1,7 @@
 package cmput301_17.includebucket;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +69,18 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
+    public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
+        this.requestID = null;
+        this.startLocation = loc1.toString();
+        this.endLocation = loc2.toString();
+        this.rider = rider;
+        this.riderStory = story;
+        this.pendingDrivers = pendingDrivers;
+        this.driver = driver;
+        this.requestStatus = RequestStatus.Open;
+        listeners = new ArrayList<>();
+    }
+
     public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
         this.requestID = null;
         this.startLocation = loc1;
@@ -76,6 +90,7 @@ public class Request implements Serializable {
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
         this.requestStatus = RequestStatus.Open;
+
         listeners = new ArrayList<>();
     }
 
@@ -103,12 +118,23 @@ public class Request implements Serializable {
         notifyListeners();
     }
 
+    public void setStartLocation(GeoPoint startLocation) {
+        this.startLocation = startLocation.toString();
+        notifyListeners();
+    }
+
+
     public String getEndLocation() {
         return endLocation;
     }
 
     public void setEndLocation(String endLocation) {
         this.endLocation = endLocation;
+        notifyListeners();
+    }
+
+    public void setEndLocation(GeoPoint endLocation) {
+        this.endLocation = endLocation.toString();
         notifyListeners();
     }
 
@@ -238,6 +264,10 @@ public class Request implements Serializable {
         notifyListeners();
     }
 
+    public UserAccount getDriver() {
+        return driver;
+    }
+
     public void chooseDriver(UserAccount user){
         this.driver = user;
         notifyListeners();
@@ -254,6 +284,7 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
+
 
         String status = this.requestStatus.toString();
 

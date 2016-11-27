@@ -14,7 +14,10 @@
         android:id="@+id/loginTextView"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentEnd="true"
+        android:textSize="25dp"
+        android:textAlignment="center" />
 
     <Button
         android:layout_width="wrap_content"
@@ -23,7 +26,9 @@
         android:id="@+id/confirmButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -31,7 +36,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/emailTextView"
         android:layout_below="@+id/loginTextView"
-        android:layout_alignParentStart="true" />
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -39,5 +46,64 @@
         android:layout_height="wrap_content"
         android:id="@+id/phoneTextView"
         android:layout_below="@+id/emailTextView"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:paddingBottom="0dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view"
+        android:layout_below="@+id/phoneTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Make"
+        android:id="@+id/MakeView"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp"
+        android:paddingTop="15dp"
+        android:layout_below="@+id/carDetailsTitle"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Model"
+        android:id="@+id/ModelView"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp"
+        android:layout_below="@+id/MakeView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Year"
+        android:id="@+id/YearView"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp"
+        android:layout_below="@+id/ModelView"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Car Details"
+        android:id="@+id/carDetailsTitle"
+        android:textSize="25dp"
+        android:paddingTop="15dp"
+        android:layout_below="@+id/view"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="sans-serif-light"
+        android:textAlignment="center" />
 </RelativeLayout>

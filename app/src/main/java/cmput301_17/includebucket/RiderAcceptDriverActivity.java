@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Formatter;
 
@@ -56,15 +57,20 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         story.setText(request.getRiderStory());
         end.setText(request.getEndAddress());
 
-        Formatter formatter = new Formatter();
-        String p = formatter.format("%.2f%n", request.getFare()).toString();
-        price.setText("$"+p);
+        //Formatter priceFormatter = new Formatter();
+        //String p = priceFormatter.format("%.2f%n", request.getFare()).toString();
+        //price.setText("$"+p);
 
         if (request.getDrivers().size() == 0)
         {
             noDrivers  = (TextView) findViewById(R.id.noPendingDrivers);
             noDrivers.setText("No one has accepted your request...");
         }
+
+        start.setText(request.getStartAddress());
+        end.setText(request.getEndAddress());
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        price.setText(formatter.format(request.getFare()));
 
         driverList = new ArrayList<>();
         driverList.addAll(request.getDrivers());
@@ -83,9 +89,7 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                final int finalPosition = position;
-
-                UserAccount user = driverList.get(finalPosition);
+                UserAccount user = driverList.get(position);
                 Intent intent = new Intent(RiderAcceptDriverActivity.this, ViewDriverDataActivity.class);
                 intent.putExtra("User", user);
                 intent.putExtra("Request", request);

@@ -268,20 +268,21 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                String startLocation = startPoint.toString();
-                String endLocation = endPoint.toString();
+
                 String startAddress = startEditText.getText().toString();
                 String endAddress = endEditText.getText().toString();
                 String riderStory = storyEditText.getText().toString();
                 Double fare = Double.parseDouble(priceEditText.getText().toString().substring(1,priceEditText.getText().toString().length()));
                 Double distance = roadLength;
 
-                Request request = new Request(startLocation, endLocation, user, riderStory, pendingDrivers, driver);
+                Request request = new Request(startPoint, endPoint, user, riderStory, pendingDrivers, driver);
                 request.setRequestStatus(Request.RequestStatus.Open);
                 request.setFare(fare);
                 request.setStartAddress(startAddress);
                 request.setEndAddress(endAddress);
                 request.setRoadLength(distance);
+                request.setStartLocation(startPoint);
+                request.setEndLocation(endPoint);
 
                 // Add the request to Elasticsearch
                 RiderRequestsController.addRequestToElasticsearch(request);
@@ -311,11 +312,25 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * It is not a requirement to have the current location as the starting point anyhow...
          */
         /*
-        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+                /**
+         * The startPoint and endPoint are subject to change once we figure out what causes the
+         * program to crash when it tries to find the current location.
+         * --> The problem may be when locationManager calls the getLastKnownLocation method.
+         * --> (Lines: 318-321)
+         */
+        //Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+        //startPoint = currentPoint;
+        //endPoint = currentPoint;
+
+        startPoint = new GeoPoint(53.5232, -113.5263);
+        endPoint = new GeoPoint(53.5232, -113.5263);
+        currentPoint=new GeoPoint(53.5232, -113.5263);
+
+
         startEditText.setText(currentPoint.toString());
         endEditText.setText(currentPoint.toString());
-*/
+
         AsyncTask<GeoPoint, Void, String> getAddress = new GetAddressFromGeoPointTask(new GetAddressFromGeoPointTask.AsyncResponse() {
 
             @Override
@@ -340,17 +355,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         IMapController mapController = map.getController();
         mapController.setZoom(15);
 
-        /**
-         * The startPoint and endPoint are subject to change once we figure out what causes the
-         * program to crash when it tries to find the current location.
-         * --> The problem may be when locationManager calls the getLastKnownLocation method.
-         * --> (Lines: 214-215)
-         */
-          //startPoint = currentPoint;
-          //endPoint = currentPoint;
 
-        startPoint = new GeoPoint(53.5232, -113.5263);
-        endPoint = new GeoPoint(53.5232, -113.5263);
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
@@ -384,7 +389,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void processFinish(Road output){
                 roadLength = output.mLength; //see also mDuration
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                priceEditText.setText(formatter.format(roadLength).toString());
+                priceEditText.setText(formatter.format(roadLength));
                 //Here you will receive the result fired from async class
                 //of onPostExecute(result) method.
 

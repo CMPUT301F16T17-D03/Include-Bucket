@@ -1,11 +1,15 @@
 package cmput301_17.includebucket;
 
+import android.location.Address;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
+
+import org.osmdroid.bonuspack.location.GeocoderNominatim;
+import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -254,6 +258,67 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
+
+    public static class GetNearbyList extends AsyncTask<String, Void, RequestList> {
+        @Override
+        protected RequestList doInBackground(String... search_param) {
+
+            verifySettings();
+            String ret;
+            try {
+                GeocoderNominatim geoCoder = new GeocoderNominatim("Include-Bucket");
+                List<Address> address = geoCoder.getFromLocationName(search_param[0], 1);
+                if (address==null){
+                    ret = null;
+
+                }
+                Address location = address.get(0);
+                ret = location.getLatitude()+","+location.getLongitude();
+                Log.i("Success", "Found address");
+            }
+            catch(Exception e){
+                ret = null;
+                Log.i("Error", "Could not find address");
+            }
+            RequestList requests = new RequestList();
+            String search_string;
+            if(ret == null){
+                search_string = "{\"from\": 0, \"size\": 10000}";
+
+            }
+            else if (search_param[0].length() == 0)
+            {
+                search_string = "{\"from\": 0, \"size\": 10000}";
+            }
+
+            else search_string ="{\"query\":{\"filtered\":{\"query\":{\"match_all\":{}},\"filter\":{\"geo_distance\":{\"distance\" : \"5km\",\"startLocation\":\""+search_param[0]+"\"}}}}}";
+
+            Search search = new Search.Builder(search_string)
+                    .addIndex("cmput301f16t17")
+                    .addType("request")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded())
+                {
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundRequests);
+                    Log.i("Success", "Got the requests.");
+                }
+                else
+                {
+                    requests = new RequestList();
+                    Log.i("Error", "The search query did not match any requests in the database.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return requests;
+        }
+    }
+
 
     /**
      * Delete a Request specified by an ID.
