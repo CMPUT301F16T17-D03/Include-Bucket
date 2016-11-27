@@ -72,34 +72,30 @@ public class ElasticsearchUserController {
 
             UserAccount foundUser = new UserAccount();
 
-            /**
-             * This query retrieves one user instance specified by the login input in LoginActivity
-             */
-            String search_string =
-                    "{\"from\":0,\"size\":10000, " +
-                        "\"query\": { \"match\": { \"uniqueUserName\": \"" + user[0] + "\" }}}";
+            if (user[0].length() != 0) {
+                String search_string =
+                        "{\"from\":0,\"size\":10000, " +
+                                "\"query\": { \"match\": { \"uniqueUserName\": \"" + user[0] + "\" }}}";
 
-            Search search = new Search.Builder(search_string)
-                    .addIndex("cmput301f16t17")
-                    .addType("user")
-                    .build();
-            try {
-                SearchResult result = client.execute(search);
+                Search search = new Search.Builder(search_string)
+                        .addIndex("cmput301f16t17")
+                        .addType("user")
+                        .build();
+                try {
+                    SearchResult result = client.execute(search);
 
-                if (result.isSucceeded())
-                {
-                    foundUser = result.getSourceAsObject(UserAccount.class);
-                    foundUser.setLoginStatus(Boolean.TRUE);
+                    if (result.isSucceeded()) {
+                        foundUser = result.getSourceAsObject(UserAccount.class);
+                        foundUser.setLoginStatus(Boolean.TRUE);
+                    } else {
+                        Log.i("Error", "The search query failed to find any users that matched.");
+                    }
+                    return foundUser;
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 }
-                else
-                {
-                    Log.i("Error", "The search query failed to find any users that matched.");
-                }
-                return foundUser;
-            } catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                return null;
             }
+            return null;
         }
     }
 

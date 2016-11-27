@@ -27,7 +27,7 @@ public class MainMenuActivity extends Activity {
         RiderRequestsFileManager.initManager(this.getApplicationContext());
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
-        user = UserController.getUserAccount();
+        user = new UserAccount();
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +44,8 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                user.setLoginStatus(Boolean.FALSE);
+                user = UserController.getUserAccount();
+                if (user != null) UserController.logUserOut();
 
                 finish();
             }

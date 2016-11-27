@@ -118,4 +118,12 @@ public class UserController {
         this.context = context;
     }
 
+    /**
+     * Logs user out
+     */
+    public static void logUserOut() {
+        getUserAccount().setLoginStatus(Boolean.FALSE);
+        userAccount = null;
+    }
+
 }

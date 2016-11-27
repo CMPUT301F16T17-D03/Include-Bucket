@@ -27,6 +27,7 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.Formatter;
 
 /**
  * DriverSingleRequestActivity
@@ -167,6 +168,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
         priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
         storyText = (TextView) findViewById(R.id.DSRAstory);
+
         map = (MapView) findViewById(R.id.DSRAmap);
         map.getOverlays().add(0, mapEventsOverlay);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -186,7 +188,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         lngdub = (Double.parseDouble(request.getEndLocation().split(",")[1]));
         endPoint = new GeoPoint(latdub, lngdub);
 
-        priceEditText.setText("$"+request.getFare().toString());
+        Formatter formatter = new Formatter();
+        String p = formatter.format("%.2f%n", request.getFare()).toString();
+        priceEditText.setText("$"+p);
         storyText.setText(request.getRiderStory());
 
         //startPoint = new GeoPoint(53.5444, -113.4909);

@@ -39,6 +39,7 @@ public class UserAccount implements Serializable {
         this.uniqueUserName = userLogin;
         this.email = userEmail;
         this.phoneNumber = userPhone;
+        this.isLoggedIn = Boolean.FALSE;
         listeners = new ArrayList<>();
     }
 
@@ -50,7 +51,7 @@ public class UserAccount implements Serializable {
         this.uniqueUserName = userLogin;
         this.email = userEmail;
         this.phoneNumber = userPhone;
-        this.isLoggedIn = true;
+        this.isLoggedIn = Boolean.FALSE;
         this.userState = null;
         this.vehicleMake = make;
         this.vehicleModel = model;

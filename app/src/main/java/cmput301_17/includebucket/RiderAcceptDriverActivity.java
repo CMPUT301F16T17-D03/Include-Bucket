@@ -1,17 +1,15 @@
 package cmput301_17.includebucket;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 
 
 /**
@@ -21,7 +19,7 @@ import java.util.ArrayList;
  */
 public class RiderAcceptDriverActivity extends MainMenuActivity {
 
-    private TextView startTitle, endTitle, priceTitle, start, end, price;
+    private TextView startTitle, endTitle, priceTitle, driversTitle, noDrivers, start, end, price, story;
     private ListView driverListView;
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverAdapter;
@@ -43,17 +41,30 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         request = (Request) getIntent().getSerializableExtra("Request");
 
         startTitle = (TextView) findViewById(R.id.startLocTextView);
-        endTitle = (TextView) findViewById(R.id.endLocTextView);
+        endTitle   = (TextView) findViewById(R.id.endLocTextView);
         priceTitle = (TextView) findViewById(R.id.priceTextView);
-
+        driversTitle   = (TextView) findViewById(R.id.priceTextView);
         driverListView = (ListView) findViewById(R.id.pendingDriversListView);
-        start = (TextView) findViewById(R.id.startGeoLocTextView);
-        end = (TextView) findViewById(R.id.endGeoLocTextView);
-        price = (TextView) findViewById(R.id.priceValueTextView);
 
-        start.setText(request.getStartLocation());
-        end.setText(request.getEndLocation());
-        price.setText(request.getFare().toString());
+        start = (TextView) findViewById(R.id.DSRAStartEditText);
+        end   = (TextView) findViewById(R.id.DSRAEndEditText);
+        price = (TextView) findViewById(R.id.priceValueTextView);
+        story = (TextView) findViewById(R.id.riderStoryTextView);
+
+        start.setText(request.getStartAddress());
+
+        story.setText(request.getRiderStory());
+        end.setText(request.getEndAddress());
+
+        Formatter formatter = new Formatter();
+        String p = formatter.format("%.2f%n", request.getFare()).toString();
+        price.setText("$"+p);
+
+        if (request.getDrivers().size() == 0)
+        {
+            noDrivers  = (TextView) findViewById(R.id.noPendingDrivers);
+            noDrivers.setText("No one has accepted your request...");
+        }
 
         driverList = new ArrayList<>();
         driverList.addAll(request.getDrivers());

@@ -3,6 +3,7 @@ package cmput301_17.includebucket;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Formatter;
 
 import io.searchbox.annotations.JestId;
 
@@ -271,7 +272,11 @@ public class Request implements Serializable {
                 status = getDrivers().size() +" Pending Drivers";
             }
         }
+
+        Formatter formatter = new Formatter();
+        String p = formatter.format("%.2f%n", getFare()).toString();
+
         notifyListeners();
-        return "\"" + getRiderStory() + "\"" + "\n" + "Price: " + getFare() + "\nStatus: " + status;
+        return "\"" + getRiderStory() + "\"" + "\n" + "Price: $" + p + "\nStatus: " + status;
     }
 }

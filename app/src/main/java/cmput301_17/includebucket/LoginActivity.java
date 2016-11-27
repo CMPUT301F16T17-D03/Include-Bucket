@@ -53,11 +53,16 @@ public class LoginActivity extends MainMenuActivity {
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         userMaster = UserController.getUserAccount();
-        if (userMaster.getLoginStatus())
+        if (userMaster != null)
         {
-            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-            startActivity(intent);
+            if (userMaster.getLoginStatus())
+            {
+                Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                startActivity(intent);
+            }
         }
+
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -125,8 +130,6 @@ public class LoginActivity extends MainMenuActivity {
                  * Accessed: November 26, 2016
                  * Author: binnyb
                  */
-                connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
                 if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
                 {
@@ -143,10 +146,11 @@ public class LoginActivity extends MainMenuActivity {
 
                     try {
                         user = retrieveUser.get();
-                        if (user != null) {
-                            UserFileManager.getUserFileManager().saveUser(user);
+                        if (user == null)
+                        {
                             toastMsg = "Username does not exist";
                         }
+
                     } catch (Exception e) {
                         Log.i("Fail","Something went wrong with the search!");
                     }
@@ -157,9 +161,14 @@ public class LoginActivity extends MainMenuActivity {
                 }
 
                 try {
-                    if (userLogin.getText().toString().equals(user.getUniqueUserName()))
+                    if (!userLogin.getText().toString().equals(user.getUniqueUserName()))
+                    {
+                        toastMsg = "Username does not exist";
+                    }
+                    else
                     {
                         user.setLoginStatus(Boolean.TRUE);
+                        UserFileManager.getUserFileManager().saveUser(user);
                         Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
@@ -229,6 +238,6 @@ public class LoginActivity extends MainMenuActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
+        if (userLogin.equals("")) UserController.logUserOut();
     }
 }

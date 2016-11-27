@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
-        android:id="@+id/startGeoLocTextView"
+        android:id="@+id/startLocTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
@@ -18,19 +18,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="End"
-        android:id="@+id/endGeoLocTextView"
+        android:id="@+id/endLocTextView"
         android:textSize="25dp"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
-        android:layout_below="@+id/startGeoLocTextView" />
+        android:layout_below="@+id/startLocTextView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Price"
-        android:id="@+id/DSRApricetext"
+        android:id="@+id/priceTextView"
         android:textSize="25dp"
-        android:layout_below="@+id/endGeoLocTextView"
+        android:layout_below="@+id/endLocTextView"
         android:fontFamily="sans-serif-light"
         android:paddingLeft="250dp"
         android:layout_alignParentStart="true" />
@@ -40,11 +40,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSRAStartEditText"
         android:hint="Input Start Location"
-        android:layout_alignBottom="@+id/startGeoLocTextView"
+        android:layout_alignBottom="@+id/startLocTextView"
         android:textSize="25dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/startGeoLocTextView"
+        android:layout_toEndOf="@+id/startLocTextView"
         android:fontFamily="sans-serif-light"
         android:paddingLeft="20dp" />
 
@@ -53,13 +53,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
-        android:layout_alignTop="@+id/endGeoLocTextView"
+        android:layout_alignTop="@+id/endLocTextView"
         android:textSize="25dp"
         android:paddingLeft="20dp"
         android:fontFamily="sans-serif-light"
         android:layout_alignEnd="@+id/DSRAStartEditText"
-        android:layout_above="@+id/DSRApricetext"
-        android:layout_toEndOf="@+id/startGeoLocTextView" />
+        android:layout_above="@+id/priceTextView"
+        android:layout_toEndOf="@+id/startLocTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
         android:textSize="25dp"
         android:fontFamily="sans-serif-light"
         android:text="$0.00"
-        android:layout_alignTop="@+id/DSRApricetext"
+        android:layout_alignTop="@+id/priceTextView"
         android:layout_alignEnd="@+id/DSRAStartEditText" />
 
     <TextView
@@ -79,16 +79,45 @@
         android:textSize="35dp"
         android:fontFamily="sans-serif-light"
         android:textAlignment="center"
-        android:layout_below="@+id/DSRApricetext"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/DSRAStartEditText" />
+        android:layout_below="@+id/riderStoryTextView"
+        android:layout_alignEnd="@+id/priceValueTextView"
+        android:paddingTop="15dp" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/pendingDriversListView"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp"
+        android:layout_alignEnd="@+id/priceValueTextView"
+        android:layout_below="@+id/noPendingDrivers" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/riderStoryTextView"
+        android:textSize="25dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Rider Story"
+        android:layout_below="@+id/priceTextView"
+        android:layout_alignEnd="@+id/priceValueTextView"
+        android:paddingBottom="15dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/riderStoryTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/noPendingDrivers"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/driversTitleTextView"
+        android:layout_alignEnd="@+id/priceValueTextView"
+        android:textSize="20dp"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textAlignment="center" />
 </RelativeLayout>

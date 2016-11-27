@@ -29,6 +29,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 
 /**
  * RiderSingleRequestActivity
@@ -38,7 +39,7 @@ import java.util.ArrayList;
  */
 public class RiderSingleRequestActivity extends MainMenuActivity implements MapEventsReceiver {
 
-    private TextView requestTextView;
+    private TextView startEditText, endEditText, priceEditText, storyText, dummyTextView;
     private Button completeButton;
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverListAdapter;
@@ -58,6 +59,12 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         UserFileManager.initManager(this.getApplicationContext());
         RiderRequestsFileManager.initManager(this.getApplicationContext());
 
+        startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
+        endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
+        priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
+        storyText = (TextView) findViewById(R.id.DSRAstory);
+        completeButton = (Button) findViewById(R.id.completeRequestButton);
+
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
@@ -73,9 +80,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         IMapController mapController = map.getController();
         mapController.setZoom(15);
 
-        
-        requestTextView = (TextView) findViewById(R.id.requestTextView);
-        completeButton = (Button) findViewById(R.id.completeRequestButton);
         Double price    = request.getFare();
         String startLoc = request.getStartLocation();
         String endLoc   = request.getEndLocation();
@@ -115,18 +119,39 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             }
         }).execute(waypoints);
 
-        requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" + startLoc +
-                "\n"+startAddress+"\nEnd Location:\n" + endLoc + "\n"+endAddress+"\nRequest Description:\n" + story);
+        startEditText.setText(request.getStartAddress());
+        endEditText.setText(endLoc);
+        storyText.setText(request.getRiderStory());
+        endEditText.setText(request.getEndAddress());
 
-        completeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        Formatter formatter = new Formatter();
+        String p = formatter.format("%.2f%n", request.getFare()).toString();
+        priceEditText.setText("$"+p);
 
-                RiderRequestsController.deleteRequest(request);
-                RiderRequestsController.deleteRequestFromElasticsearch(request);
-                Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
+        if (request.getRequestStatus() != Request.RequestStatus.Closed) {
+            completeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    RiderRequestsController.deleteRequest(request);
+                    RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+        }
+        else
+        {
+            storyText.setText("You already accepted this request.");
+            storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            completeButton.setText("BACK TO YOUR REQUESTS");
+            completeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
     @Override
     public boolean longPressHelper(GeoPoint p) {
