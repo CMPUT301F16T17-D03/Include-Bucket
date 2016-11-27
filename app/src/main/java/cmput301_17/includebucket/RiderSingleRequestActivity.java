@@ -138,7 +138,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
                     RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
-                    toastMsg = "Request Completed";
+                    Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -151,7 +151,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             completeButton.setText("REQUESTS");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
                     Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
                     startActivity(intent);
                     finish();
@@ -163,7 +162,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                startAddress+"\nEnd Location:\n" + endAddress+"\nRequest Description:\n" +
                 story + "\n"+ "Driver car details:\n" + make + "\n" + model + "\n" + year);
 */
-        completeButton.setOnClickListener(new View.OnClickListener() {
+ /*       completeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 RiderRequestsController.deleteRequest(request);
@@ -171,7 +170,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                 Toast.makeText(RiderSingleRequestActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                 finish();
             }
-        });
+        });*/
 
     }
     @Override
