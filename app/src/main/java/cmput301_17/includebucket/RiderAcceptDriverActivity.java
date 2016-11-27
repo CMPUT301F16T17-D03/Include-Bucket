@@ -94,6 +94,7 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
                 intent.putExtra("User", user);
                 intent.putExtra("Request", request);
                 startActivity(intent);
+                finish();
             }
         });
         driverAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, driverList);

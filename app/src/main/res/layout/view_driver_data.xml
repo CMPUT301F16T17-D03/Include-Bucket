@@ -38,7 +38,8 @@
         android:layout_below="@+id/loginTextView"
         android:fontFamily="sans-serif-light"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textSize="25dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -49,7 +50,8 @@
         android:fontFamily="sans-serif-light"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingBottom="0dp" />
+        android:paddingBottom="0dp"
+        android:textSize="25dp" />
 
     <View
         android:layout_width="match_parent"

@@ -51,6 +51,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
     private MapView map;
     private RoadManager roadManager;
 
+    private String toastMsg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,18 +131,21 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         String p = formatter.format("%.2f%n", request.getFare()).toString();
         priceEditText.setText("$"+p);
 
+        toastMsg = null;
         if (request.getRequestStatus() != Request.RequestStatus.Closed) {
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    toastMsg = "Request Completed";
                     finish();
                 }
             });
         }
         else
         {
+            toastMsg = "Back to your requests!";
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             completeButton.setText("REQUESTS");
@@ -149,6 +154,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
                     Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             });
         }
@@ -162,7 +168,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
                 RiderRequestsController.deleteRequest(request);
                 RiderRequestsController.deleteRequestFromElasticsearch(request);
-                Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RiderSingleRequestActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
