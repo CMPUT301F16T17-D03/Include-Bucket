@@ -53,7 +53,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     private Request request = new Request();
     private ArrayList<UserAccount> drivers;
     private UserAccount driver;
-    private Button acceptButton;
+    private Button acceptButton, riderDetailsButton;
 
     private UserAccount user = new UserAccount();
 
@@ -81,6 +81,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
         storyText = (TextView) findViewById(R.id.DSRAstory);
         acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
+        riderDetailsButton = (Button) findViewById(R.id.riderDetailsButton);
 
         /****************************************************** PERMISSIONS *****************************************************/
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -212,6 +213,14 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             });
         }
 
+        riderDetailsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                Intent intent = new Intent(DriverSingleRequestActivity.this, ViewRiderDataActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
 

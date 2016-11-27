@@ -40,7 +40,7 @@ import java.util.Formatter;
 public class RiderSingleRequestActivity extends MainMenuActivity implements MapEventsReceiver {
 
     private TextView startEditText, endEditText, priceEditText, storyText;
-    private Button completeButton;
+    private Button completeButton, viewDriverButton;
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverListAdapter;
 
@@ -66,6 +66,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
         storyText = (TextView) findViewById(R.id.DSRAstory);
         completeButton = (Button) findViewById(R.id.completeRequestButton);
+        viewDriverButton = (Button) findViewById(R.id.viewDriverButton);
 
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
@@ -157,6 +158,17 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                 }
             });
         }
+
+        viewDriverButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                Intent intent = new Intent(RiderSingleRequestActivity.this, ViewDriverDataActivity.class);
+                intent.putExtra("User",request.getDriver());
+                intent.putExtra("Request", request);
+                startActivity(intent);
+                finish();
+            }
+        });
 /*
         requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" +
                startAddress+"\nEnd Location:\n" + endAddress+"\nRequest Description:\n" +
