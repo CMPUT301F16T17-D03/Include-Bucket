@@ -268,8 +268,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-
-
                 String startLocation = startPoint.toString();
                 String endLocation = endPoint.toString();
                 String startAddress = startEditText.getText().toString();

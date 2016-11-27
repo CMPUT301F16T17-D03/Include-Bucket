@@ -49,4 +49,9 @@
     <string name="vehicleYear">MMDDYY</string>
     <string name="vehicleDescription">Plan on Driving?</string>
 
+    <!-- Activity Titles -->
+    <string name="driver_Requests">Your Rides</string>
+    <string name="rider_Requests">Your Requests</string>
+    <string name="open_Requests">Open Requests</string>
+
 </resources>

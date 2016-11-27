@@ -9,19 +9,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
-        android:id="@+id/DSRAstart"
+        android:id="@+id/startGeoLocTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:fontFamily="sans-serif-light"
         android:textSize="25dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="End"
-        android:id="@+id/DSRAend"
+        android:id="@+id/endGeoLocTextView"
         android:textSize="25dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/DSRAstart" />
+        android:fontFamily="sans-serif-light"
+        android:layout_below="@+id/startGeoLocTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,27 +31,33 @@
         android:text="Price"
         android:id="@+id/DSRApricetext"
         android:textSize="25dp"
-        android:layout_above="@+id/linearLayout"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/endGeoLocTextView"
+        android:fontFamily="sans-serif-light"
+        android:paddingLeft="250dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$0.00"
         android:id="@+id/DSRAPriceEditText"
-        android:layout_alignBottom="@+id/DSRAmaptext"
-        android:layout_toRightOf="@+id/DSRApricetext"
-        android:layout_toStartOf="@+id/DSRAAcceptButton" />
+        android:textSize="25dp"
+        android:layout_alignTop="@+id/DSRApricetext"
+        android:layout_alignBottom="@+id/DSRApricetext"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/DSRAStartEditText"
         android:hint="Input Start Location"
+        android:layout_alignBottom="@+id/startGeoLocTextView"
+        android:textSize="25dp"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/DSRAAcceptButton"
-        android:layout_above="@+id/DSRAend"
-        android:layout_toEndOf="@+id/DSRAstart" />
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/startGeoLocTextView"
+        android:fontFamily="sans-serif-light"
+        android:paddingLeft="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,9 +65,12 @@
         android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
         android:layout_alignEnd="@+id/DSRAAcceptButton"
-        android:layout_above="@+id/DSRAmaptext"
-        android:layout_toEndOf="@+id/DSRAstart"
-        android:layout_alignTop="@+id/DSRAend" /> 
+        android:layout_toEndOf="@+id/startGeoLocTextView"
+        android:layout_alignTop="@+id/endGeoLocTextView"
+        android:layout_alignBottom="@+id/endGeoLocTextView"
+        android:textSize="25dp"
+        android:paddingLeft="20dp"
+        android:fontFamily="sans-serif-light" />
 
     <Button
         android:layout_width="wrap_content"
@@ -67,35 +78,25 @@
         android:text="Accept"
         android:id="@+id/DSRAAcceptButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/DSRAstory"
-        android:layout_alignParentStart="true"
         android:hint="Rider Story"
-        android:layout_alignBottom="@+id/DSRAAcceptButton"
-        android:layout_toStartOf="@+id/DSRAAcceptButton"
-        android:layout_alignTop="@+id/DSRAAcceptButton" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MAP"
-        android:id="@+id/DSRAmaptext"
-        android:textSize="40dp"
-        tools:layout_width="200dp"
-        android:layout_below="@+id/DSRAend"
+        android:layout_above="@+id/DSRAAcceptButton"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/DSRApricetext" />
+        android:textSize="25dp"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignEnd="@+id/DSRAPriceEditText" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/DSRAmaptext"
         android:layout_above="@+id/DSRAstory"
         android:id="@+id/linearLayout">
         <org.osmdroid.views.MapView android:id="@+id/DSRAmap"

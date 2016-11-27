@@ -45,26 +45,8 @@ public class UserFileManager {
         return userFileManager;
     }
 
-
     public UserFileManager(Context context) {
         this.context = context;
-    }
-
-
-
-    static public String userToString(UserAccount u) throws IOException {
-        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-        ObjectOutputStream oo = new ObjectOutputStream(bo);
-        oo.writeObject(u);
-        oo.close();
-        byte bytes[] = bo.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
-    }
-
-    static public UserAccount userFromString(String userData) throws ClassNotFoundException, IOException {
-        ByteArrayInputStream bi = new ByteArrayInputStream(Base64.decode(userData, Base64.DEFAULT));
-        ObjectInputStream oi = new ObjectInputStream(bi);
-        return (UserAccount) oi.readObject();
     }
 
     public UserAccount loadUser() throws IOException, ClassNotFoundException {

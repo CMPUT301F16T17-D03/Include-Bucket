@@ -1,8 +1,11 @@
 package cmput301_17.includebucket;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,6 +32,9 @@ public class LoginActivity extends MainMenuActivity {
     private EditText userLogin;
     private UserAccount foundUser;
     private RequestList requestList;
+    private ConnectivityManager connectivityManager;
+    private boolean connected;
+    private UserAccount userMaster,user;
 
     UserController userController;
 
@@ -46,7 +52,12 @@ public class LoginActivity extends MainMenuActivity {
         RiderRequestsFileManager.initManager(this.getApplicationContext());
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
-        userController = new UserController();
+        userMaster = UserController.getUserAccount();
+        if (userMaster.getLoginStatus())
+        {
+            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+            startActivity(intent);
+        }
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -109,30 +120,52 @@ public class LoginActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                ElasticsearchUserController.RetrieveUser retrieveUser;
-                retrieveUser = new ElasticsearchUserController.RetrieveUser();
-                retrieveUser.execute(userLogin.getText().toString());
+                /**
+                 * Taken from: http://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
+                 * Accessed: November 26, 2016
+                 * Author: binnyb
+                 */
+                connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                UserAccount user = new UserAccount();
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+                {
+                    connected = Boolean.TRUE;
+                }
+                else connected = Boolean.FALSE;
+
+                String toastMsg = null;
+                if (connected)
+                {
+                    ElasticsearchUserController.RetrieveUser retrieveUser;
+                    retrieveUser = new ElasticsearchUserController.RetrieveUser();
+                    retrieveUser.execute(userLogin.getText().toString());
+
+                    try {
+                        user = retrieveUser.get();
+                        if (user != null) {
+                            UserFileManager.getUserFileManager().saveUser(user);
+                            toastMsg = "Username does not exist";
+                        }
+                    } catch (Exception e) {
+                        Log.i("Fail","Something went wrong with the search!");
+                    }
+                }
+                else
+                {
+                    toastMsg = "You need internet to log in!";
+                }
 
                 try {
-
-                    user = retrieveUser.get();
-
-                    UserFileManager.getUserFileManager().saveUser(user);
-
-                    UserAccount u = UserController.getUserAccount();
-
-                    Log.i("HELLLO","This user is "+ u.getUniqueUserName());
-
                     if (userLogin.getText().toString().equals(user.getUniqueUserName()))
                     {
+                        user.setLoginStatus(Boolean.TRUE);
                         Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
                     }
                 } catch (Exception e) {
-                    Toast.makeText(LoginActivity.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -172,6 +205,7 @@ public class LoginActivity extends MainMenuActivity {
 
                         if (userLogin.getText().toString().equals(user.getUniqueUserName()))
                         {
+                            user.setLoginStatus(Boolean.TRUE);
                             Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
                             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                             startActivity(intent);

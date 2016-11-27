@@ -136,6 +136,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
                 Request request =  requestList.get(position);
                 intent.putExtra("Request", request);
                 startActivity(intent);
+                finish();
             }
         });
     }

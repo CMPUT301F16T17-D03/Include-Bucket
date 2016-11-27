@@ -9,21 +9,14 @@ import android.widget.Button;
 import java.sql.Driver;
 
 /**
- *
  * MainMenuActivity
  *
  * The view for the main menu
- *
- *
  */
 
 public class MainMenuActivity extends Activity {
-   // private Activity activity = this;
 
-    private UserAccount user;
-    private UserController userController;
-    private RiderRequestsController riderController;
-    private DriverRequestsController driverController;
+    UserAccount user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +26,8 @@ public class MainMenuActivity extends Activity {
         UserFileManager.initManager(this.getApplicationContext());
         RiderRequestsFileManager.initManager(this.getApplicationContext());
         DriverRequestsFileManager.initManager(this.getApplicationContext());
+
+        user = UserController.getUserAccount();
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +44,8 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                UserController.logUserOut();
+                user.setLoginStatus(Boolean.FALSE);
+
                 finish();
             }
         });
@@ -59,8 +55,6 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                UserAccount user = UserController.getUserAccount();
-                user.setUserState(UserAccount.UserState.rider);
 
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
                 startActivity(intent);

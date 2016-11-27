@@ -55,8 +55,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         UserFileManager.initManager(this.getApplicationContext());
         RiderRequestsFileManager.initManager(this.getApplicationContext());
 
-
-
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
         /**
@@ -69,9 +67,9 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
         {
-            connected = true;
+            connected = Boolean.TRUE;
         }
-        else connected = false;
+        else connected = Boolean.FALSE;
 
 
         if (connected)

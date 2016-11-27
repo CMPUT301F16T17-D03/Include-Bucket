@@ -10,7 +10,10 @@
         android:id="@+id/requestTitleTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:textSize="35dp" />
+        android:fontFamily="sans-serif-light"
+        android:textSize="35dp"
+        android:textAlignment="center"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,8 +24,19 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:nestedScrollingEnabled="true"
+        android:fontFamily="sans-serif-light"
         android:textSize="15dp" />
-        android:nestedScrollingEnabled="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complete Request"
+        android:id="@+id/completeRequestButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -35,13 +49,5 @@
             android:layout_height="fill_parent" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Complete Request"
-        android:id="@+id/completeRequestButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -91,9 +91,7 @@ public class ElasticsearchRequestController {
     }
 
     /**
-     * This method retrieves all requests. Essentially, the driver will obtain these results,
-     * which will then be filtered out so that only the requests not including their own will
-     * be left in the DriverCurrentRequestsActivity.
+     * This method retrieves all requests.
      */
     public static class GetOpenRequests extends AsyncTask<String, Void, RequestList> {
         @Override

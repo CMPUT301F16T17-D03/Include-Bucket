@@ -102,5 +102,7 @@
         android:text="@string/accept_button"
         android:id="@+id/acceptButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        android:fontFamily="sans-serif-light" />
 </RelativeLayout>

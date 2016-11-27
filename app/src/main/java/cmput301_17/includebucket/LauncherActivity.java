@@ -3,6 +3,7 @@ package cmput301_17.includebucket;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * LauncherActivity
@@ -12,27 +13,31 @@ import android.os.Bundle;
  * It is the activity class that decides whether LoginActivity or
  * MainMenuActivity is viewed after checking the login state of the user.
  * If the user is logged in, it will switch directly to MainMenuActivity.
- * If the user is not logged in, it will switch directly to LoginActivity.
+ * If the user is not logged in, it will switch to LoginActivity.
  */
 public class LauncherActivity extends Activity {
 
-    /**
-     * Maybe a solution would be to save the last person that was logged in into a local file
-     * by way of using GSON. We would then have to retrieve that user and check their login
-     * status to perform the necessary checks.
-     *
-     * @param savedInstanceState
-     */
+    UserAccount user = new UserAccount();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO : fix these checks using GSON
-        UserAccount newUser = new UserAccount("Username","jemm@idk.com","null",null,null,null);
+        UserFileManager.initManager(this.getApplicationContext());
+        //RiderRequestsFileManager.initManager(this.getApplicationContext());
+        //DriverRequestsFileManager.initManager(this.getApplicationContext());
+
+        user = UserController.getUserAccount();
+        try {
+            UserFileManager.getUserFileManager().saveUser(user);
+        } catch (Exception e) {
+            Log.i("Fail", "Could not deserialize the UserAccount in UserFileManager");
+        }
 
         Intent intent;
-        if (!newUser.getLoginStatus()){
+        if (!user.getLoginStatus()){
             intent = new Intent(LauncherActivity.this,LoginActivity.class);
+            Log.i("Success","You did it.");
         }
         else {
             intent = new Intent(LauncherActivity.this,MainMenuActivity.class);

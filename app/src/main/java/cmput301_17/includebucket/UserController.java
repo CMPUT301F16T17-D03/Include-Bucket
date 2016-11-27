@@ -20,20 +20,12 @@ import java.util.concurrent.ExecutionException;
 /**
  * UserController
  *
- * This is a controller for a UserAccount.
- *     This class will be used to control when the data of a
- *     user is changed (i.e. when the user updates their contact information) --> many changes
- *     to the Login/Register activities will be done later to follow the UML diagram.
- *     Also when a user creates or deletes a request, this class should be communicated with via
- *     an observer/listener class so that the UserAccount model is also updated).
+ * This is a controller for a UserAccount. A singleton class.
  */
 public class UserController {
 
     private Context context;
     private static UserAccount userAccount = null;
-    private static final String USER_FILE  = "user.sav";
-
-    //private static UserController controller = new UserController();
 
     public static UserAccount getUserAccount() {
         if (userAccount == null) {
@@ -102,25 +94,6 @@ public class UserController {
     }
 
     /**
-     * This loads a user account from USER_FILE.
-     */
-    /*public static void loadUserAccountFromLocalFile() {
-
-        try {
-            FileInputStream fis = controller.getContext().openFileInput(USER_FILE);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
-            Gson gson = new Gson();
-
-            Type listType = new TypeToken<UserAccount>() {}.getType();
-            userAccount = gson.fromJson(in, listType);
-        }
-        catch (FileNotFoundException e) {
-            userAccount = new UserAccount();
-        }
-    }
-
-    /**
      * This saves a user account in to USER_FILE.
      * @param
      */
@@ -131,13 +104,6 @@ public class UserController {
             e.printStackTrace();
             throw new RuntimeException("Could not deserialize User from UserFileManagaer");
         }
-    }
-
-    /**
-     * Log the user out of the app.
-     */
-    public static void logUserOut() {
-        userAccount = null;
     }
 
     /**

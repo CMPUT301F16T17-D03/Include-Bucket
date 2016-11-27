@@ -26,10 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class RiderRequestsController {
 
     private Context context;
-    private static RiderRequestsController controller = new RiderRequestsController();
-
     private static RequestList riderRequests = null;
-    private static final String RIDER_REQUESTS_FILE = "rider_requests.sav";
 
     /**
      * This returns a list of requests.
@@ -83,10 +80,12 @@ public class RiderRequestsController {
     }
 
     /**
-     * Adds a bulk of requests to the list
+     * This deletes a rider request from the riderRequests list.
+     * @return requests
      */
-    public static void addBulkRequests(RequestList requestList) {
-        getRiderRequests().getRequests().addAll(requestList);
+    public static void deleteRequest(Request request) {
+
+        getRiderRequests().deleteRequest(request);
     }
 
     /**
@@ -100,7 +99,6 @@ public class RiderRequestsController {
         createRequest.execute(request);
     }
 
-
     /**
      * This deletes a request from Elasticsearch.
      * @param request
@@ -110,15 +108,6 @@ public class RiderRequestsController {
         ElasticsearchRequestController.DeleteRequest deleteRequest;
         deleteRequest = new ElasticsearchRequestController.DeleteRequest();
         deleteRequest.execute(request);
-        Log.i("FAIL", "This is " + request.getRequestID());
-    }
-    /**
-     * This deletes a rider request from the riderRequests list.
-     * @return requests
-     */
-    public static void deleteRequest(Request request) {
-
-        getRiderRequests().deleteRequest(request);
     }
 
     /**
@@ -132,8 +121,6 @@ public class RiderRequestsController {
         riderList = new ElasticsearchRequestController.GetRiderRequests();
         riderList.execute(user);
 
-        Log.i("SUCCESS","Found " + user.getUniqueUserName());
-
         RequestList requestList = new RequestList();
         try {
             requestList.getRequests().addAll(riderList.get());
@@ -143,25 +130,6 @@ public class RiderRequestsController {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * This loads requests from RIDER_REQUESTS_FILE.
-     */
-    public static void loadRequestsFromLocalFile() {
-
-        try {
-            FileInputStream fis = controller.getContext().openFileInput(RIDER_REQUESTS_FILE);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
-            Gson gson = new Gson();
-
-            Type listType = new TypeToken<RequestList>() {}.getType();
-            riderRequests = gson.fromJson(in, listType);
-        }
-        catch (FileNotFoundException e) {
-            riderRequests = new RequestList();
         }
     }
 

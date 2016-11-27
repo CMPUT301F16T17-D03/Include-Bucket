@@ -38,25 +38,25 @@ public class ElasticsearchUserController {
             verifySettings();
 
             for (UserAccount user : userAccounts) {
-                    Index index = new Index.Builder(user)
-                            .index("cmput301f16t17")
-                            .type("user")
-                            .build();
-                    try {
-                        DocumentResult result = client.execute(index);
+                Index index = new Index.Builder(user)
+                        .index("cmput301f16t17")
+                        .type("user")
+                        .build();
+                try {
+                    DocumentResult result = client.execute(index);
 
-                        if (result.isSucceeded())
-                        {
-                            user.setUserId(result.getId());
-                        }
-                        else
-                        {
-                            Log.i("Error", "Elastic search was not able to add the user.");
-                        }
-                    } catch(Exception e){
-                        Log.i("Error", "We failed to add a user to elastic search!");
-                        e.printStackTrace();
+                    if (result.isSucceeded())
+                    {
+                        user.setUserId(result.getId());
                     }
+                    else
+                    {
+                        Log.i("Error", "Elastic search was not able to add the user.");
+                    }
+                } catch(Exception e){
+                    Log.i("Error", "We failed to add a user to elastic search!");
+                    e.printStackTrace();
+                }
             }
             return null;
         }

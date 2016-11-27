@@ -2,6 +2,7 @@ package cmput301_17.includebucket;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 
 /**
@@ -144,7 +146,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 createRequest.execute(request);
                 Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
 
-                DriverRequestsController.loadOpenRequestsFromElasticsearch();
+                Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
+                startActivity(intent);
 
                 finish();
             }

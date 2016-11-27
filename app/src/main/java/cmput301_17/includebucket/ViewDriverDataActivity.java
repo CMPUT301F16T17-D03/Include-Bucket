@@ -29,7 +29,6 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_driver_data);
 
-
         UserFileManager.initManager(this.getApplicationContext());
 
         final UserAccount driver = (UserAccount) getIntent().getSerializableExtra("User");
@@ -85,7 +84,6 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[] {driver.getEmail()});
                 startActivity(intent);
-
             }
         });
 
