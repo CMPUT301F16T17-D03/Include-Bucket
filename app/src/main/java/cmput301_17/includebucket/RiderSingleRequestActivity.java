@@ -137,8 +137,9 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    RiderRequestsController.deleteRequest(request);
-                    RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    request.setRequestStatus(Request.RequestStatus.Closed);
+                    //RiderRequestsController.deleteRequest(request);
+                    //RiderRequestsController.deleteRequestFromElasticsearch(request);
                     Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
                     finish();
                 }

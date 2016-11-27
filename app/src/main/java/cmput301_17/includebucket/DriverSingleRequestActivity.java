@@ -142,7 +142,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         /**************************************************** PERMISSIONS ***************************************************/
 
 
-        if (request.getRequestStatus() == Request.RequestStatus.Open)
+        if (request.getRequestStatus() != Request.RequestStatus.Closed)
         {
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -201,13 +201,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         }*/
         else if (request.getRequestStatus() == Request.RequestStatus.Closed)
         {
-            storyText.setText("THIS REQUEST IS CLOSED.");
+            storyText.setText("This request is now closed.");
             acceptButton.setText("REQUESTS");
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     setResult(RESULT_OK);
-                    Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
-                    startActivity(intent);
                     finish();
                 }
             });
@@ -217,8 +215,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 Intent intent = new Intent(DriverSingleRequestActivity.this, ViewRiderDataActivity.class);
+                intent.putExtra("Request", request);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -293,6 +291,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         //AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
         //Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
         //map.getOverlays().add(roadOverlay);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
