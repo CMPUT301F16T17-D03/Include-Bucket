@@ -40,7 +40,7 @@ import java.util.Formatter;
 public class RiderSingleRequestActivity extends MainMenuActivity implements MapEventsReceiver {
 
     private TextView startEditText, endEditText, priceEditText, storyText;
-    private Button completeButton;
+    private Button completeButton, viewDriverButton;
     private ArrayList<UserAccount> driverList;
     private ArrayAdapter<UserAccount> driverListAdapter;
 
@@ -50,6 +50,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
     private GeoPoint endPoint;
     private MapView map;
     private RoadManager roadManager;
+
+    private String toastMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
         storyText = (TextView) findViewById(R.id.DSRAstory);
         completeButton = (Button) findViewById(R.id.completeRequestButton);
+        viewDriverButton = (Button) findViewById(R.id.viewDriverButton);
 
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
@@ -129,43 +132,58 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         String p = formatter.format("%.2f%n", request.getFare()).toString();
         priceEditText.setText("$"+p);
 
+        toastMsg = null;
         if (request.getRequestStatus() != Request.RequestStatus.Closed) {
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    RiderRequestsController.deleteRequest(request);
-                    RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    request.setRequestStatus(Request.RequestStatus.Closed);
+                    //RiderRequestsController.deleteRequest(request);
+                    //RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
         }
         else
         {
+            toastMsg = "Back to your requests!";
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             completeButton.setText("REQUESTS");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
                     Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             });
         }
+
+        viewDriverButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                Intent intent = new Intent(RiderSingleRequestActivity.this, ViewDriverDataActivity.class);
+                intent.putExtra("User",request.getDriver());
+                intent.putExtra("Request", request);
+                startActivity(intent);
+                finish();
+            }
+        });
 /*
         requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" +
                startAddress+"\nEnd Location:\n" + endAddress+"\nRequest Description:\n" +
                 story + "\n"+ "Driver car details:\n" + make + "\n" + model + "\n" + year);
 */
-        completeButton.setOnClickListener(new View.OnClickListener() {
+ /*       completeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 RiderRequestsController.deleteRequest(request);
                 RiderRequestsController.deleteRequestFromElasticsearch(request);
-                Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RiderSingleRequestActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                 finish();
             }
-        });
+        });*/
 
     }
     @Override

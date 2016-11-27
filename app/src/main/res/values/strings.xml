@@ -53,5 +53,7 @@
     <string name="driver_Requests">Your Rides</string>
     <string name="rider_Requests">Your Requests</string>
     <string name="open_Requests">Open Requests</string>
+    <string name="contact_info">Contact Information</string>
+
 
 </resources>

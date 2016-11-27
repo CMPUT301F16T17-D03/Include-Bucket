@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Formatter;
 
 /**
@@ -51,6 +53,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     private Request request = new Request();
     private ArrayList<UserAccount> drivers;
     private UserAccount driver;
+    private Button acceptButton, riderDetailsButton;
 
     private UserAccount user = new UserAccount();
 
@@ -72,6 +75,13 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
         drivers= new ArrayList<UserAccount>();
         driver = new UserAccount();
+
+        startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
+        endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
+        priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
+        storyText = (TextView) findViewById(R.id.DSRAstory);
+        acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
+        riderDetailsButton = (Button) findViewById(R.id.riderDetailsButton);
 
         /****************************************************** PERMISSIONS *****************************************************/
         //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -132,25 +142,81 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         /**************************************************** PERMISSIONS ***************************************************/
 
 
+        if (request.getRequestStatus() != Request.RequestStatus.Closed)
+        {
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
 
-        Button acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
+                    request.setRequestStatus(Request.RequestStatus.PendingDrivers);
+                    request.setDriverAccepted(true);
+                    request.addDriver(user);
+                    DriverRequestsController.deleteRequest(request);
+                    ElasticsearchRequestController.CreateRequest createRequest;
+                    createRequest = new ElasticsearchRequestController.CreateRequest();
+                    createRequest.execute(request);
+                    Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
+                    startActivity(intent);
+
+                    finish();
+                }
+            });
+        }
+        /**
+         * I tried. Haha.
+         * I tried to create a condition where if the driver was in the pendingDrivers list,
+         * they wouldn't be allowed to accept the request. But this failed miserably.
+         * Anyone got any ideas??
+         */
+        /*
+        else if (request.getRequestStatus() == Request.RequestStatus.PendingDrivers)
+        {
+            Collection<UserAccount> pendingDrivers = new ArrayList<>();
+            pendingDrivers = request.getDrivers();
+
+            for (UserAccount u : pendingDrivers)
+            {
+                if (u.equals(user))
+                {
+                    Log.i("SUCCESS", "The list contains the driver " + user.getUniqueUserName());
+                    storyText.setText("You already accepted the request.");
+                    acceptButton.setText("REQUESTS");
+                }
+                else
+                {
+                    Log.i("FAIL", "The list sucks " + user.getUniqueUserName());
+                }
+            }
+
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+                    Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }*/
+        else if (request.getRequestStatus() == Request.RequestStatus.Closed)
+        {
+            storyText.setText("This request is now closed.");
+            acceptButton.setText("REQUESTS");
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+        }
+
+        riderDetailsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
-                request.setRequestStatus(Request.RequestStatus.Accepted);
-                request.setDriverAccepted(true);
-                request.addDriver(user);
-                DriverRequestsController.deleteRequest(request);
-                ElasticsearchRequestController.CreateRequest createRequest;
-                createRequest = new ElasticsearchRequestController.CreateRequest();
-                createRequest.execute(request);
-                Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
+                Intent intent = new Intent(DriverSingleRequestActivity.this, ViewRiderDataActivity.class);
+                intent.putExtra("Request", request);
                 startActivity(intent);
-
-                finish();
             }
         });
 
@@ -163,11 +229,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
 
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
-
-        startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
-        endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
-        priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
-        storyText = (TextView) findViewById(R.id.DSRAstory);
 
         map = (MapView) findViewById(R.id.DSRAmap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -230,6 +291,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         //AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
         //Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
         //map.getOverlays().add(roadOverlay);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {

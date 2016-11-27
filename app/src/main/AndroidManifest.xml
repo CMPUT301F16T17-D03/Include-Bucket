@@ -37,6 +37,7 @@
         <activity android:name=".ViewDriverDataActivity" />
         <activity android:name=".RiderSingleRequestActivity" />
         <activity android:name=".RiderAcceptDriverActivity" />
+        <activity android:name=".ViewRiderDataActivity" />
 
 
         <!--

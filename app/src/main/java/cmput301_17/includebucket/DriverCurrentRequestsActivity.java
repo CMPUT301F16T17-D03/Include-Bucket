@@ -1,9 +1,12 @@
 package cmput301_17.includebucket;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -92,7 +95,22 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         requestAdapter.notifyDataSetChanged();
+
+        requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                final int finalPosition = position;
+
+                Request request = requestList.get(finalPosition);
+
+                Intent intent = new Intent(DriverCurrentRequestsActivity.this, DriverSingleRequestActivity.class);
+                intent.putExtra("Request", request);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

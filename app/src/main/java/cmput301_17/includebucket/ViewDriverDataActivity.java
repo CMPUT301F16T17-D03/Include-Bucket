@@ -59,28 +59,44 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         makeView.setText(make);
         yearView.setText(year);
 
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_OK);
+        if (request.getRequestStatus() != Request.RequestStatus.Closed) {
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
 
-                request.setRequestStatus(Request.RequestStatus.Closed);
-                request.chooseDriver(driver);
-                request.setRiderAccepted(true);
-                request.clearDrivers();
-                request.setRiderAccepted(true); // Eventually we won't need these booleans, but they are kept for testing purposes
-                request.chooseDriver(driver);
+                    Request newRequest = new Request();
+                    newRequest = request;
 
+                    DriverRequestsController.deleteRequest(request);
 
-                DriverRequestsController.deleteRequest(request);
-                ElasticsearchRequestController.CreateRequest createRequest;
-                createRequest = new ElasticsearchRequestController.CreateRequest();
-                createRequest.execute(request);
-                Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+                    ElasticsearchRequestController.CreateRequest createRequest;
+                    createRequest = new ElasticsearchRequestController.CreateRequest();
+                    createRequest.execute(newRequest);
 
+                    newRequest.setRequestStatus(Request.RequestStatus.Closed);
+                    newRequest.chooseDriver(driver);
+                    newRequest.setRiderAccepted(true);
+                    newRequest.clearDrivers();
 
-        });
+                    Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+        else
+        {
+            acceptButton.setText("REQUESTS");
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+                    Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
 
         emailButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -106,7 +122,6 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + driver.getPhoneNumber()));
                 startActivity(intent);
-
             }
         });
 
