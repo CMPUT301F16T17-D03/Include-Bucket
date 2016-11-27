@@ -51,8 +51,8 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         end = (TextView) findViewById(R.id.endGeoLocTextView);
         price = (TextView) findViewById(R.id.priceValueTextView);
 
-        start.setText(request.getStartLocation());
-        end.setText(request.getEndLocation());
+        start.setText(request.getStartLocation().toString());
+        end.setText(request.getEndLocation().toString());
         price.setText(request.getFare().toString());
 
         driverList = new ArrayList<>();

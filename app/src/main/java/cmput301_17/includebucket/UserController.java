@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -22,9 +23,9 @@ import java.util.concurrent.ExecutionException;
  *
  * This is a controller for a UserAccount. A singleton class.
  */
-public class UserController {
+public class UserController implements Serializable{
 
-    private Context context;
+    //private Context context;
     private static UserAccount userAccount = null;
 
     public static UserAccount getUserAccount() {
@@ -110,12 +111,8 @@ public class UserController {
      * Add user ride request ID's to riderRequests list.
      * @return
      */
-    public Context getContext() {
-        return context;
-    }
+    //public Context getContext() {return context;}
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
+    //public void setContext(Context context) {this.context = context;}
 
 }

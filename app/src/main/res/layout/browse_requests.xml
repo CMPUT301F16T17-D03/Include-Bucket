@@ -49,4 +49,23 @@
         android:layout_below="@+id/requestsTitle"
         android:layout_alignParentStart="true" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:id="@+id/searchNearbyButton"
+        android:layout_alignTop="@+id/nearby"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nearby"
+        android:singleLine="true"
+        android:hint="Search by location"
+        android:layout_below="@+id/keyword"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>

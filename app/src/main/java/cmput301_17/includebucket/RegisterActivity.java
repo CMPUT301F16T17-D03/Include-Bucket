@@ -81,7 +81,7 @@ public class RegisterActivity extends MainMenuActivity {
 
                     UserController.createUserInElasticSearch(user);
 
-                    controller.setContext(RegisterActivity.this);
+                    //controller.setContext(RegisterActivity.this);
 
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");
 

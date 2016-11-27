@@ -77,14 +77,13 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         requestTextView = (TextView) findViewById(R.id.requestTextView);
         completeButton = (Button) findViewById(R.id.completeRequestButton);
         Double price    = request.getFare();
-        String startLoc = request.getStartLocation();
-        String endLoc   = request.getEndLocation();
+
         String story    = request.getRiderStory();
         String startAddress = request.getStartAddress();
         String endAddress = request.getEndAddress();
 
-        startPoint = new GeoPoint(Double.parseDouble(startLoc.split(",")[0]), Double.parseDouble(startLoc.split(",")[1]));
-        endPoint = new GeoPoint(Double.parseDouble(endLoc.split(",")[0]), Double.parseDouble(endLoc.split(",")[1]));
+        startPoint = request.getStartLocation();
+        endPoint = request.getEndLocation();
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
@@ -115,8 +114,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             }
         }).execute(waypoints);
 
-        requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" + startLoc +
-                "\n"+startAddress+"\nEnd Location:\n" + endLoc + "\n"+endAddress+"\nRequest Description:\n" + story);
+        requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" +
+                "\n"+startAddress+"\nEnd Location:\n" + "\n"+endAddress+"\nRequest Description:\n" + story);
 
         completeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

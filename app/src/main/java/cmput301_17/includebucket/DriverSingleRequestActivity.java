@@ -177,14 +177,10 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
         Request request = (Request) getIntent().getSerializableExtra("Request");
         startEditText.setText(request.getStartAddress());
-        Double latdub = (Double.parseDouble(request.getStartLocation().split(",")[0]));
-        Double lngdub = (Double.parseDouble(request.getStartLocation().split(",")[1]));
-        startPoint = new GeoPoint(latdub, lngdub);
+        startPoint = request.getStartLocation();
 
         endEditText.setText(request.getEndAddress());
-        latdub = (Double.parseDouble(request.getEndLocation().split(",")[0]));
-        lngdub = (Double.parseDouble(request.getEndLocation().split(",")[1]));
-        endPoint = new GeoPoint(latdub, lngdub);
+        endPoint = request.getEndLocation();
 
         priceEditText.setText("$"+request.getFare().toString());
         storyText.setText(request.getRiderStory());

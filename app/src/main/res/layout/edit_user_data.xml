@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".ViewDriverDataActivity"
     android:background="#000000">
 
@@ -32,13 +31,53 @@
         android:fontFamily="sans-serif-light"
         android:textSize="25dp" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/editVehicleMake"
+        android:layout_below="@+id/editPhone"
+        android:layout_alignParentStart="true"
+        android:singleLine="true"
+        android:hint="Vehicle Make"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/editVehicleModel"
+        android:layout_below="@+id/editVehicleMake"
+        android:layout_alignParentStart="true"
+        android:singleLine="true"
+        android:hint="Vehicle Model"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/editVehicleYear"
+        android:layout_below="@+id/editVehicleModel"
+        android:layout_alignParentStart="true"
+        android:singleLine="true"
+        android:hint="MM/DD/YY Vehicle Year"
+        android:fontFamily="sans-serif-light"
+        android:textSize="25dp"
+        android:inputType="date" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/saveButton"
-        android:layout_below="@+id/editPhone"
+        android:layout_below="@+id/editVehicleYear"
         android:layout_alignParentStart="true"
         android:textSize="25dp"
         android:fontFamily="sans-serif-light" />
+
 </RelativeLayout>

@@ -58,9 +58,10 @@ public class UserFileManager {
         }
         else
         {
-            Gson gson = new Gson();
-            UserAccount user = gson.fromJson(userData, UserAccount.class);
-            return user;
+//            Gson gson = new Gson();
+//            UserAccount user = gson.fromJson(userData, UserAccount.class);
+//            return user;
+            return new UserAccount();
         }
     }
 

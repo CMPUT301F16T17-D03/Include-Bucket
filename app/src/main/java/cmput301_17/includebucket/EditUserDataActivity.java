@@ -17,7 +17,7 @@ public class EditUserDataActivity extends MainMenuActivity {
 
     protected EditText userName, userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
 
-    UserAccount user = new UserAccount();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +26,19 @@ public class EditUserDataActivity extends MainMenuActivity {
 
         UserFileManager.initManager(this.getApplicationContext());
 
-        user = (UserAccount) getIntent().getSerializableExtra("User");
+        UserAccount user = UserController.getUserAccount();
+        //user = (UserAccount) getIntent().getSerializableExtra("User");
 
         userEmail = (EditText) findViewById(R.id.editEmail);
+        userEmail.setText(user.getEmail());
         userPhone = (EditText) findViewById(R.id.editPhone);
+        userPhone.setText(user.getPhoneNumber());
+        vehicleMake = (EditText) findViewById(R.id.editVehicleMake);
+        vehicleMake.setText(user.getVehicleMake());
+        vehicleModel = (EditText) findViewById(R.id.editVehicleModel);
+        vehicleModel.setText(user.getVehicleModel());
+        vehicleYear = (EditText) findViewById(R.id.editVehicleYear);
+        vehicleYear.setText(user.getVehicleYear());
 
         Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {

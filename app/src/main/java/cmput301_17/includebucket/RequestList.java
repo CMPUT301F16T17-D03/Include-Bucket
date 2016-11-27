@@ -56,7 +56,8 @@ public class RequestList extends ArrayList implements Serializable {
     public Request get(int i) {
         ArrayList<Request> list = new ArrayList<>();
         list.addAll(getRequests());
-        return list.get(i);
+        if (list.size()>0){return list.get(i);}
+        else{return null;}
     }
 
     public int size() {
