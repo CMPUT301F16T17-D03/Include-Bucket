@@ -81,6 +81,9 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         String story    = request.getRiderStory();
         String startAddress = request.getStartAddress();
         String endAddress = request.getEndAddress();
+        String make = request.getDriver().getVehicleMake();
+        String model = request.getDriver().getVehicleModel();
+        String year = request.getDriver().getVehicleYear();
 
         startPoint = request.getStartLocation();
         endPoint = request.getEndLocation();
@@ -115,7 +118,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         }).execute(waypoints);
 
         requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" +
-                "\n"+startAddress+"\nEnd Location:\n" + "\n"+endAddress+"\nRequest Description:\n" + story);
+               startAddress+"\nEnd Location:\n" + endAddress+"\nRequest Description:\n" +
+                story + "\n"+ "Driver car details:\n" + make + "\n" + model + "\n" + year);
 
         completeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -89,6 +89,7 @@ public class Request implements Serializable {
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
         this.requestStatus = RequestStatus.Open;
+
         listeners = new ArrayList<>();
     }
 
@@ -262,6 +263,10 @@ public class Request implements Serializable {
         notifyListeners();
     }
 
+    public UserAccount getDriver() {
+        return driver;
+    }
+
     public void chooseDriver(UserAccount user){
         this.driver = user;
         notifyListeners();
@@ -278,6 +283,7 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
+
 
         String status = this.requestStatus.toString();
 
