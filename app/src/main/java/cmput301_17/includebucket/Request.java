@@ -238,6 +238,10 @@ public class Request implements Serializable {
         notifyListeners();
     }
 
+    public UserAccount getDriver() {
+        return driver;
+    }
+
     public void chooseDriver(UserAccount user){
         this.driver = user;
         notifyListeners();

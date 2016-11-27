@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ViewDriverDataActivity extends MainMenuActivity {
 
-    private TextView loginTextView;
+    private TextView loginTextView, makeView, modelView, yearView;
     private Button acceptButton, emailButton, phoneButton;
     private UserAccount driver = new UserAccount();
     @Override
@@ -39,17 +39,26 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         loginTextView = (TextView) findViewById(R.id.loginTextView);
         emailButton = (Button) findViewById(R.id.emailTextView);
         phoneButton = (Button) findViewById(R.id.phoneTextView);
+        makeView = (TextView) findViewById(R.id.MakeView);
+        modelView = (TextView) findViewById(R.id.ModelView);
+        yearView = (TextView) findViewById(R.id.YearView);
 
         acceptButton = (Button) findViewById(R.id.confirmButton);
 
 
-        String login = driver.getUniqueUserName();
-        String email = driver.getEmail();
-        String phone = driver.getPhoneNumber();
+        String login = "Username: " + driver.getUniqueUserName();
+        String email = "Email: " + driver.getEmail();
+        String phone = "Phone number: " + driver.getPhoneNumber();
+        String make = "Car details: \nMake: " + driver.getVehicleMake();
+        String model = "Model: " + driver.getVehicleModel();
+        String year = "Year: " + driver.getVehicleYear();
 
         loginTextView.setText(login);
         emailButton.setText(email);
         phoneButton.setText(phone);
+        modelView.setText(model);
+        makeView.setText(make);
+        yearView.setText(year);
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
