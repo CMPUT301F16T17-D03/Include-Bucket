@@ -108,8 +108,8 @@ public class Request implements Serializable {
 
     public String getRequestID() {return requestID; }
 
-    public GeoPoint getStartLocation() {
-        return new GeoPoint(Double.parseDouble(startLocation.split(",")[0]),Double.parseDouble(startLocation.split(",")[1])) ;
+    public String getStartLocation() {
+        return startLocation;
     }
 
     public void setStartLocation(String startLocation) {
@@ -123,8 +123,8 @@ public class Request implements Serializable {
     }
 
 
-    public GeoPoint getEndLocation() {
-        return new GeoPoint(Double.parseDouble(endLocation.split(",")[0]),Double.parseDouble(endLocation.split(",")[1]));
+    public String getEndLocation() {
+        return endLocation;
     }
 
     public void setEndLocation(String endLocation) {

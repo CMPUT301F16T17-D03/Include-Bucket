@@ -44,7 +44,7 @@ public class RegisterActivity extends MainMenuActivity {
         vehicleModel = (EditText) findViewById(R.id.modelTextField);
         vehicleYear  = (EditText) findViewById(R.id.yearTextField);
 
-        Button registerButton = (Button) findViewById(R.id.acceptButton);
+        Button registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);

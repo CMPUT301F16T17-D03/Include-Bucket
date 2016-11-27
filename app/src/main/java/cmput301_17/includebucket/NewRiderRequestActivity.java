@@ -389,7 +389,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             public void processFinish(Road output){
                 roadLength = output.mLength; //see also mDuration
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                priceEditText.setText(formatter.format(roadLength).toString());
+                priceEditText.setText(formatter.format(roadLength));
                 //Here you will receive the result fired from async class
                 //of onPostExecute(result) method.
 

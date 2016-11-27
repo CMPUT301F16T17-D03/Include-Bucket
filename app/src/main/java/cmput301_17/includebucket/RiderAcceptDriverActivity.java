@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 
@@ -51,9 +52,10 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         end = (TextView) findViewById(R.id.endGeoLocTextView);
         price = (TextView) findViewById(R.id.priceValueTextView);
 
-        start.setText(request.getStartLocation().toString());
-        end.setText(request.getEndLocation().toString());
-        price.setText(request.getFare().toString());
+        start.setText(request.getStartAddress());
+        end.setText(request.getEndAddress());
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        price.setText(formatter.format(request.getFare()));
 
         driverList = new ArrayList<>();
         driverList.addAll(request.getDrivers());
@@ -72,9 +74,7 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                final int finalPosition = position;
-
-                UserAccount user = driverList.get(finalPosition);
+                UserAccount user = driverList.get(position);
                 Intent intent = new Intent(RiderAcceptDriverActivity.this, ViewDriverDataActivity.class);
                 intent.putExtra("User", user);
                 intent.putExtra("Request", request);

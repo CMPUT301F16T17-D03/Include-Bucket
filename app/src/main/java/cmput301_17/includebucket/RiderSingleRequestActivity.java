@@ -85,8 +85,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         String model = request.getDriver().getVehicleModel();
         String year = request.getDriver().getVehicleYear();
 
-        startPoint = request.getStartLocation();
-        endPoint = request.getEndLocation();
+        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),Double.parseDouble(request.getStartLocation().split(",")[1]));
+        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),Double.parseDouble(request.getEndLocation().split(",")[1]));
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);

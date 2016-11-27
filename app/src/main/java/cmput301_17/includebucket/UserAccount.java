@@ -185,7 +185,13 @@ public class UserAccount implements Serializable {
      * This returns the login status of the user
      * @return isLoggedIn
      */
-    public boolean getLoginStatus() { return this.isLoggedIn; }
+    public boolean getLoginStatus() {
+        try {
+            return this.isLoggedIn;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     /**
      * This changes the user's login status
