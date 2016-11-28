@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutionException;
  */
 public class UserController implements Serializable{
 
-    //private Context context;
     private static UserAccount userAccount = null;
 
     public static UserAccount getUserAccount() {

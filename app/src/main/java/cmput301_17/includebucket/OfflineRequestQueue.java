@@ -1,5 +1,7 @@
 package cmput301_17.includebucket;
 
+import android.util.Log;
+
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -7,10 +9,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class OfflineRequestQueue {
 
-    private static LinkedBlockingQueue<Request> requestQueue = null;
-    private volatile boolean shutdown;
+    private static LinkedBlockingQueue<CreateRequestCommand> requestQueue = null;
 
-    public static LinkedBlockingQueue<Request> getRequestQueue() {
+    public static LinkedBlockingQueue<CreateRequestCommand> getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = new LinkedBlockingQueue<>();
         }
@@ -21,24 +22,26 @@ public class OfflineRequestQueue {
      * Taken from: https://www.javacodegeeks.com/2015/09/command-design-pattern.html
      * Accessed: November 26, 2016
      * Author: Rohit Joshi
-     * @param request
+     * @param command
      */
-    public void addCommand(Request request) {
+    public static void addCommand(CreateRequestCommand command) {
         try {
-            requestQueue.put(request);
+            getRequestQueue().put(command);
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            e.printStackTrace();
         }
     }
 
-    public void queueManager() {
-        while (!requestQueue.isEmpty()) {
+    public static void execute() {
+        while (!getRequestQueue().isEmpty()) {
             try {
+                CreateRequestCommand c = OfflineRequestQueue.getRequestQueue().take();
+                c.execute();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        shutdown = true;
     }
 }
+

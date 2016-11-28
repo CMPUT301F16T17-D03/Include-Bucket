@@ -13,7 +13,16 @@
         android:text="@string/driver_Requests"
         android:layout_alignParentEnd="true"
         android:fontFamily="sans-serif-light"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view2"
+        android:layout_below="@+id/requestTitleTextView" />
 
     <ListView
         android:layout_width="wrap_content"

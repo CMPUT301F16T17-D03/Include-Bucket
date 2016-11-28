@@ -18,6 +18,7 @@
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/searchButton"
         android:singleLine="true"
+        android:fontFamily="sans-serif-light"
         android:hint="Search by keyword" />
 
     <Button
@@ -26,8 +27,9 @@
         android:layout_height="wrap_content"
         android:text="Search"
         android:id="@+id/searchButton"
-        android:layout_alignBottom="@+id/keyword"
-        android:layout_alignParentEnd="true" />
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/keyword" />
 
 
     <ListView
@@ -35,6 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/browseRequestList"
         android:layout_below="@+id/requestsTitle"
+        android:fontFamily="sans-serif-light"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -43,8 +46,10 @@
         android:layout_height="wrap_content"
         android:text="Search"
         android:id="@+id/searchNearbyButton"
-        android:layout_alignTop="@+id/nearby"
-        android:layout_alignParentEnd="true" />
+        android:fontFamily="sans-serif-light"
+        android:layout_alignBottom="@+id/nearby"
+        android:layout_toEndOf="@+id/keyword"
+        android:layout_alignTop="@+id/nearby" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -53,7 +58,9 @@
         android:singleLine="true"
         android:hint="Search by location"
         android:layout_below="@+id/keyword"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:fontFamily="sans-serif-light"
+        android:layout_toStartOf="@+id/searchNearbyButton" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,8 +72,17 @@
         android:textAlignment="center"
         android:layout_below="@+id/nearby"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/linearLayout2"
-        android:layout_alignParentStart="true" />
+        android:layout_toEndOf="@+id/linearLayout"
+        android:layout_alignParentStart="true"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view2"
+        android:layout_below="@+id/requestsTitle" />
 
 
 </RelativeLayout>

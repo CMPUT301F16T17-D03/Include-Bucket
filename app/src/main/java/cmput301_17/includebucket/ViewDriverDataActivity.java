@@ -100,14 +100,11 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                     createRequest.execute(newRequest);
 
                     newRequest.setRequestStatus(Request.RequestStatus.Closed);
-                    newRequest.chooseDriver(driver);
+                    newRequest.setChosenDriver(driver);
                     newRequest.setRiderAccepted(true);
                     newRequest.clearDrivers();
 
                     Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
-                    createNotification(acceptButton);
-                    Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
-                    startActivity(intent);
                     finish();
                 }
             });

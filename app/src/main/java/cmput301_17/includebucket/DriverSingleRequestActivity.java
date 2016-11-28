@@ -6,13 +6,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +34,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
+import java.lang.reflect.Array;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,8 +63,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     private ArrayList<UserAccount> drivers;
     private UserAccount driver;
     private Button acceptButton, riderDetailsButton;
-
+    private ConnectivityManager connectivityManager;
+    private boolean connected, browse;
+    private Request newRequest = new Request();
     private UserAccount user = new UserAccount();
+    private Request request;
 
     /**
      * Deals with most map functionality. Gets permissions to run map in phone.
@@ -75,11 +82,12 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         UserFileManager.initManager(this.getApplicationContext());
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
-        user = UserController.getUserAccount();
+        user    = UserController.getUserAccount();
         request = (Request) getIntent().getSerializableExtra("Request");
+        browse  = (boolean) getIntent().getExtras().getBoolean("BrowseActivity");
 
-        drivers= new ArrayList<UserAccount>();
-        driver = new UserAccount();
+        drivers = new ArrayList<UserAccount>();
+        driver  = new UserAccount();
 
         startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
         endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
@@ -88,78 +96,84 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         acceptButton = (Button) findViewById(R.id.DSRAAcceptButton);
         riderDetailsButton = (Button) findViewById(R.id.riderDetailsButton);
 
-        /****************************************************** PERMISSIONS *****************************************************/
-        //int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        //Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        /*************************************** PERMISSIONS **************************************/
 
-            // Should we show an explanation?
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        1);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                    Manifest.permission.ACCESS_COARSE_LOCATION))
+            {
+                /**
+                 * Show an explanation to the user *asynchronously* -- don't block
+                 * this thread waiting for the user's response! After the user
+                 * sees the explanation, try again to request the permission.
+                 */
+            }
+            /**
+             * MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+             * app-defined int constant. The callback method gets the
+             * result of the request.
+             */
+            else
+            {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
             }
         }
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        1);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                    Manifest.permission.READ_EXTERNAL_STORAGE))
+            {
+                /**
+                 * Show an expanation to the user *asynchronously* -- don't block
+                 * this thread waiting for the user's response! After the user
+                 * sees the explanation, try again to request the permission.
+                 */
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                /**
+                 * MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                 * app-defined int constant. The callback method gets the
+                 * result of the request.
+                 */
             }
         }
-        //OpenStreetMapTileProviderConstants.setCachePath(new File("/sdcard/osmdroid2/").getAbsolutePath());
-        /**************************************************** PERMISSIONS ***************************************************/
+        /******************************************************************************************/
 
 
-        if (request.getRequestStatus() != Request.RequestStatus.Closed)
+        if (connected)
+        {
+            DriverRequestsController.loadOpenRequestsFromElasticsearch();
+        }
+
+        if (request.getRequestStatus() == Request.RequestStatus.Open)
         {
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     setResult(RESULT_OK);
 
-                    request.setRequestStatus(Request.RequestStatus.PendingDrivers);
-                    request.setDriverAccepted(true);
-                    request.addDriver(user);
-                    DriverRequestsController.deleteRequest(request);
+                    newRequest = request;
+
+                    newRequest.setRequestStatus(Request.RequestStatus.PendingDrivers);
+                    newRequest.setDriverAccepted(true);
+                    newRequest.addDriver(user);
+
+                    DriverRequestsController.deleteRequestFromElasticsearch(request);
+
                     ElasticsearchRequestController.CreateRequest createRequest;
                     createRequest = new ElasticsearchRequestController.CreateRequest();
-                    createRequest.execute(request);
+                    createRequest.execute(newRequest);
+
+                    request = newRequest;
+
                     Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
                     createNotification(acceptButton);
 
@@ -170,41 +184,54 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 }
             });
         }
-        /**
-         * I tried. Haha.
-         * I tried to create a condition where if the driver was in the pendingDrivers list,
-         * they wouldn't be allowed to accept the request. But this failed miserably.
-         * Anyone got any ideas??
-         */
-        /*
         else if (request.getRequestStatus() == Request.RequestStatus.PendingDrivers)
         {
-            Collection<UserAccount> pendingDrivers = new ArrayList<>();
-            pendingDrivers = request.getDrivers();
+            ArrayList<UserAccount> drivers = new ArrayList<>(request.getDrivers());
 
-            for (UserAccount u : pendingDrivers)
-            {
-                if (u.equals(user))
+            boolean foundDriver = Boolean.FALSE;
+            for (UserAccount u : drivers) {
+                if (u.getUniqueUserName().equals(user.getUniqueUserName()))
                 {
-                    Log.i("SUCCESS", "The list contains the driver " + user.getUniqueUserName());
-                    storyText.setText("You already accepted the request.");
-                    acceptButton.setText("REQUESTS");
-                }
-                else
-                {
-                    Log.i("FAIL", "The list sucks " + user.getUniqueUserName());
+                    foundDriver = Boolean.TRUE;
                 }
             }
 
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    setResult(RESULT_OK);
-                    Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        }*/
+            if (foundDriver && browse)
+            {
+                acceptButton.setText("REQUESTS");
+                AlertDialog.Builder adb = new AlertDialog.Builder(DriverSingleRequestActivity.this);
+                adb.setMessage("You already accepted this request! Go to your Involved Requests to view details.");
+                adb.setCancelable(true);
+
+                adb.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+                adb.show();
+
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+            else
+            {
+                acceptButton.setText("REQUESTS");
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+
+        }
         else if (request.getRequestStatus() == Request.RequestStatus.Closed)
         {
             storyText.setText("This request is now closed.");
@@ -227,8 +254,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         });
 
 
-
-        /*************************************************** MAPS STUFF *****************************************************/
+        /****************************************** MAPS ******************************************/
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
@@ -274,7 +300,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(startMarker);
         map.getOverlays().add(endMarker);
-
 
         startMarker.setIcon(getResources().getDrawable(R.mipmap.marker_green));
         endMarker.setIcon(getResources().getDrawable(R.mipmap.marker_red));
@@ -323,11 +348,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
-        //DO NOTHING FOR NOW:
         return false;
     }
     @Override public boolean longPressHelper(GeoPoint p) {
-        //DO NOTHING FOR NOW:
         return false;
     }
 
@@ -345,16 +368,16 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
         }
 
-        @Override public void onMarkerDrag(Marker marker) {
-            //mTrace.add(marker.getPosition());
-        }
+        @Override
+        public void onMarkerDrag(Marker marker) {}
 
         /**
          * Sets the position when the makrer stops being dragged
          *
          * @param marker
          */
-        @Override public void onMarkerDragEnd(Marker marker) {
+        @Override
+        public void onMarkerDragEnd(Marker marker) {
 
             mTrace.add(marker.getPosition());
             map.getOverlays().remove(3);
@@ -363,17 +386,16 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 public void processFinish(Road output){
                 }
             }).execute(mTrace);
-            if (marker.equals(startMarker)){
-                //update start location text
+            if (marker.equals(startMarker))
+            {
                 startEditText.setText(startMarker.getPosition().toString());
             }
-            else if (marker.equals(endMarker)){
+            else if (marker.equals(endMarker))
+            {
                 endEditText.setText(endMarker.getPosition().toString());
             }
-            // update suggested fare
             String price = ""+startMarker.getPosition().distanceTo(endMarker.getPosition());
             priceEditText.setText(price);
-
         }
 
         /**
@@ -381,11 +403,15 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
          *
          * @param marker
          */
-        @Override public void onMarkerDragStart(Marker marker) {
-            if(marker.getPosition().equals(mTrace.get(0))){
+        @Override
+        public void onMarkerDragStart(Marker marker)
+        {
+            if(marker.getPosition().equals(mTrace.get(0)))
+            {
                 mTrace.remove(0);
             }
-            else{
+            else
+            {
                 mTrace.remove(1);
             }
         }

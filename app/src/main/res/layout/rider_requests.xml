@@ -6,14 +6,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Requests"
         android:id="@+id/requestTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
         android:textSize="35dp"
         android:layout_alignParentEnd="true"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="@string/my_requests" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/requestTextView" />
 
     <Button
         android:layout_width="wrap_content"
@@ -22,7 +30,7 @@
         android:id="@+id/newRequestButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:fontFamily="sans-serif-light"
         android:layout_alignParentStart="true" />
 

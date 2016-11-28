@@ -34,6 +34,7 @@ public class Request implements Serializable {
     private boolean driverAccepted;
     private boolean riderAccepted;
     private boolean isCompleted, isPaid;
+    private UserAccount chosenDriver;
 
     protected ArrayList<Listener> listeners;
 
@@ -46,7 +47,7 @@ public class Request implements Serializable {
      *     Confirmed and completed (The rider confirmed that driver's acceptance and payment is completed)
      */
     public enum RequestStatus {
-        Open, Accepted, PendingDrivers, Closed
+        Open, PendingDrivers, Closed
     }
 
     private RequestStatus requestStatus = RequestStatus.Open;
@@ -90,7 +91,6 @@ public class Request implements Serializable {
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
         this.requestStatus = RequestStatus.Open;
-
         listeners = new ArrayList<>();
     }
 
@@ -268,8 +268,16 @@ public class Request implements Serializable {
         return driver;
     }
 
-    public void chooseDriver(UserAccount user){
-        this.driver = user;
+    public void setDriver(UserAccount driver) {
+        this.driver = driver;
+    }
+
+    public UserAccount getChosenDriver() {
+        return chosenDriver;
+    }
+
+    public void setChosenDriver(UserAccount user){
+        this.chosenDriver = user;
         notifyListeners();
     }
 
@@ -288,12 +296,7 @@ public class Request implements Serializable {
 
         String status = this.requestStatus.toString();
 
-        if (hasRiderAccepted())
-        {
-            status = "Closed";
-        }
-
-        else if (isDriverAccepted()) {
+        if (isDriverAccepted() && requestStatus != RequestStatus.Closed) {
             if(getDrivers().size()== 1)
             {
                 status = "1 Pending Driver";

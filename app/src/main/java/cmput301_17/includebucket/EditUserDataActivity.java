@@ -29,18 +29,18 @@ public class EditUserDataActivity extends MainMenuActivity {
         UserAccount user = UserController.getUserAccount();
         //user = (UserAccount) getIntent().getSerializableExtra("User");
 
-        userEmail = (EditText) findViewById(R.id.editEmail);
+        userEmail = (EditText) findViewById(R.id.edit_email);
         userEmail.setText(user.getEmail());
-        userPhone = (EditText) findViewById(R.id.editPhone);
+        userPhone = (EditText) findViewById(R.id.edit_phone);
         userPhone.setText(user.getPhoneNumber());
-        vehicleMake = (EditText) findViewById(R.id.editVehicleMake);
+        vehicleMake = (EditText) findViewById(R.id.edit_vehicle_make);
         vehicleMake.setText(user.getVehicleMake());
-        vehicleModel = (EditText) findViewById(R.id.editVehicleModel);
+        vehicleModel = (EditText) findViewById(R.id.edit_vehicle_model);
         vehicleModel.setText(user.getVehicleModel());
-        vehicleYear = (EditText) findViewById(R.id.editVehicleYear);
+        vehicleYear = (EditText) findViewById(R.id.edit_vehicle_year);
         vehicleYear.setText(user.getVehicleYear());
 
-        Button saveButton = (Button) findViewById(R.id.saveButton);
+        Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);

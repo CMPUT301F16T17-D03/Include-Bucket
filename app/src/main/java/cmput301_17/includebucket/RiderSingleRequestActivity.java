@@ -153,8 +153,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             completeButton.setText("REQUESTS");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
-                    startActivity(intent);
                     finish();
                 }
             });
@@ -167,7 +165,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                 intent.putExtra("User",request.getDriver());
                 intent.putExtra("Request", request);
                 startActivity(intent);
-                finish();
             }
         });
 /*
