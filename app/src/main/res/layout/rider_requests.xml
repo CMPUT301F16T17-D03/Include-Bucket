@@ -13,7 +13,15 @@
         android:fontFamily="sans-serif-light"
         android:textSize="35dp"
         android:layout_alignParentEnd="true"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/requestTextView" />
 
     <Button
         android:layout_width="wrap_content"

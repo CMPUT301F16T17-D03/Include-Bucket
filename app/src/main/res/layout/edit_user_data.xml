@@ -9,75 +9,103 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editEmail"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editPhone"
+        android:id="@+id/edit_email"
         android:singleLine="true"
-        android:hint="@string/editUserEmail"
+        android:hint="@string/edit_user_email"
         android:inputType="textEmailAddress"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp"
+        android:layout_below="@+id/loginTitle"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="15dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:ems="10"
-        android:id="@+id/editPhone"
-        android:layout_below="@+id/editEmail"
+        android:id="@+id/edit_phone"
+        android:layout_below="@+id/edit_email"
         android:layout_alignParentStart="true"
         android:singleLine="true"
         android:hint="Phone"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="none"
         android:ems="10"
-        android:id="@+id/editVehicleMake"
-        android:layout_below="@+id/editPhone"
+        android:id="@+id/edit_vehicle_make"
+        android:layout_below="@+id/edit_phone"
         android:layout_alignParentStart="true"
         android:singleLine="true"
         android:hint="Vehicle Make [Honda]"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="none"
         android:ems="10"
-        android:id="@+id/editVehicleModel"
-        android:layout_below="@+id/editVehicleMake"
+        android:id="@+id/edit_vehicle_model"
+        android:layout_below="@+id/edit_vehicle_make"
         android:layout_alignParentStart="true"
         android:singleLine="true"
         android:hint="Vehicle Model [Civic]"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:id="@+id/editVehicleYear"
-        android:layout_below="@+id/editVehicleModel"
+        android:id="@+id/edit_vehicle_year"
+        android:layout_below="@+id/edit_vehicle_model"
         android:layout_alignParentStart="true"
         android:singleLine="true"
         android:hint="Vehicle Year [1999]"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
-        android:inputType="date" />
+        android:textSize="20dp"
+        android:inputType="date"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:id="@+id/saveButton"
-        android:layout_below="@+id/editVehicleYear"
+        android:id="@+id/save_button"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:textSize="25dp"
-        android:fontFamily="sans-serif-light" />
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginTitle"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="35dp"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif-light"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:hint="Edit Your Info" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view2"
+        android:layout_below="@+id/loginTitle" />
 
 </RelativeLayout>

@@ -12,14 +12,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="End"
         android:id="@+id/endLocTextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
         android:layout_below="@+id/startLocTextView" />
@@ -29,11 +29,13 @@
         android:layout_height="wrap_content"
         android:text="Price"
         android:id="@+id/priceTextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/endLocTextView"
         android:fontFamily="sans-serif-light"
         android:paddingLeft="250dp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingBottom="5dp"
+        android:layout_toStartOf="@+id/priceValueTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,12 +43,13 @@
         android:id="@+id/DSRAStartEditText"
         android:hint="Input Start Location"
         android:layout_alignBottom="@+id/startLocTextView"
-        android:textSize="25dp"
+        android:textSize="17dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/startLocTextView"
         android:fontFamily="sans-serif-light"
-        android:paddingLeft="20dp" />
+        android:paddingLeft="20dp"
+        android:paddingTop="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,22 +57,26 @@
         android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
         android:layout_alignTop="@+id/endLocTextView"
-        android:textSize="25dp"
+        android:textSize="17dp"
         android:paddingLeft="20dp"
         android:fontFamily="sans-serif-light"
         android:layout_alignEnd="@+id/DSRAStartEditText"
         android:layout_above="@+id/priceTextView"
-        android:layout_toEndOf="@+id/startLocTextView" />
+        android:layout_toEndOf="@+id/startLocTextView"
+        android:paddingTop="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/priceValueTextView"
-        android:textSize="25dp"
+        android:textSize="18dp"
         android:fontFamily="sans-serif-light"
         android:text="$0.00"
         android:layout_alignTop="@+id/priceTextView"
-        android:layout_alignEnd="@+id/DSRAStartEditText" />
+        android:layout_alignEnd="@+id/DSRAStartEditText"
+        android:paddingTop="2dp"
+        android:layout_above="@+id/view3"
+        android:paddingRight="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -82,7 +89,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/riderStoryTextView"
         android:layout_alignEnd="@+id/priceValueTextView"
-        android:paddingTop="15dp" />
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -91,18 +99,28 @@
         android:fontFamily="sans-serif-light"
         android:textSize="25dp"
         android:layout_alignEnd="@+id/priceValueTextView"
-        android:layout_below="@+id/noPendingDrivers" />
+        android:layout_below="@+id/noPendingDrivers"
+        android:layout_above="@+id/deleteButton" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_above="@+id/riderStoryTextView"
+        android:id="@+id/view3" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/riderStoryTextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:fontFamily="sans-serif-light"
         android:text="Rider Story"
         android:layout_below="@+id/priceTextView"
         android:layout_alignEnd="@+id/priceValueTextView"
-        android:paddingBottom="15dp" />
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:textAlignment="center" />
 
     <View
         android:layout_width="match_parent"
@@ -120,4 +138,15 @@
         android:textSize="20dp"
         android:fontFamily="sans-serif-light"
         android:textAlignment="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_button"
+        android:id="@+id/deleteButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20dp" />
 </RelativeLayout>

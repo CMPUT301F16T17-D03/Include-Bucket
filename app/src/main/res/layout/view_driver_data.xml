@@ -13,7 +13,7 @@
         android:text="@string/user_login"
         android:id="@+id/loginTextView"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textAlignment="center"
         android:layout_below="@+id/view"
         android:layout_alignParentStart="true"
@@ -29,7 +29,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/emailTextView"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/phoneTextView"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/phoneTextView"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/loginTextView"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -74,7 +74,7 @@
         android:text="Make"
         android:id="@+id/MakeView"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:paddingTop="15dp"
         android:layout_below="@+id/view2"
         android:layout_alignParentStart="true"
@@ -87,7 +87,7 @@
         android:text="Model"
         android:id="@+id/ModelView"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/MakeView"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -99,7 +99,7 @@
         android:text="Year"
         android:id="@+id/YearView"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/ModelView"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -130,5 +130,6 @@
         android:paddingBottom="15dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:paddingTop="15dp" />
 </RelativeLayout>

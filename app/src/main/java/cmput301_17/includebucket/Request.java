@@ -296,7 +296,7 @@ public class Request implements Serializable {
 
         String status = this.requestStatus.toString();
 
-        if (isDriverAccepted()) {
+        if (isDriverAccepted() && requestStatus != RequestStatus.Closed) {
             if(getDrivers().size()== 1)
             {
                 status = "1 Pending Driver";

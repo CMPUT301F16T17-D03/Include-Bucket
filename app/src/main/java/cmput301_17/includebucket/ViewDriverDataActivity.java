@@ -79,8 +79,6 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                     newRequest.clearDrivers();
 
                     Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
-                    startActivity(intent);
                     finish();
                 }
             });

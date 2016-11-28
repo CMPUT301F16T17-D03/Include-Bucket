@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -173,12 +174,11 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 final int finalPosition = position;
-
                 request =  requestList.get(finalPosition);
 
                 Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
                 intent.putExtra("Request", request);
-
+                intent.putExtra("BrowseActivity", Boolean.TRUE);
                 startActivity(intent);
             }
         });

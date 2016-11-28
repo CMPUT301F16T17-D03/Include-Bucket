@@ -59,7 +59,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     private UserAccount driver;
     private Button acceptButton, riderDetailsButton;
     private ConnectivityManager connectivityManager;
-    private boolean connected;
+    private boolean connected, browse;
     private Request newRequest = new Request();
     private UserAccount user = new UserAccount();
     private Request request;
@@ -77,8 +77,9 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         UserFileManager.initManager(this.getApplicationContext());
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
-        user = UserController.getUserAccount();
+        user    = UserController.getUserAccount();
         request = (Request) getIntent().getSerializableExtra("Request");
+        browse  = (boolean) getIntent().getExtras().getBoolean("BrowseActivity");
 
         drivers = new ArrayList<UserAccount>();
         driver  = new UserAccount();
@@ -188,7 +189,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 }
             }
 
-            if (foundDriver)
+            if (foundDriver && browse)
             {
                 acceptButton.setText("REQUESTS");
                 AlertDialog.Builder adb = new AlertDialog.Builder(DriverSingleRequestActivity.this);
@@ -200,16 +201,25 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                     public void onClick(DialogInterface dialog, int which) {}
                 });
                 adb.show();
+
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+            }
+            else
+            {
+                acceptButton.setText("REQUESTS");
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
             }
 
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    setResult(RESULT_OK);
-                    Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
         }
         else if (request.getRequestStatus() == Request.RequestStatus.Closed)
         {

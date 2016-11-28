@@ -142,10 +142,27 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
+                final int finalPosition = position;
+                Request request = requestList.get(finalPosition);
+                Intent intent;
+
+                if(request.hasRiderAccepted() == false){
+                    intent = new Intent(RiderCurrentRequestsActivity.this, RiderAcceptDriverActivity.class);
+                    intent.putExtra("Request", request);
+                    startActivity(intent);
+                }
+                else {
+                    intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
+                    intent.putExtra("Request", request);
+                    startActivity(intent);
+                }
+
+
+/*
                 AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
                 adb.setMessage(adbMessage);
                 adb.setCancelable(true);
-                final int finalPosition = position;
+
 
                 adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
@@ -169,24 +186,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 adb.setPositiveButton("More", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Request request = requestList.get(finalPosition);
-                        Intent intent;
 
-                        if(request.hasRiderAccepted() == false){
-                            intent = new Intent(RiderCurrentRequestsActivity.this, RiderAcceptDriverActivity.class);
-                            intent.putExtra("Request", request);
-                            startActivity(intent);
-                            finish();
-                        }
-                        else {
-                            intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
-                            intent.putExtra("Request", request);
-                            startActivity(intent);
-                            finish();
-                        }
+
+
                     }
                 });
-                adb.show();
+                adb.show();*/
             }
         });
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);

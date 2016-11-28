@@ -7,29 +7,37 @@
     android:background="#000000">
 
     <Button
-        android:text="@string/new_button"
+        android:text="@string/new_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/newRequest"
-        android:layout_alignTop="@+id/MyRequests"
-        android:layout_toStartOf="@+id/RiderText" />
+        android:fontFamily="sans-serif-light"
+        android:textSize="20dp"
+        android:width="205dp"
+        android:layout_below="@+id/RiderText"
+        android:layout_alignStart="@+id/Browse" />
 
     <Button
         android:text="My Requests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/MyRequests"
-        android:layout_below="@+id/RiderText"
-        android:layout_toEndOf="@+id/RiderText" />
+        android:fontFamily="sans-serif-light"
+        android:width="205dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/newRequest"
+        android:layout_alignEnd="@+id/newRequest" />
 
     <Button
-        android:text="Current"
+        android:text="My Offers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Current"
-        android:layout_below="@+id/DriverText"
-        android:layout_alignEnd="@+id/MyRequests"
-        android:layout_toEndOf="@+id/RiderText" />
+        android:fontFamily="sans-serif-light"
+        android:textSize="20dp"
+        android:width="205dp"
+        android:layout_below="@+id/Browse"
+        android:layout_alignStart="@+id/Browse" />
 
     <Button
         android:text="Logout"
@@ -37,7 +45,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/Logout" />
+        android:fontFamily="sans-serif-light"
+        android:id="@+id/Logout"
+        android:textSize="20dp"
+        android:background="#000000" />
 
     <Button
         android:text="Account"
@@ -45,15 +56,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/Account" />
+        android:fontFamily="sans-serif-light"
+        android:id="@+id/Account"
+        android:textSize="20dp"
+        android:background="#000000" />
 
     <Button
-        android:text="Browse"
+        android:text="Open Requests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Browse"
+        android:fontFamily="sans-serif-light"
+        android:width="205dp"
+        android:textSize="20dp"
         android:layout_below="@+id/DriverText"
-        android:layout_toStartOf="@+id/DriverText" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,10 +78,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Rider"
         android:id="@+id/RiderText"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="111dp"
-        android:textSize="30dp" />
+        android:fontFamily="sans-serif-light"
+        android:textSize="35dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textAlignment="center"
+        android:layout_below="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -72,7 +93,31 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Driver"
         android:id="@+id/DriverText"
+        android:fontFamily="sans-serif-light"
+        android:textSize="35dp"
+        android:textAlignment="center"
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/RiderText"
-        android:textSize="30dp" />
+        android:paddingTop="15dp"
+        android:paddingBottom="5dp"
+        android:layout_alignEnd="@+id/Account" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_above="@+id/DriverText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/Account"
+        android:text="@string/mainmenu_title"
+        android:fontFamily="sans-serif-light"
+        android:textSize="35dp"
+        android:textAlignment="center" />
+
 </RelativeLayout>

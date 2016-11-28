@@ -13,14 +13,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp" />
+        android:textSize="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="End"
         android:id="@+id/endLocTextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
         android:layout_below="@+id/startLocTextView" />
@@ -30,21 +30,30 @@
         android:layout_height="wrap_content"
         android:text="Price"
         android:id="@+id/priceTextView"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/endLocTextView"
         android:fontFamily="sans-serif-light"
-        android:paddingLeft="200dp" />
+        android:paddingLeft="200dp"
+        android:paddingBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$0.00"
         android:id="@+id/DSRAPriceEditText"
-        android:textSize="25dp"
+        android:textSize="18dp"
         android:layout_alignTop="@+id/priceTextView"
         android:layout_alignBottom="@+id/priceTextView"
         android:fontFamily="sans-serif-light"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:paddingRight="5dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/DSRAPriceEditText"
+        android:id="@+id/view1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,25 +61,27 @@
         android:id="@+id/DSRAStartEditText"
         android:hint="Input Start Location"
         android:layout_alignBottom="@+id/startLocTextView"
-        android:textSize="25dp"
+        android:textSize="17dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/startLocTextView"
         android:fontFamily="sans-serif-light"
-        android:paddingLeft="20dp" />
+        android:paddingLeft="20dp"
+        android:paddingTop="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/DSRAEndEditText"
         android:hint="Input End Location"
-        android:layout_alignEnd="@+id/DSRAAcceptButton"
-        android:layout_toEndOf="@+id/startLocTextView"
         android:layout_alignTop="@+id/endLocTextView"
-        android:layout_alignBottom="@+id/endLocTextView"
-        android:textSize="25dp"
+        android:textSize="17dp"
         android:paddingLeft="20dp"
-        android:fontFamily="sans-serif-light" />
+        android:fontFamily="sans-serif-light"
+        android:paddingTop="2dp"
+        android:layout_alignEnd="@+id/DSRAStartEditText"
+        android:layout_above="@+id/priceTextView"
+        android:layout_toEndOf="@+id/startLocTextView" />
 
     <Button
         android:layout_width="wrap_content"
@@ -80,7 +91,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-light"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_toStartOf="@+id/riderDetailsButton"
         android:textAlignment="center" />
 
@@ -89,11 +100,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSRAstory"
         android:hint="Rider Story"
-        android:layout_above="@+id/DSRAAcceptButton"
-        android:layout_alignParentStart="true"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:fontFamily="sans-serif-light"
-        android:layout_alignEnd="@+id/DSRAPriceEditText" />
+        android:layout_below="@+id/view1"
+        android:layout_alignEnd="@+id/DSRAEndEditText"
+        android:layout_alignParentStart="true"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textAlignment="center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/DSRAstory"
+        android:id="@+id/view2" />
 
     <Button
         android:layout_width="wrap_content"
@@ -102,11 +123,11 @@
         android:id="@+id/riderDetailsButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/DSRAstory"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:fontFamily="sans-serif-light"
         android:textAlignment="center"
-        android:width="205dp" />
+        android:width="205dp"
+        android:layout_alignTop="@+id/DSRAAcceptButton" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -120,7 +141,5 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
     </LinearLayout>
-
-
 
 </RelativeLayout>

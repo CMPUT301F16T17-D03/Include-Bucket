@@ -7,8 +7,10 @@
     <string name="cancel_button">Cancel</string>
     <string name="edit_button">Edit</string>
     <string name="new_button">New</string>
+    <string name="new_request">I Need a Ride!</string>
     <string name="save_button">Save</string>
     <string name="confirm_button">Confrim</string>
+    <string name="delete_button">Delete</string>
 
 
     <!-- Strings related to login -->
@@ -23,7 +25,7 @@
 
     <!-- Strings related to register -->
     <string name="register_button">Register</string>
-    <string name="userInfo">You:</string>
+    <string name="userInfo">Plan on driving? (You can fill this later)</string>
 
     <!-- Strings related to user -->
     <string name="user_name">Name</string>
@@ -35,25 +37,29 @@
     <string name="title_activity_edit_user_data">EditUserDataActivity</string>
 
     <!-- Strings related to edit -->
-    <string name="editUserName">Name</string>
-    <string name="editUserEmail">Email</string>
-    <string name="editUserPhone">Phone</string>
-    <string name="editUserSaveButton">Save</string>
+    <string name="edit_user_name">Name</string>
+    <string name="edit_user_email">Email</string>
+    <string name="edit_user_phone">Phone</string>
+    <string name="edit_user_save_button">Save</string>
 
     <!-- String for titles -->
     <string name="requestTitle">Request Information</string>
 
     <!-- String for Vehicle Description -->
-    <string name="vehicleMake">Make</string>
-    <string name="vehicleModel">Model</string>
-    <string name="vehicleYear">MMDDYY</string>
-    <string name="vehicleDescription">Plan on Driving?</string>
+    <string name="vehicle_make">Make</string>
+    <string name="vehicle_model">Model</string>
+    <string name="vehicle_year">YYYY</string>
+    <string name="vehicle_description">Plan on Driving?</string>
 
     <!-- Activity Titles -->
-    <string name="driver_Requests">Your Rides</string>
+    <string name="driver_Requests">My Ride Offers</string>
     <string name="rider_Requests">Your Requests</string>
     <string name="open_Requests">Open Requests</string>
     <string name="contact_info">Contact Information</string>
+    <string name="edit_info">Edit Your Info</string>
+    <string name="login_title">Ridr Drive Trying</string>
+    <string name="mainmenu_title">What is Your Role?</string>
+    <string name="register_title">Register</string>
 
 
 </resources>
