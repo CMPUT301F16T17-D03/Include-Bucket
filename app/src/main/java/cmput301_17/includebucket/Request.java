@@ -20,8 +20,8 @@ public class Request implements Serializable {
     @JestId
     String requestID;
 
-    private String startLocation;
-    private String endLocation;
+    private GeoPoint startLocation;
+    private GeoPoint endLocation;
     private String startAddress;
     private String endAddress;
     private UserAccount rider;
@@ -72,8 +72,8 @@ public class Request implements Serializable {
      */
     public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance) {
         this.requestID = null;
-        this.startLocation = loc1.toString();
-        this.endLocation = loc2.toString();
+        this.startLocation = loc1;
+        this.endLocation = loc2;
         this.startAddress = startAddress;
         this.endAddress = endAddress;
         this.fare = fare;
@@ -87,10 +87,14 @@ public class Request implements Serializable {
         listeners = new ArrayList<>();
     }
 
-    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
+    public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance) {
         this.requestID = null;
-        this.startLocation = loc1;
-        this.endLocation = loc2;
+        this.startLocation = new GeoPoint(Double.parseDouble(loc1.split(",")[0]), Double.parseDouble(loc1.split(",")[1]));
+        this.endLocation = new GeoPoint(Double.parseDouble(loc2.split(",")[0]), Double.parseDouble(loc2.split(",")[1]));
+        this.startAddress = startAddress;
+        this.endAddress = endAddress;
+        this.fare = fare;
+        //this.distance = distance;
         this.rider = rider;
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
@@ -99,10 +103,14 @@ public class Request implements Serializable {
         listeners = new ArrayList<>();
     }
 
-    public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String id) {
+    public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance, String id) {
         this.requestID = id;
-        this.startLocation = loc1.toString();
-        this.endLocation = loc2.toString();
+        this.startLocation = loc1;
+        this.endLocation = loc2;
+        this.startAddress = startAddress;
+        this.endAddress = endAddress;
+        this.fare = fare;
+        //this.distance = distance;
         this.rider = rider;
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;
@@ -127,31 +135,31 @@ public class Request implements Serializable {
     public String getRequestID() {return requestID; }
 
     public String getStartLocation() {
-        return startLocation;
+        return startLocation.toString();
     }
 
-    public void setStartLocation(String startLocation) {
-        this.startLocation = startLocation;
+    public void setStartLocation(String loc1) {
+        this.startLocation= new GeoPoint(Double.parseDouble(loc1.split(",")[0]), Double.parseDouble(loc1.split(",")[1]));;
         notifyListeners();
     }
 
     public void setStartLocation(GeoPoint startLocation) {
-        this.startLocation = startLocation.toString();
+        this.startLocation = startLocation;
         notifyListeners();
     }
 
 
     public String getEndLocation() {
-        return endLocation;
+        return endLocation.toString();
     }
 
-    public void setEndLocation(String endLocation) {
-        this.endLocation = endLocation;
+    public void setEndLocation(String loc2) {
+        this.endLocation= new GeoPoint(Double.parseDouble(loc2.split(",")[0]), Double.parseDouble(loc2.split(",")[1]));
         notifyListeners();
     }
 
     public void setEndLocation(GeoPoint endLocation) {
-        this.endLocation = endLocation.toString();
+        this.endLocation = endLocation;
         notifyListeners();
     }
 
