@@ -23,6 +23,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="createNotification"
         android:text="@string/confirm_button"
         android:id="@+id/confirmButton"
         android:layout_alignParentBottom="true"

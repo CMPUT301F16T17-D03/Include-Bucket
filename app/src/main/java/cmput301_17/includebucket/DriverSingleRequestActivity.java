@@ -2,11 +2,16 @@ package cmput301_17.includebucket;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -156,6 +161,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                     createRequest = new ElasticsearchRequestController.CreateRequest();
                     createRequest.execute(request);
                     Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+                    createNotification(acceptButton);
 
                     Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
                     startActivity(intent);
@@ -296,6 +302,24 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    public void createNotification(View view) {
+        NotificationManager notificationmanager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent notification = new Intent(this, RiderCurrentRequestsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,(int) System.currentTimeMillis(), notification, 0);
+
+
+        Notification mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.small_icon)
+                .setContentTitle("New Notifications")
+                .setContentText("Your Request Has Been Accepted")
+                .setContentIntent(pendingIntent)
+                .build();
+        mBuilder.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationmanager.notify(0, mBuilder);
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {

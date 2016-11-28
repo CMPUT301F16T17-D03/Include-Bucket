@@ -11,7 +11,6 @@ import android.support.v4.app.NotificationCompat;
 
 //driver is notified if acceptance is accepted
 
-//http://stackoverflow.com/questions/19018655/notification-builder-cant-accept-this-as-replacement-for-context-why
 //https://developer.android.com/guide/topics/ui/notifiers/notifications.html
 public class NotifyAcceptance extends Service {
 

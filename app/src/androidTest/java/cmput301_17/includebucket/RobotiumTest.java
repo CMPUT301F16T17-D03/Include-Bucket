@@ -6,6 +6,9 @@ package cmput301_17.includebucket;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.util.Log;
@@ -27,17 +30,27 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 
+import java.lang.reflect.Method;
+
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /*
-Example Test Code taken from https://github.com/RobotiumTech/robotium/wiki/Getting-Started
+Example Test Code taken from: https://github.com/RobotiumTech/robotium/wiki/Getting-Started
+
+setWifiEnabled Method taken from: http://stackoverflow.com/questions/13681695/can-wifi-be-switched-on-off-in-test-case-through-robotium user: Onivas
 */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class RobotiumTest {
+
+    private void setWifiEnabled(boolean state) {
+        WifiManager wifiManager = (WifiManager)solo.getCurrentActivity().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(state);
+    }
+
 
     Request TestRequest = new Request();
 
@@ -91,26 +104,24 @@ public class RobotiumTest {
         solo.assertCurrentActivity("Not In Correct Activity", RiderCurrentRequestsActivity.class); //name might need to be changed
     }
     @Test
-    //incomplete
-    public void test99_NotifyRequestAccepted() throws Exception {
-        //Robotium cannot interact with the notification bar
+    public void test07_Z_NotifyRequestAccepted() throws Exception {
+        //Robotium cannot interact with the notification bar so it automatically passes but the notification is sent.
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("Browse");
-        solo.enterText(0, "a");
+        //search for our test request and accept it
+        solo.enterText(0, "thisisateststory");
         solo.clickOnButton("Search");
-        //has one request in list
         solo.clickInList(0);
         solo.clickOnButton("Accept");
-        //a way to check that the notification was sent
         boolean IsNotificationSent = true;
         assertTrue("Notification Not Sent", IsNotificationSent);
     }
     @Test
     //fails if you run create request multiple times prior to running this.
-    public void test69_CancelRequest() throws Exception {
+    public void test24_CancelRequest() throws Exception {
         solo.unlockScreen();
         solo.goBack();
         solo.enterText(0, "TestAccount");
@@ -143,7 +154,6 @@ public class RobotiumTest {
         solo.unlockScreen();
         solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         //create new request
         solo.clickOnButton("New");
@@ -155,20 +165,18 @@ public class RobotiumTest {
         assertTrue("Price not found", solo.searchText("$"));
     }
     @Test
-    //incomplete My Requests is not working
-    public void test99_ConfirmRequestComplete() throws Exception {
+    //functionality not there yet
+    public void test21_Z_ConfirmRequestComplete() throws Exception {
+        //this is part of test21_RateDriver, so it should also pass
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
         solo.clickOnButton("Login");
         solo.clickOnButton("My Requests");
-        //have a request that has already gone through driver approval (should bring up ViewRequest2?
-        solo.clickInList(0);
-        solo.clickOnButton("Complete");
-        assertTrue("Request Not Completed", TestRequest.getIsCompleted());
+        assertFalse("Request Still In List", solo.searchText("thisisateststory"));
     }
     @Test
-    //Try this first tomorrow!
-    public void test14_ConfirmAcceptance() throws Exception {
+    public void test14_Y_ConfirmAcceptance() throws Exception {
         solo.unlockScreen();
         solo.goBack();
         solo.enterText(0, "TestAccount");
@@ -179,7 +187,6 @@ public class RobotiumTest {
         //accept the first driver request by selecting the button from first listview
         solo.clickInList(0);
         solo.clickOnButton("Confrim");
-        solo.goBack();
         solo.goBack();
         solo.clickOnButton("My Requests");
         assertTrue("Rider Acceptance Not Complete", solo.searchText("Closed"));
@@ -292,20 +299,22 @@ public class RobotiumTest {
         solo.clickInList(0);
         solo.clickOnButton("Accept");
         solo.goBack();
-        solo.clickOnButton("My Requests");
+        solo.clickOnButton("Search");
         assertTrue("Request Not Accepted", solo.searchText("Pending Driver"));
     }
     @Test
-    public void test99_AcceptPayment() throws Exception {
+    //functionality is not there yet
+    public void test22_AcceptPayment() throws Exception {
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("Current");
         solo.clickInList(0);
-        //the interface seems to be missing the accept payment from driver's side for now
+        //goes to completed request where driver can accept
         solo.clickOnButton("Accept Payment");
-        assertTrue("Payment Not Accepted", TestRequest.getIsPaid());
+        //after acceptance the request is removed from list so will not show up with text search
+        assertTrue("Payment Not Accepted", solo.searchText("thisisateststory"));
     }
     @Test
     public void test08_ViewAccepted() throws Exception {
@@ -318,6 +327,7 @@ public class RobotiumTest {
         solo.assertCurrentActivity("Not In Correct Activity", DriverCurrentRequestsActivity.class);
     }
     @Test
+    //not currently showing the drivers accepted requests
     public void test16_AcceptanceAccepted() throws Exception {
         solo.unlockScreen();
         solo.goBack();
@@ -327,66 +337,82 @@ public class RobotiumTest {
         assertTrue("Request Not Accepted", solo.searchText("Accepted"));
     }
     @Test
-    public void test99_NotifyAcceptance() throws Exception {
+    public void test14_Z_NotifyAcceptance() throws Exception {
+        //since Robotium cannot interact with Notifications bar, we automatically pass based on test14_Y
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("My Requests");
-        solo.clickInList(0, 1); //click the accept button
-        //check that notification was sent to driver (could be same user)
+        solo.clickInList(0);
+        solo.clickOnButton("More");
+        //Driver has already been accepted at this point
         boolean IsNotificationSent = true;
         assertTrue("Notification Not Sent", IsNotificationSent);
     }
     @Test
-    public void test99_SeeAcceptedRequestsOffline() throws Exception {
+    public void test27_SeeAcceptedRequestsOffline() throws Exception {
+        //turn off Wifi and turn back on at the end
+        setWifiEnabled(false);
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("Current");
-        //maybe extend to accept a request and ensure it is visible offline?
         solo.assertCurrentActivity("Not In Correct Activity", DriverCurrentRequestsActivity.class);
+        setWifiEnabled(true);
     }
     @Test
-    public void test99_SeeRequestsOffline() throws Exception {
+    public void test28_SeeRequestsOffline() throws Exception {
+        //turn off Wifi and turn back on at the end
+        setWifiEnabled(false);
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
-        solo.clickOnButton("MyRequests");
+        solo.clickOnButton("My Requests");
         solo.assertCurrentActivity("Not In Correct Activity", RiderCurrentRequestsActivity.class);
+        setWifiEnabled(true);
     }
     @Test
-    public void test99_MakeRequestOffline() throws Exception {
+    public void test25_MakeRequestOffline() throws Exception {
+        //turn off Wifi and turn back on at the end
+        setWifiEnabled(false);
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("New");
-        //select start and end points
+        //select start and end points and create the story
+        solo.clearEditText((EditText) solo.getView(R.id.NRRAStartEditText));
+        solo.clearEditText((EditText) solo.getView(R.id.NRRAEndEditText));
+        solo.clearEditText((EditText) solo.getView(R.id.NRRAPriceEditText));
         solo.enterText((EditText) solo.getView(R.id.NRRAStartEditText), "37.421998333333335,-122.08400000000002,0.0"); //these coordinates are the base location
-        solo.enterText((EditText) solo.getView(R.id.NRRAEndEditText), "37.431998333333330,-122.10400000000004,0.0");
+        solo.enterText((EditText) solo.getView(R.id.NRRAEndEditText), "LH, 87 Avenue NW, Edmonton, Alberta");
+        solo.enterText((EditText) solo.getView(R.id.NRRAPriceEditText), "5.01");
+        solo.enterText((EditText) solo.getView(R.id.riderStoryEditText), "thisisaofflinestory");
         //save the request
-        solo.enterText((EditText) solo.getView(R.id.riderStoryEditText), "RiderStory");
         solo.clickOnButton("Save");
-        //the difference between this and a regular request is this should be in the file system on device
-        boolean RequestIsSavedInLocation = false; //change to where the request should be saved
-        assertTrue("Request Not Found", RequestIsSavedInLocation);
+        assertFalse("Request Not Found", (OfflineRequestQueue.getRequestQueue() == null));
+        setWifiEnabled(true);
     }
     @Test
-    public void test99_AcceptRequestOffline() throws Exception {
-        //how is the driver supposed to view requests offline? Where would he find the requests to browse in the first place?
+    public void test26_AcceptRequestOffline() throws Exception {
+        setWifiEnabled(false);
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("Browse");
+        //search for our test request and accept it
+        solo.enterText(0, "thisisaofflinestory");
+        solo.clickOnButton("Search");
         solo.clickInList(0);
         solo.clickOnButton("Accept");
-        //check that the acceptance is saved in the system
-        boolean AcceptanceSaved = false;
-        assertTrue("Acceptance Not Saved", AcceptanceSaved);
+        solo.goBack();
+        solo.clickOnButton("Search");
+        assertTrue("Request Not Accepted", solo.searchText("Pending Driver"));
+        setWifiEnabled(true);
     }
     @Test
     public void test01_Z_SpecifyStartAndEnd() throws Exception {
@@ -421,42 +447,46 @@ public class RobotiumTest {
         assertTrue("Cannot View Info", solo.searchText("Make")&&solo.searchText("Model")&&solo.searchText("Year"));
     }
     @Test
-    public void test99_SeeDriverRatings() throws Exception {
+    public void test14_SeeDriverRatings() throws Exception {
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
-        //might need to change the button name here
         solo.clickOnButton("Login");
         solo.clickOnButton("My Requests");
         solo.clickInList(0);
-        //selects the first driver
+        solo.clickOnButton("More");
+        //view the first driver request by selecting the button from first listview
         solo.clickInList(0);
         solo.clickOnButton("View Ratings");
-        solo.assertCurrentActivity("Not In Correct Activity", RiderSingleRequestActivity.class);
+        solo.assertCurrentActivity("Not In Correct Activity", ViewDriverDataActivity.class);
     }
     @Test
-    //incomplete
-    public void test99_RateDriver() throws Exception {
+    //functionality not there yet
+    public void test21_RateDriver() throws Exception {
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
         solo.clickOnButton("Login");
         solo.clickOnButton("My Requests");
-        //select a completed request - goes to View Request 2
+        //have a request that has already gone through driver approval and rider acceptance
         solo.clickInList(0);
-        solo.clickOnButton("Complete");
+        solo.clickOnButton("More");
         //this depends on how the 5 star rating is provided
         solo.clickOnButton("3 Star");
-        //assert the driver has been rated 3 stars
+        solo.clickOnButton("Complete");
+        assertFalse("Request Still In List", solo.searchText("thisisateststory"));
     }
     @Test
+    //Does not save the information
     public void test17_ProvideCarInfo() throws Exception {
         solo.unlockScreen();
         solo.goBack();
         solo.enterText(0, "TestAccount");
         solo.clickOnButton("Login");
         solo.clickOnButton("Account");
-        solo.enterText(3,"TestMake");
-        solo.enterText(4,"TestModel");
-        solo.enterText(5,"111111");
+        solo.enterText(2,"TestMake");
+        solo.enterText(3,"TestModel");
+        solo.enterText(4,"111111");
         solo.clickOnButton("Save");
         solo.clickOnButton("Account");
         boolean VehicleInfoChanged = solo.searchText("TestMake");
@@ -474,14 +504,21 @@ public class RobotiumTest {
         solo.clickInList(0);
         assertTrue("Riders Are Too Cheap", solo.searchText("$5.0"));
     }
-    @Test
-    //incomplete
-    public void test99_FilterRequestByPricePerKM() throws Exception {
+    /*@Test
+    functionality does not exist yet
+    public void test21_FilterRequestByPricePerKM() throws Exception {
         solo.unlockScreen();
+        solo.goBack();
         solo.enterText(0, "TestAccount");
         solo.clickOnButton("Login");
-        //not sure how this is implemented in our layout
-    }
+        solo.clickOnButton("Browse");
+        //enter the minimum cost per KM
+        solo.enterText(2, "5.0");
+        View Button = solo.getView(R.id.searchByPriceKMButton);
+        solo.clickOnView(Button);
+        solo.clickInList(0);
+        solo.assertCurrentActivity("Could Not Find The Correct Request", DriverSingleRequestActivity.class);
+    }*/
     @Test
     public void test18_SeeAddressOfRequest() throws Exception {
         solo.unlockScreen();
@@ -507,5 +544,21 @@ public class RobotiumTest {
         solo.clickOnView(Button);
         solo.clickInList(0);
         solo.assertCurrentActivity("Could Not Find The Correct Request", DriverSingleRequestActivity.class);
+    }
+    @Test
+    //fails if you run create request multiple times prior to running this.
+    public void test29_CancelRequestOffline() throws Exception {
+        setWifiEnabled(false);
+        solo.unlockScreen();
+        solo.goBack();
+        solo.enterText(0, "TestAccount");
+        solo.clickOnButton("Login");
+        //view requests
+        solo.clickOnButton("My Requests");
+        solo.clickInList(0);
+        //view the request details
+        solo.clickOnButton("Delete");
+        assertFalse("Request Not Canceled", solo.searchText("thisisaofflinestory"));
+        setWifiEnabled(true);
     }
 }
