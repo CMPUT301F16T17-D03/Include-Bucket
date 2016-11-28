@@ -24,8 +24,6 @@ public class LauncherActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         UserFileManager.initManager(this.getApplicationContext());
-        //RiderRequestsFileManager.initManager(this.getApplicationContext());
-        //DriverRequestsFileManager.initManager(this.getApplicationContext());
 
         user = UserController.getUserAccount();
         try {
@@ -37,7 +35,6 @@ public class LauncherActivity extends Activity {
         Intent intent;
         if (!user.getLoginStatus()){
             intent = new Intent(LauncherActivity.this,LoginActivity.class);
-            Log.i("Success","You did it.");
         }
         else {
             intent = new Intent(LauncherActivity.this,MainMenuActivity.class);

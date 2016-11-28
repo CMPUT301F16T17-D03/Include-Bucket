@@ -14,14 +14,6 @@ public class AcceptRequestCommand implements Command {
     private Request request;
     private UserAccount user;
 
-    public void createRequest(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
-        user = UserController.getUserAccount();
-        request = new Request(loc1, loc2, rider, story, pendingDrivers, driver);
-        request.setRequestStatus(Request.RequestStatus.PendingDrivers);
-        request.setDriverAccepted(true);
-        request.addDriver(user);
-    }
-
     public void createAcceptRequest(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String id) {
         user = UserController.getUserAccount();
         request = new Request(loc1, loc2, rider, story, pendingDrivers, driver, id);

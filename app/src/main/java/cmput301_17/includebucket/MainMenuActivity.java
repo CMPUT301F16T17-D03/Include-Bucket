@@ -18,7 +18,7 @@ import java.sql.Driver;
 
 public class MainMenuActivity extends Activity {
 
-    UserAccount user;
+    UserAccount user = new UserAccount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,10 @@ public class MainMenuActivity extends Activity {
                 setResult(RESULT_OK);
 
                 user = UserController.getUserAccount();
-                if (user != null) UserController.logUserOut();
+                user.setLoginStatus(Boolean.FALSE);
+
+                //if (user != null) UserController.logUserOut();
+
                 finish();
             }
         });
@@ -56,7 +59,6 @@ public class MainMenuActivity extends Activity {
         riderRequestsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
 
                 Intent intent = new Intent(MainMenuActivity.this, RiderCurrentRequestsActivity.class);
                 startActivity(intent);

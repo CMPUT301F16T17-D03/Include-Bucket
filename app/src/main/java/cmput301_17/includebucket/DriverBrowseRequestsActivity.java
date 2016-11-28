@@ -112,7 +112,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
                 requests = DriverRequestsController.getDriverRequests().getRequests();
                 requestList.addAll(requests);
-                Log.i("SIZE", "" + requestList.size());
                 browseRequestList.setAdapter(requestAdapter);
                 requestAdapter.notifyDataSetChanged();
             }
@@ -135,7 +134,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
 
                 requests = DriverRequestsController.getDriverRequests().getRequests();
                 requestList.addAll(requests);
-                Log.i("SIZE", "" + requestList.size());
                 browseRequestList.setAdapter(requestAdapter);
                 requestAdapter.notifyDataSetChanged();
             }

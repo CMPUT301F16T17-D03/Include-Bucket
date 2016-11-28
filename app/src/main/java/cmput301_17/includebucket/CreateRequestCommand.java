@@ -18,8 +18,8 @@ public class CreateRequestCommand implements Command {
     public void execute() {
 
         try {
-            if (request != null) {
-
+            if (request != null)
+            {
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();
                 createRequest.execute(request);

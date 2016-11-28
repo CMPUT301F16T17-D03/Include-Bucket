@@ -116,19 +116,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 PackageManager.PERMISSION_GRANTED)
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION))
-            {
-                /**
-                 * Show an explanation to the user *asynchronously* -- don't block
-                 * this thread waiting for the user's response! After the user
-                 * sees the explanation, try again to request the permission.
-                 */
-            }
-            /**
-             * MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-             * app-defined int constant. The callback method gets the
-             * result of the request.
-             */
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {}
             else
             {
                 ActivityCompat.requestPermissions(this, new String[]{
@@ -140,23 +128,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 != PackageManager.PERMISSION_GRANTED)
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE))
-            {
-                /**
-                 * Show an expanation to the user *asynchronously* -- don't block
-                 * this thread waiting for the user's response! After the user
-                 * sees the explanation, try again to request the permission.
-                 */
-            }
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {}
             else
             {
                 ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                /**
-                 * MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                 * app-defined int constant. The callback method gets the
-                 * result of the request.
-                 */
             }
         }
         /****************************************** MAPS ******************************************/
@@ -189,14 +165,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         String p = formatter.format("%.2f%n", request.getFare()).toString();
         priceEditText.setText("$"+p);
         storyText.setText(request.getRiderStory());
-
-        //startPoint = new GeoPoint(53.5444, -113.4909);
-        //endPoint = new GeoPoint(53.6444, -113.5909);
-        //startEditText.setText(startPoint.toString());
-        //endEditText.setText(endPoint.toString());
-        //String price = "" + startPoint.distanceTo(endPoint);
-        //priceEditText.setText(price);
-        //storyText.setText("A Story goes here");
 
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
@@ -388,13 +356,10 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
      */
     private class OnMarkerDragDrawer implements Marker.OnMarkerDragListener {
         ArrayList<GeoPoint> mTrace;
-
-        //RoadManager roadManager;
         OnMarkerDragDrawer() {
             mTrace = new ArrayList<GeoPoint>(2);
             mTrace.add(startMarker.getPosition());
             mTrace.add(endMarker.getPosition());
-
         }
 
         @Override

@@ -17,8 +17,6 @@ public class EditUserDataActivity extends MainMenuActivity {
 
     protected EditText userName, userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +25,6 @@ public class EditUserDataActivity extends MainMenuActivity {
         UserFileManager.initManager(this.getApplicationContext());
 
         UserAccount user = UserController.getUserAccount();
-        //user = (UserAccount) getIntent().getSerializableExtra("User");
 
         userEmail = (EditText) findViewById(R.id.edit_email);
         userEmail.setText(user.getEmail());

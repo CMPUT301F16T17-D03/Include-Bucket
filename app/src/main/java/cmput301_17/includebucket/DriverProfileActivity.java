@@ -27,7 +27,6 @@ public class DriverProfileActivity extends MainMenuActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
                 finish();
             }
         });

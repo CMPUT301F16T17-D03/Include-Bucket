@@ -31,7 +31,8 @@ public class DriverRequestsController {
 
     public static RequestList getDriverRequests() {
 
-        if (driverRequests == null) {
+        if (driverRequests == null)
+        {
             try {
                 driverRequests = DriverRequestsFileManager.getRequestListFileManager().loadRequestList();
                 driverRequests.addListener(new Listener() {
@@ -68,7 +69,7 @@ public class DriverRequestsController {
     }
 
     /**
-     * This adds a request to Elasticsearch and the riderRequests list.
+     * This adds a request to the driverRequests list.
      * @param request
      */
     public static void addRequest(Request request) {

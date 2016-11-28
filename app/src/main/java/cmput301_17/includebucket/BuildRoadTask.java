@@ -21,7 +21,11 @@ import java.util.ArrayList;
 
 public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Road>
 {
-//http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
+    /**
+     * Taken from: http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
+     * Accessed on: November 10, 2016
+     * Author: HelmiB
+     */
     public interface AsyncResponse {
         void processFinish(Road output);
     }
@@ -29,19 +33,15 @@ public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Road>
     public MapView map;
     public RoadManager manager;
     public Polyline roadline;
-    public BuildRoadTask(MapView m, RoadManager r, AsyncResponse delegate)
-    {
+    public BuildRoadTask(MapView m, RoadManager r, AsyncResponse delegate) {
         this.map = m;
         this.manager =r;
         this.delegate = delegate;
-
     }
 
-    protected Road doInBackground(ArrayList<GeoPoint>... waypoints)
-    {   Road road = manager.getRoad(waypoints[0]);
-
+    protected Road doInBackground(ArrayList<GeoPoint>... waypoints) {
+        Road road = manager.getRoad(waypoints[0]);
         roadline = RoadManager.buildRoadOverlay(road);
-
         return road;
     }
 
@@ -51,7 +51,6 @@ public class BuildRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Road>
     @Override
     protected void onPostExecute(Road result) {
         super.onPostExecute(result);
-
         map.getOverlays().add(roadline);
         delegate.processFinish(result);
         map.invalidate();

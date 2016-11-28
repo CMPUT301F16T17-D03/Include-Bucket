@@ -123,9 +123,4 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
             }
         });
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 }

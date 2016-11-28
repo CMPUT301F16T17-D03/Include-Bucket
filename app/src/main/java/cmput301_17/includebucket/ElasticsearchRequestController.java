@@ -62,39 +62,6 @@ public class ElasticsearchRequestController {
     }
 
     /**
-     * This method retrieves a request made by a particular user, specified by the request ID.
-     * Will retrieve only one request at a time.
-     */
-    public static class GetRidersRequests extends AsyncTask<String, Void, Request> {
-        @Override
-        protected Request doInBackground(String... requestIds) {
-            verifySettings();
-
-            Request request = new Request();
-
-            DocumentResult result;
-
-            Get requests = new Get.Builder("cmput301f16t17", requestIds[0]).type("request").build();
-            try {
-                result = client.execute(requests);
-
-                if(result.isSucceeded())
-                {
-                    request = result.getSourceAsObject(Request.class);
-                }
-                else
-                {
-                    Log.i("Error", "The search query did not match any requests in the database.");
-                }
-
-            } catch (IOException e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-            return request;
-        }
-    }
-
-    /**
      * This method retrieves all requests.
      */
     public static class GetOpenRequests extends AsyncTask<String, Void, RequestList> {
@@ -174,7 +141,7 @@ public class ElasticsearchRequestController {
     }
 
     /**
-     * This method retrieves all of the drivers requests in the database.
+     * This method retrieves all of the driver's requests in the database.
      */
     public static class GetDriverRequests extends AsyncTask<UserAccount, Void, RequestList> {
         @Override
@@ -259,6 +226,9 @@ public class ElasticsearchRequestController {
         }
     }
 
+    /**
+     * Gets a list of addresses nearby a specified location
+     */
     public static class GetNearbyList extends AsyncTask<String, Void, RequestList> {
         @Override
         protected RequestList doInBackground(String... search_param) {
@@ -318,7 +288,6 @@ public class ElasticsearchRequestController {
             return requests;
         }
     }
-
 
     /**
      * Delete a Request specified by an ID.
