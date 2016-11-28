@@ -9,9 +9,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class OfflineRequestQueue {
 
-    private static LinkedBlockingQueue<CreateRequestCommand> requestQueue = null;
+    private static LinkedBlockingQueue<Command> requestQueue = null;
 
-    public static LinkedBlockingQueue<CreateRequestCommand> getRequestQueue() {
+    public static LinkedBlockingQueue<Command> getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = new LinkedBlockingQueue<>();
         }
@@ -24,7 +24,7 @@ public class OfflineRequestQueue {
      * Author: Rohit Joshi
      * @param command
      */
-    public static void addCommand(CreateRequestCommand command) {
+    public static void addCommand(Command command) {
         try {
             getRequestQueue().put(command);
         } catch (InterruptedException e) {
@@ -35,7 +35,7 @@ public class OfflineRequestQueue {
     public static void execute() {
         while (!getRequestQueue().isEmpty()) {
             try {
-                CreateRequestCommand c = OfflineRequestQueue.getRequestQueue().take();
+                Command c = OfflineRequestQueue.getRequestQueue().take();
                 c.execute();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

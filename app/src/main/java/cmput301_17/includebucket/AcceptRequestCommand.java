@@ -1,5 +1,7 @@
 package cmput301_17.includebucket;
 
+import android.util.Log;
+
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;

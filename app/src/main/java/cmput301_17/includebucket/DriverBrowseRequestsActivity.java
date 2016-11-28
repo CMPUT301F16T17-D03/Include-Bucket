@@ -66,30 +66,26 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
          */
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() ==
+                NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() ==
+                        NetworkInfo.State.CONNECTED)
         {
-            connected = true;
+            connected = Boolean.TRUE;
         }
-        else connected = false;
+        else connected = Boolean.FALSE;
 
         if (connected)
         {
-            /**
-             * Creates requests offline successfully and stores them into server
-             * when online again, but for some reason it takes a while for it to load
-             * into the server. Sometimes it only shows up when another request is made again.
-             * Not sure if this is a server issue, or issue with the code. But it works.
-             *
-             * @see OfflineRequestQueue
-             * @see CreateRequestCommand
-             *
-             */
             if (!OfflineRequestQueue.getRequestQueue().isEmpty())
             {
                 OfflineRequestQueue.execute();
             }
             DriverRequestsController.loadOpenRequestsFromElasticsearch();
+        }
+        else
+        {
+            Toast.makeText(DriverBrowseRequestsActivity.this, "You are offline!", Toast.LENGTH_SHORT).show();
         }
 
         requests = DriverRequestsController.getDriverRequests().getRequests();
@@ -159,7 +155,6 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         requestAdapter.notifyDataSetChanged();
     }
 

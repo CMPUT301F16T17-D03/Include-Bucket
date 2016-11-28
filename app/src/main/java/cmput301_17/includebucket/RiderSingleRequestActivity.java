@@ -61,6 +61,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         UserFileManager.initManager(this.getApplicationContext());
         RiderRequestsFileManager.initManager(this.getApplicationContext());
 
+        final Request request = (Request) getIntent().getSerializableExtra("Request");
+
         startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
         endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
         priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
@@ -71,9 +73,9 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
-        org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
+        org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(
+                BuildConfig.APPLICATION_ID);
 
-        final Request request = (Request) getIntent().getSerializableExtra("Request");
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
         map = (MapView) findViewById(R.id.SRMap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -92,8 +94,10 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         String model = request.getDriver().getVehicleModel();
         String year = request.getDriver().getVehicleYear();
 
-        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),Double.parseDouble(request.getStartLocation().split(",")[1]));
-        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),Double.parseDouble(request.getEndLocation().split(",")[1]));
+        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),
+                Double.parseDouble(request.getStartLocation().split(",")[1]));
+        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),
+                Double.parseDouble(request.getEndLocation().split(",")[1]));
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
@@ -116,7 +120,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
         waypoints.add(endPoint);
-        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
+        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(
+                map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
             public void processFinish(Road output){
                 //Here you will receive the result fired from async class
@@ -136,10 +141,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         if (request.getRequestStatus() != Request.RequestStatus.Closed) {
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
                     request.setRequestStatus(Request.RequestStatus.Closed);
-                    //RiderRequestsController.deleteRequest(request);
-                    //RiderRequestsController.deleteRequestFromElasticsearch(request);
                     Toast.makeText(RiderSingleRequestActivity.this, "Request Completed", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -150,9 +152,11 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             toastMsg = "Back to your requests!";
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            completeButton.setText("REQUESTS");
+            completeButton.setText("DELETE");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    RiderRequestsController.deleteRequest(request);
+                    RiderRequestsController.deleteRequestFromElasticsearch(request);
                     finish();
                 }
             });
@@ -181,6 +185,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                 finish();
             }
         });*/
+
+
 
     }
     @Override
