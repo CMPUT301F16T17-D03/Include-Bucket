@@ -205,6 +205,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setResult(RESULT_OK);
+                        Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 });
@@ -215,6 +217,8 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setResult(RESULT_OK);
+                        Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 });

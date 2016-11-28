@@ -40,7 +40,7 @@ public class EditUserDataActivity extends MainMenuActivity {
         vehicleYear = (EditText) findViewById(R.id.edit_vehicle_year);
         vehicleYear.setText(user.getVehicleYear());
 
-        Button saveButton = (Button) findViewById(R.id.saveButton);
+        Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);

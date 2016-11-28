@@ -134,8 +134,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/priceTextView"
-        android:layout_above="@+id/DSRAstory"
+        android:layout_below="@+id/DSRAstory"
+        android:layout_above="@+id/riderDetailsButton"
         android:id="@+id/linearLayout">
         <org.osmdroid.views.MapView android:id="@+id/DSRAmap"
             android:layout_width="fill_parent"

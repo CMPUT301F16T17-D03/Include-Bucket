@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_button"
-        android:id="@+id/save_button"
+        android:id="@+id/saveButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/riderStoryEditText"
         android:hint="Rider Story"
-        android:layout_above="@+id/save_button"
+        android:layout_above="@+id/saveButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:fontFamily="sans-serif-light"
@@ -118,5 +118,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
     </LinearLayout>
+
 
 </RelativeLayout>
