@@ -14,6 +14,7 @@ import org.osmdroid.util.GeoPoint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -23,6 +24,8 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
+
+import static java.lang.Math.cos;
 
 /**
  * ElasticsearchRequestController
@@ -111,7 +114,6 @@ public class ElasticsearchRequestController {
                     .Builder(query)
                     .addIndex("cmput301f16t17")
                     .addType("request").build();
-
             try {
                 result = client.execute(search);
 
@@ -265,6 +267,7 @@ public class ElasticsearchRequestController {
 
             verifySettings();
             String ret;
+            Address location=new Address(Locale.CANADA);
             try {
                 GeocoderNominatim geoCoder = new GeocoderNominatim("Include-Bucket");
                 List<Address> address = geoCoder.getFromLocationName(search_param[0], 1);
@@ -272,7 +275,7 @@ public class ElasticsearchRequestController {
                     ret = null;
 
                 }
-                Address location = address.get(0);
+                location = address.get(0);
                 ret = location.getLatitude()+","+location.getLongitude();
                 Log.i("Success", "Found address");
             }
@@ -291,8 +294,8 @@ public class ElasticsearchRequestController {
                 search_string = "{\"from\": 0, \"size\": 10000}";
             }
 
-            else search_string ="{\"query\":{\"filtered\":{\"query\":{\"match_all\":{}},\"filter\":{\"geo_distance\":{\"distance\" : \"5km\",\"startLocation\":\""+search_param[0]+"\"}}}}}";
-
+            //else search_string ="{\"query\":{\"filtered\":{\"query\":{\"match_all\":{}},\"filter\":{\"geo_distance\":{\"distance\" : \"5km\",\"startLocation\":\""+search_param[0]+"\"}}}}}";
+            else {search_string = "{\"from\": 0,\"size\": 10000,\"query\" : {\"match_all\" : {}},\"filter\" : {\"range\" : { \"location.mLatitude\" : {\"gte\":"+(location.getLatitude()-0.05)+", \"lte\":"+(location.getLatitude()+0.05)+"}}}, \"filter\" : {\"range\" : {\"location.mLongitude\" : {\"gte\":"+(location.getLongitude()-0.05)+",\"lte\":"+(location.getLongitude()+0.05/cos(location.getLatitude()))+"}}}}";}
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")

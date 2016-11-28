@@ -20,7 +20,7 @@ public class Request implements Serializable {
     @JestId
     String requestID;
 
-    private GeoPoint startLocation;
+    private GeoPoint location;
     private GeoPoint endLocation;
     private String startAddress;
     private String endAddress;
@@ -72,7 +72,7 @@ public class Request implements Serializable {
      */
     public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance) {
         this.requestID = null;
-        this.startLocation = loc1;
+        this.location = loc1;
         this.endLocation = loc2;
         this.startAddress = startAddress;
         this.endAddress = endAddress;
@@ -89,7 +89,7 @@ public class Request implements Serializable {
 
     public Request(String loc1, String loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance) {
         this.requestID = null;
-        this.startLocation = new GeoPoint(Double.parseDouble(loc1.split(",")[0]), Double.parseDouble(loc1.split(",")[1]));
+        this.location = new GeoPoint(Double.parseDouble(loc1.split(",")[0]), Double.parseDouble(loc1.split(",")[1]));
         this.endLocation = new GeoPoint(Double.parseDouble(loc2.split(",")[0]), Double.parseDouble(loc2.split(",")[1]));
         this.startAddress = startAddress;
         this.endAddress = endAddress;
@@ -105,7 +105,7 @@ public class Request implements Serializable {
 
     public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance, String id) {
         this.requestID = id;
-        this.startLocation = loc1;
+        this.location = loc1;
         this.endLocation = loc2;
         this.startAddress = startAddress;
         this.endAddress = endAddress;
@@ -135,16 +135,16 @@ public class Request implements Serializable {
     public String getRequestID() {return requestID; }
 
     public String getStartLocation() {
-        return startLocation.toString();
+        return location.toString();
     }
 
     public void setStartLocation(String loc1) {
-        this.startLocation= new GeoPoint(Double.parseDouble(loc1.split(",")[0]), Double.parseDouble(loc1.split(",")[1]));;
+        this.location= new GeoPoint(Double.parseDouble(loc1.split(",")[0]), Double.parseDouble(loc1.split(",")[1]));;
         notifyListeners();
     }
 
     public void setStartLocation(GeoPoint startLocation) {
-        this.startLocation = startLocation;
+        this.location = startLocation;
         notifyListeners();
     }
 
