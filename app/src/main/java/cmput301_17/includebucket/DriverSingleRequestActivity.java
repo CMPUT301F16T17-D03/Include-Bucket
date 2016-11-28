@@ -59,7 +59,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
     private GeoPoint endPoint;
     private MapView map;
     private RoadManager roadManager;
-    private Request request = new Request();
     private ArrayList<UserAccount> drivers;
     private UserAccount driver;
     private Button acceptButton, riderDetailsButton;
@@ -337,7 +336,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
 
         Notification mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.small_icon)
+                .setSmallIcon(R.drawable.center)
                 .setContentTitle("New Notifications")
                 .setContentText("Your Request Has Been Accepted")
                 .setContentIntent(pendingIntent)

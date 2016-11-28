@@ -39,7 +39,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
 
 
         Notification mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.small_icon)
+                .setSmallIcon(R.drawable.center)
                 .setContentTitle("New Notifications")
                 .setContentText("Your Acceptance Has Been Accepted")
                 .setContentIntent(pendingIntent)
@@ -102,7 +102,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                     newRequest.setRequestStatus(Request.RequestStatus.Closed);
                     newRequest.setChosenDriver(driver);
                     newRequest.setRiderAccepted(true);
-                    newRequest.clearDrivers();
+                    //newRequest.clearDrivers();
 
                     Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
                     finish();
@@ -129,10 +129,21 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 // code from http://stackoverflow.com/questions/9259856/displaying-the-to-address-prefilled-in-email-intent
                 // accessed on November 26, 2016
                 // user: goodm
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {driver.getEmail()});
-                startActivity(intent);
+                //Intent intent = new Intent(Intent.ACTION_SEND);
+                //intent.setType("plain/text");
+                //intent.putExtra(Intent.EXTRA_EMAIL, new String[] {driver.getEmail()});
+                //startActivity(intent);
+
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail"));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(ViewDriverDataActivity.this, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -70,10 +70,15 @@ public class Request implements Serializable {
      * @param rider The rider making a request
      * @param story The rider's story (where is the rider going?)
      */
-    public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
+    public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance) {
         this.requestID = null;
         this.startLocation = loc1.toString();
         this.endLocation = loc2.toString();
+        this.startAddress = startAddress;
+        this.endAddress = endAddress;
+        this.fare = fare;
+        //this.distance = distance;
+
         this.rider = rider;
         this.riderStory = story;
         this.pendingDrivers = pendingDrivers;

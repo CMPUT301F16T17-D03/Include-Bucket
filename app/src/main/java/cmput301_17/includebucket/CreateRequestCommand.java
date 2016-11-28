@@ -10,8 +10,9 @@ public class CreateRequestCommand implements Command {
 
     private Request request;
 
-    public void createRequest(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver) {
-        request = new Request(loc1, loc2, rider, story, pendingDrivers, driver);
+    public void createRequest(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, Double distance) {
+        request = new Request(loc1, loc2, rider, story, pendingDrivers, driver, startAddress, endAddress, fare, distance);
+
     }
 
     @Override

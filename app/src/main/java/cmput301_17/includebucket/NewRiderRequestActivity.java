@@ -248,14 +248,14 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 Double fare = Double.parseDouble(priceEditText.getText().toString().substring(1,priceEditText.getText().toString().length()));
                 Double distance = roadLength;
 
-                Request request = new Request(startPoint, endPoint, user, riderStory, pendingDrivers, driver);
-                request.setRequestStatus(Request.RequestStatus.Open);
-                request.setFare(fare);
-                request.setStartAddress(startAddress);
-                request.setEndAddress(endAddress);
-                request.setRoadLength(distance);
-                request.setStartLocation(startPoint);
-                request.setEndLocation(endPoint);
+                Request request = new Request(startPoint, endPoint, user, riderStory, pendingDrivers, driver, startAddress, endAddress, fare, distance);
+                //request.setRequestStatus(Request.RequestStatus.Open);
+                //request.setFare(fare);
+                //request.setStartAddress(startAddress);
+                //request.setEndAddress(endAddress);
+                //request.setRoadLength(distance);
+                //request.setStartLocation(startPoint.toString());
+                //request.setEndLocation(endPoint.toString());
 
                 if (connected)
                 {
@@ -274,7 +274,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     RiderRequestsController.addRiderRequest(request);
 
                     CreateRequestCommand newRequestCommand = new CreateRequestCommand();
-                    newRequestCommand.createRequest(startPoint, endPoint, user, riderStory, pendingDrivers, driver);
+                    newRequestCommand.createRequest(startPoint, endPoint, user, riderStory, pendingDrivers, driver, startAddress, endAddress, fare, distance);
 
                     OfflineRequestQueue.addCommand(newRequestCommand);
                 }
