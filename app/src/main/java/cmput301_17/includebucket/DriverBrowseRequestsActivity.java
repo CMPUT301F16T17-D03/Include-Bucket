@@ -38,6 +38,7 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
     private UserAccount user = new UserAccount();
     private ConnectivityManager connectivityManager;
     private boolean connected;
+    private Request request;
 
     /**
      * Controls the list of requests and handles button clicks.
@@ -71,9 +72,22 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         }
         else connected = false;
 
-
         if (connected)
         {
+            /**
+             * Creates requests offline successfully and stores them into server
+             * when online again, but for some reason it takes a while for it to load
+             * into the server. Sometimes it only shows up when another request is made again.
+             * Not sure if this is a server issue, or issue with the code. But it works.
+             *
+             * @see OfflineRequestQueue
+             * @see CreateRequestCommand
+             *
+             */
+            if (!OfflineRequestQueue.getRequestQueue().isEmpty())
+            {
+                OfflineRequestQueue.execute();
+            }
             DriverRequestsController.loadOpenRequestsFromElasticsearch();
         }
 
@@ -157,9 +171,14 @@ public class DriverBrowseRequestsActivity extends MainMenuActivity {
         browseRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                final int finalPosition = position;
+
+                request =  requestList.get(finalPosition);
+
                 Intent intent = new Intent(DriverBrowseRequestsActivity.this, DriverSingleRequestActivity.class);
-                Request request =  requestList.get(position);
                 intent.putExtra("Request", request);
+
                 startActivity(intent);
             }
         });

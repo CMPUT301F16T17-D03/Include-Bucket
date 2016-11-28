@@ -28,7 +28,6 @@ public class DriverRequestsController {
     private Context context;
 
     private static RequestList driverRequests = null;
-    private static final String DRIVER_REQUESTS_FILE = "driver_requests.sav";
 
     public static RequestList getDriverRequests() {
 

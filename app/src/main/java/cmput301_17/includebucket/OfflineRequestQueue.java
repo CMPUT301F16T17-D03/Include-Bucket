@@ -42,7 +42,6 @@ public class OfflineRequestQueue {
                 e.printStackTrace();
             }
         }
-        //RiderRequestsController.loadRequestsFromElasticSearch();
     }
 }
 
