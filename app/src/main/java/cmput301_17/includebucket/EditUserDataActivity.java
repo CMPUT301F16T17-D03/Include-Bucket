@@ -47,6 +47,7 @@ public class EditUserDataActivity extends MainMenuActivity {
             }
         });
     }
+
     public void editUser() {
 
         String login = user.getUniqueUserName();

@@ -128,9 +128,11 @@ public class ViewDriverDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                // code from http://stackoverflow.com/questions/9259856/displaying-the-to-address-prefilled-in-email-intent
-                // accessed on November 26, 2016
-                // user: goodm
+                /**
+                 * code from http://stackoverflow.com/questions/9259856/displaying-the-to-address-prefilled-in-email-intent
+                 * accessed on November 26, 2016
+                 * user: goodm
+                 */
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[] {driver.getEmail()});
@@ -142,9 +144,11 @@ public class ViewDriverDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                // code from http://stackoverflow.com/questions/11699819/how-do-i-get-the-dialer-to-open-with-phone-number-displayed
-                // accessed on November 26, 2016
-                // user: AAnkit
+                /**
+                 * code from http://stackoverflow.com/questions/11699819/how-do-i-get-the-dialer-to-open-with-phone-number-displayed
+                 * accessed on November 26, 2016
+                 * user: AAnkit
+                 */
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + driver.getPhoneNumber()));
                 startActivity(intent);

@@ -4,9 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -14,7 +11,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -152,14 +148,11 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         mapController.setZoom(15);
 
         request = (Request) getIntent().getSerializableExtra("Request");
-
         startEditText.setText(request.getStartAddress());
-        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),
-                Double.parseDouble(request.getStartLocation().split(",")[1])) ;
+        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),Double.parseDouble(request.getStartLocation().split(",")[1])) ;
 
         endEditText.setText(request.getEndAddress());
-        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),
-                Double.parseDouble(request.getEndLocation().split(",")[1]));
+        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),Double.parseDouble(request.getEndLocation().split(",")[1]));
 
         Formatter formatter = new Formatter();
         String p = formatter.format("%.2f%n", request.getFare()).toString();
@@ -189,12 +182,14 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
         waypoints.add(endPoint);
-        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(
-                map, roadManager, new BuildRoadTask.AsyncResponse(){
+        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Road output){}
+            public void processFinish(Road output){
+            }
         }).execute(waypoints);
+
         /******************************************************************************************/
+
 
         if (request.getRequestStatus() == Request.RequestStatus.Open)
         {
@@ -220,7 +215,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                         ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
 
                         AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
-                        acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getRequestID());
+                        acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getStartAddress(), request.getEndAddress(), request.getFare(), request.getRequestID());
 
                         OfflineRequestQueue.addCommand(acceptRequestCommand);
                         Log.i("\n\n\nRequest ID","" +request.getRequestID());
@@ -229,6 +224,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                     finish();
                 }
             });
+
         }
         else if (request.getRequestStatus() == Request.RequestStatus.PendingDrivers)
         {
@@ -265,34 +261,10 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             }
             else
             {
+                acceptButton.setText("REQUESTS");
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setResult(RESULT_OK);
-                        if (connected)
-                        {
-                            request.setRequestStatus(Request.RequestStatus.PendingDrivers);
-                            request.setDriverAccepted(true);
-                            request.addDriver(user);
-
-                            DriverRequestsController.deleteRequestFromElasticsearch(request);
-
-                            ElasticsearchRequestController.CreateRequest createRequest;
-                            createRequest = new ElasticsearchRequestController.CreateRequest();
-                            createRequest.execute(request);
-                        }
-                        else
-                        {
-                            String riderStory = request.getRiderStory();
-                            ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
-
-                            AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
-                            acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getRequestID());
-
-                            OfflineRequestQueue.addCommand(acceptRequestCommand);
-
-                            Log.i("\n\n\nRequest ID","" +request.getRequestID());
-                        }
-                        Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
@@ -326,24 +298,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         super.onStop();
     }
 
-    public void createNotification(View view) {
-        NotificationManager notificationmanager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Intent notification = new Intent(this, RiderCurrentRequestsActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,(int) System.currentTimeMillis(), notification, 0);
-
-
-        Notification mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.small_icon)
-                .setContentTitle("New Notifications")
-                .setContentText("Your Request Has Been Accepted")
-                .setContentIntent(pendingIntent)
-                .build();
-        mBuilder.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        notificationmanager.notify(0, mBuilder);
-    }
-
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
         return false;
     }
@@ -356,10 +310,13 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
      */
     private class OnMarkerDragDrawer implements Marker.OnMarkerDragListener {
         ArrayList<GeoPoint> mTrace;
+
+        //RoadManager roadManager;
         OnMarkerDragDrawer() {
             mTrace = new ArrayList<GeoPoint>(2);
             mTrace.add(startMarker.getPosition());
             mTrace.add(endMarker.getPosition());
+
         }
 
         @Override

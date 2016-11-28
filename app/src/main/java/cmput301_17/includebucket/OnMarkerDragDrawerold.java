@@ -11,8 +11,6 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
-
-
 /**
  * OnMarkerDragDrawerold
  *
@@ -35,7 +33,6 @@ public class OnMarkerDragDrawerold implements Marker.OnMarkerDragListener {
     }
 
     @Override public void onMarkerDrag(Marker marker) {
-        //mTrace.add(marker.getPosition());
     }
 
     @Override public void onMarkerDragEnd(Marker marker) {
@@ -48,12 +45,9 @@ public class OnMarkerDragDrawerold implements Marker.OnMarkerDragListener {
             }
         }).execute(mTrace);
         if (marker.getTitle().equals("Start Point")){
-            //update start location text
         }
         if (marker.getTitle().equals("End Point")){
-            //update end location text
         }
-        // update suggested fare
     }
 
     @Override public void onMarkerDragStart(Marker marker) {

@@ -14,14 +14,13 @@ public class AcceptRequestCommand implements Command {
     private Request request;
     private UserAccount user;
 
-    public void createAcceptRequest(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String id) {
+    public void createAcceptRequest(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String startAddress, String endAddress, Double fare, String id) {
         user = UserController.getUserAccount();
-        request = new Request(loc1, loc2, rider, story, pendingDrivers, driver, id);
+        request = new Request(loc1, loc2, rider, story, pendingDrivers, driver, startAddress, endAddress, fare, id);
         request.setRequestStatus(Request.RequestStatus.PendingDrivers);
         request.setDriverAccepted(true);
-        request.addDriver(user);
+        request.addDriver(driver);
     }
-
 
     @Override
     public void execute() {
@@ -29,9 +28,11 @@ public class AcceptRequestCommand implements Command {
         try {
             if (request != null) {
 
-                Log.i("\n\nSUCCESS","The request ID is      :)\n\n" + request.getRequestID());
+                request.setRequestStatus(Request.RequestStatus.PendingDrivers);
+                request.setDriverAccepted(true);
+                request.addDriver(user);
 
-                DriverRequestsController.deleteRequestFromElasticsearch(request);
+                DriverRequestsController.deleteRequest(request);
 
                 ElasticsearchRequestController.CreateRequest createRequest;
                 createRequest = new ElasticsearchRequestController.CreateRequest();

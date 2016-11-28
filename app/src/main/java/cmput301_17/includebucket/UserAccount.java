@@ -89,24 +89,8 @@ public class UserAccount implements Serializable {
         notifyListeners();
     }
 
-
     public String getUniqueUserName() {
         return uniqueUserName;
-    }
-
-    /**
-     * This sets the unique username
-     * @param name
-     * @return
-     */
-    public boolean setUniqueUserName(String name){ //, Database database){
-        if (
-            //isUnique(name, database)
-                true) {
-            this.uniqueUserName = name;
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -143,45 +127,6 @@ public class UserAccount implements Serializable {
         notifyListeners();
     }
 
-    /**
-     * This returns the list of requests
-     * @return
-     */
-    //public Collection<Request> getDriverRequests() {return driverRequests;}
-
-    /**
-     * This sets the driver requests list.
-     * @param driverRequests
-     */
-/*    public void setDriverRequests(ArrayList<Request> driverRequests) {
-        this.driverRequests = driverRequests;
-    }
-
-    /**
-     * This adds a new request for the driver to the list.
-     * @param request
-     */
-/*
-    public void addDriverRequest(Request request){
-        if (this.driverRequests.contains(request)){
-            return;
-        }
-        this.driverRequests.add(request);
-        request.addDriver(this);
-    }
-
-    /**
-     * This cancels the request.
-     * @param request
-     */
- /*   public void cancelDriverRequest(Request request){
-        if (this.driverRequests.contains(request)){
-            this.driverRequests.remove(request);
-            request.removeDriver(this);
-        }
-        return;
-    }
-*/
     /**
      * This returns the login status of the user
      * @return isLoggedIn
@@ -267,6 +212,4 @@ public class UserAccount implements Serializable {
     public void addListener(Listener l) {
         getListeners().add(l);
     }
-
-    public void removeListener(Listener l) { getListeners().remove(l); }
 }

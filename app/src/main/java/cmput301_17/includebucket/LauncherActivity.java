@@ -26,6 +26,7 @@ public class LauncherActivity extends Activity {
         UserFileManager.initManager(this.getApplicationContext());
 
         user = UserController.getUserAccount();
+
         try {
             UserFileManager.getUserFileManager().saveUser(user);
         } catch (Exception e) {

@@ -64,7 +64,7 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
             {
                 OfflineRequestQueue.execute();
             }
-            DriverRequestsController.loadOpenRequestsFromElasticsearch();
+            DriverRequestsController.loadInvolvedRequestsFromElasticsearch();
         }
         else
         {
@@ -117,8 +117,11 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
 
                 Request request = requestList.get(finalPosition);
 
+
+
                 Intent intent = new Intent(DriverCurrentRequestsActivity.this, DriverSingleRequestActivity.class);
                 intent.putExtra("Request", request);
+
                 startActivity(intent);
             }
         });

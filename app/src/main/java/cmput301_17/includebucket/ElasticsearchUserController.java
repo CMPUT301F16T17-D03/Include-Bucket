@@ -161,7 +161,6 @@ public class ElasticsearchUserController {
      * Author: sromansky
      */
     private static void verifySettings() {
-        // Create the client if it hasn't already been initialized
         if (client == null)
         {
             DroidClientConfig.Builder builder;

@@ -47,9 +47,12 @@ public class MainMenuActivity extends Activity {
                 setResult(RESULT_OK);
 
                 user = UserController.getUserAccount();
-                user.setLoginStatus(Boolean.FALSE);
+                //user.setLoginStatus(Boolean.FALSE);
 
-                //if (user != null) UserController.logUserOut();
+                UserController.logUserOut();
+                RiderRequestsController.clearList();
+                DriverRequestsController.clearList();
+
 
                 finish();
             }

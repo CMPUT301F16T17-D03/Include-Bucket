@@ -235,4 +235,8 @@ public class DriverRequestsController {
         }
     }
 
+    public static void clearList() {
+        driverRequests = null;
+    }
+
 }

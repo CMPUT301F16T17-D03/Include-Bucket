@@ -9,14 +9,16 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
-//driver is notified if acceptance is accepted
-
-//https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+/**
+ * Driver is notified if acceptance is accepted
+ */
 public class NotifyAcceptance extends Service {
 
+    /**
+     * https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+     */
     @Override
     public IBinder onBind(Intent arg0) {
-        // TODO Auto-generated method stub
         return null;
     }
 

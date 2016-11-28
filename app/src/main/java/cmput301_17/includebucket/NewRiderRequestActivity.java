@@ -111,22 +111,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-                /**
-                 * Show an explanation to the user *asynchronously* -- don't block
-                 * this thread waiting for the user's response! After the user
-                 * sees the explanation, try again to request the permission.
-                 */
-
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         1);
-                /**
-                 * MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                 * app-defined int constant. The callback method gets the
-                 * result of the request.
-                 */
             }
         }
 
@@ -137,11 +125,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                /**
-                 * Show an expanation to the user *asynchronously* -- don't block
-                 * this thread waiting for the user's response! After the user
-                 * sees the explanation, try again to request the permission.
-                 */
             }
             else
             {
@@ -149,11 +132,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                         this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         1);
-                /**
-                 * MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                 * app-defined int constant. The callback method gets the
-                 * result of the request.
-                 */
             }
         }
 
@@ -257,26 +235,20 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 Double fare = Double.parseDouble(priceEditText.getText().toString().substring(1,priceEditText.getText().toString().length()));
                 Double distance = roadLength;
 
-                Request request = new Request(startPoint, endPoint, user, riderStory, pendingDrivers, driver);
-                request.setRequestStatus(Request.RequestStatus.Open);
-                request.setFare(fare);
-                request.setStartAddress(startAddress);
-                request.setEndAddress(endAddress);
-                request.setRoadLength(distance);
-                request.setStartLocation(startPoint);
-                request.setEndLocation(endPoint);
+                Request request = new Request(startPoint, endPoint, user, riderStory, pendingDrivers, driver, startAddress, endAddress, fare, distance);
 
                 if (connected)
                 {
                     RiderRequestsController.addRequestToElasticsearch(request);
                     RiderRequestsController.addRiderRequest(request);
+                    Log.i("LOGGED IN AS", " "+user.getUniqueUserName());
                 }
                 else
                 {
                     RiderRequestsController.addRiderRequest(request);
 
                     CreateRequestCommand newRequestCommand = new CreateRequestCommand();
-                    newRequestCommand.createRequest(startPoint, endPoint, user, riderStory, pendingDrivers, driver);
+                    newRequestCommand.createRequest(startPoint, endPoint, user, riderStory, pendingDrivers, driver, startAddress, endAddress, fare, distance);
 
                     OfflineRequestQueue.addCommand(newRequestCommand);
                 }
@@ -293,24 +265,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
 
-        /*
-         * TODO : Current location does not work on all machines for some reason
-         * Comment out the next four lines for testing purposes,
-         * figure out what is wrong with current location later.
-         * It is not a requirement to have the current location as the starting point anyhow...
-         */
-        /*
-                /**
-         * The startPoint and endPoint are subject to change once we figure out what causes the
-         * program to crash when it tries to find the current location.
-         * --> The problem may be when locationManager calls the getLastKnownLocation method.
-         * --> (Lines: 318-321)
-         */
-        //Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
-        //startPoint = currentPoint;
-        //endPoint = currentPoint;
-
         startPoint = new GeoPoint(53.5232, -113.5263);
         endPoint = new GeoPoint(53.5232, -113.5263);
         currentPoint=new GeoPoint(53.5232, -113.5263);
@@ -323,17 +277,10 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
             @Override
             public void processFinish(String output) {
-                //Double temp = output.mLength; //see also mDuration
                 startEditText.setText(output);
                 endEditText.setText(output);
-                //Here you will receive the result fired from async class
-                //of onPostExecute(result) method.
-
             }
         }).execute(currentPoint);
-        //startEditText.setText(currentPoint.toString()); //replaced with GetAddressFromGeoPointTask()
-        //endEditText.setText(currentPoint.toString());
-
 
         map = (MapView) findViewById(R.id.NRRAMap);
         map.getOverlays().add(0, mapEventsOverlay);
@@ -376,9 +323,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 roadLength = output.mLength; //see also mDuration
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
                 priceEditText.setText(formatter.format(roadLength));
-                //Here you will receive the result fired from async class
-                //of onPostExecute(result) method.
-
             }
         }).execute(waypoints);
     }
@@ -395,7 +339,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     }
 
     @Override public boolean longPressHelper(GeoPoint p) {
-        //DO NOTHING FOR NOW:
         return false;
     }
 
@@ -429,7 +372,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private class OnMarkerDragDrawer implements Marker.OnMarkerDragListener {
         ArrayList<GeoPoint> mTrace;
 
-        //RoadManager roadManager;
         OnMarkerDragDrawer() {
             mTrace = new ArrayList<GeoPoint>(2);
             mTrace.add(startMarker.getPosition());
@@ -440,9 +382,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
          * Deals with a marker drag, unused
          * @param marker
          */
-        @Override public void onMarkerDrag(Marker marker) {
-            //mTrace.add(marker.getPosition());
-        }
+        @Override public void onMarkerDrag(Marker marker) {}
 
         /**
          * Deals with the marker stopping being dragged.
@@ -452,42 +392,37 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
             mTrace.add(marker.getPosition());
             Road road;
-            //http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
+            /**
+             * Taken from: http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
+             * Accessed on: November 2, 2016
+             * Author: HelmiB
+             */
             AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
 
                 @Override
                 public void processFinish(Road output){
-                    roadLength = output.mLength; //see also mDuration
+                    roadLength = output.mLength;
                     NumberFormat formatter = NumberFormat.getCurrencyInstance();
                     priceEditText.setText(formatter.format(roadLength).toString());
-                    //Here you will receive the result fired from async class
-                    //of onPostExecute(result) method.
                 }
             }).execute(mTrace);
             if (marker.equals(startMarker)){
-                //update start location text
-                //startEditText.setText(startMarker.getPosition().toString());
                 startPoint = marker.getPosition();
                 AsyncTask<GeoPoint, Void, String> getAddress = new GetAddressFromGeoPointTask(new GetAddressFromGeoPointTask.AsyncResponse() {
 
                     @Override
                     public void processFinish(String output) {
                         startEditText.setText(output);
-                        //Here you will receive the result fired from async class
-                        //of onPostExecute(result) method.
                     }
                 }).execute(startMarker.getPosition());
             }
             else if (marker.equals(endMarker)){
-                //endEditText.setText(endMarker.getPosition().toString());
                 endPoint = marker.getPosition();
                 AsyncTask<GeoPoint, Void, String> getAddress = new GetAddressFromGeoPointTask(new GetAddressFromGeoPointTask.AsyncResponse() {
 
                     @Override
                     public void processFinish(String output) {
                         endEditText.setText(output);
-                        //Here you will receive the result fired from async class
-                        //of onPostExecute(result) method.
                     }
                 }).execute(endMarker.getPosition());
             }

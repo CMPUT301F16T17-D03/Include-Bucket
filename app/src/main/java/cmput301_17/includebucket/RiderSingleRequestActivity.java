@@ -85,9 +85,9 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         IMapController mapController = map.getController();
         mapController.setZoom(15);
 
-        Double price    = request.getFare();
+        Double price = request.getFare();
 
-        String story    = request.getRiderStory();
+        String story = request.getRiderStory();
         String startAddress = request.getStartAddress();
         String endAddress = request.getEndAddress();
         String make = request.getDriver().getVehicleMake();
@@ -121,9 +121,9 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         waypoints.add(startPoint);
         waypoints.add(endPoint);
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(
-                map, roadManager, new BuildRoadTask.AsyncResponse(){
+                map, roadManager, new BuildRoadTask.AsyncResponse() {
             @Override
-            public void processFinish(Road output){
+            public void processFinish(Road output) {
                 //Here you will receive the result fired from async class
                 //of onPostExecute(result) method.
             }
@@ -135,7 +135,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
         Formatter formatter = new Formatter();
         String p = formatter.format("%.2f%n", request.getFare()).toString();
-        priceEditText.setText("$"+p);
+        priceEditText.setText("$" + p);
 
         toastMsg = null;
         if (request.getRequestStatus() != Request.RequestStatus.Closed) {
@@ -146,10 +146,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                     finish();
                 }
             });
-        }
-        else
-        {
-            viewDriverButton.setText("Rate Driver");
+        } else {
             toastMsg = "Back to your requests!";
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -167,28 +164,11 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 Intent intent = new Intent(RiderSingleRequestActivity.this, ViewDriverDataActivity.class);
-                intent.putExtra("User",request.getDriver());
+                intent.putExtra("User", request.getDriver());
                 intent.putExtra("Request", request);
                 startActivity(intent);
             }
         });
-/*
-        requestTextView.setText("Price:\n" + price + "\n\nStart Location:\n" +
-               startAddress+"\nEnd Location:\n" + endAddress+"\nRequest Description:\n" +
-                story + "\n"+ "Driver car details:\n" + make + "\n" + model + "\n" + year);
-*/
- /*       completeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                RiderRequestsController.deleteRequest(request);
-                RiderRequestsController.deleteRequestFromElasticsearch(request);
-                Toast.makeText(RiderSingleRequestActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });*/
-
-
-
     }
     @Override
     public boolean longPressHelper(GeoPoint p) {

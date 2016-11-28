@@ -54,28 +54,6 @@ public class ViewRiderDataActivity extends MainMenuActivity {
                 setResult(RESULT_OK);
 
                 /**
-                 * code from http://stackoverflow.com/questions/9259856/displaying-the-to-address-prefilled-in-email-intent
-                 * accessed on November 26, 2016
-                 * user: goodm
-                 *
-                 * Requires emailing application installed on phone to work. Crashes when it runs.
-                 */
-                //Intent intent = new Intent(Intent.ACTION_SEND);
-                //intent.setType("plain/text");
-                //intent.putExtra(Intent.EXTRA_EMAIL, new String[] { driver.getEmail()});
-                //startActivity(intent);
-
-
-                /**
-                 * Hello, email handler friend!
-                 *
-                 * I hope you see disssss
-                 *
-                 * The code above made the app crash, maybe you knew this, maybe you didn't. I don't know.
-                 * I tried looking for solutions and came upon this one. It's pretty useless without
-                 * some sort of 'email application' that everyone says needs to be installed on the app
-                 * for it to work. Hope this helps (or not, you decide).
-                 *
                  * Taken from: http://stackoverflow.com/questions/14604349/activitynotfoundexception-while-sending-email-from-the-application
                  * Accessed November 28, 2016
                  * Author: Sahil Mahajan Mj
@@ -97,9 +75,11 @@ public class ViewRiderDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                // code from http://stackoverflow.com/questions/11699819/how-do-i-get-the-dialer-to-open-with-phone-number-displayed
-                // accessed on November 26, 2016
-                // user: AAnkit
+                /**
+                 * code from http://stackoverflow.com/questions/11699819/how-do-i-get-the-dialer-to-open-with-phone-number-displayed
+                 * accessed on November 26, 2016
+                 * user: AAnkit
+                 */
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + driver.getPhoneNumber()));
                 startActivity(intent);

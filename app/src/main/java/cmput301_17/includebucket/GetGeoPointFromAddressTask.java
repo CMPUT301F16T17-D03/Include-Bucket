@@ -27,13 +27,13 @@ public class GetGeoPointFromAddressTask extends AsyncTask<String, Void, GeoPoint
 
     public GetGeoPointFromAddressTask(AsyncResponse delegate)
     {
-
         this.delegate = delegate;
-
     }
-
     protected GeoPoint doInBackground(String... addresses)
-    { //http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
+    {
+        /**
+         * http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
+         */
         GeoPoint ret;
         try {
             GeocoderNominatim geoCoder = new GeocoderNominatim("Include-Bucket");
@@ -45,12 +45,6 @@ public class GetGeoPointFromAddressTask extends AsyncTask<String, Void, GeoPoint
             }
             Address location = address.get(0);
             ret = new GeoPoint(location.getLatitude(), location.getLongitude());
-            //String country = addresses.get(0).getCountryName();
-            //String postalCode = addresses.get(0).getPostalCode();
-            //String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-
-
-
         }catch(Exception e){
             ret = null;
         }

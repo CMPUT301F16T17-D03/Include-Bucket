@@ -17,8 +17,6 @@ public class RegisterActivity extends MainMenuActivity {
 
     protected EditText userLogin, userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
 
-    UserController controller = new UserController();
-
     /**
      *  When the user presses the Accept button, they are directed back into the login activity
      * Here they will be prompted for their login that they just created
@@ -81,8 +79,6 @@ public class RegisterActivity extends MainMenuActivity {
 
                     UserController.createUserInElasticSearch(user);
 
-                    //controller.setContext(RegisterActivity.this);
-
                     Log.i("Success","A user with Login: " + textLogin + " has been created.");
 
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -96,5 +92,11 @@ public class RegisterActivity extends MainMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
-//rider is notified if their request is accepted
-
-//https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-
+/*
+ * Rider is notified if their request is accepted
+ */
 public class NotifyRequestAccepted extends Service {
+
+    /**
+     * https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+     */
 
     @Override
     public IBinder onBind(Intent arg0) {

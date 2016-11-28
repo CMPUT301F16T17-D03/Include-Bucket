@@ -74,16 +74,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         if (connected)
         {
-            /**
-             * Creates requests offline successfully and stores them into server
-             * when online again, but for some reason it takes a while for it to load
-             * into the server. Sometimes it only shows up when another request is made again.
-             * Not sure if this is a server issue, or issue with the code. But it works.
-             *
-             * @see OfflineRequestQueue
-             * @see CreateRequestCommand
-             *
-             */
             RiderRequestsController.loadRequestsFromElasticSearch();
         }
         else
@@ -139,6 +129,16 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
 
         if (connected)
         {
+            /**
+             * Creates requests offline successfully and stores them into server
+             * when online again, but for some reason it takes a while for it to load
+             * into the server. Sometimes it only shows up when another request is made again.
+             * Not sure if this is a server issue, or issue with the code. But it works.
+             *
+             * @see OfflineRequestQueue
+             * @see CreateRequestCommand
+             *
+             */
             if (!OfflineRequestQueue.getRequestQueue().isEmpty())
             {
                 OfflineRequestQueue.execute();
@@ -159,50 +159,12 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     intent = new Intent(RiderCurrentRequestsActivity.this, RiderAcceptDriverActivity.class);
                     intent.putExtra("Request", request);
                     startActivity(intent);
-                    finish();
                 }
                 else {
                     intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
                     intent.putExtra("Request", request);
                     startActivity(intent);
-                    finish();
                 }
-
-
-/*
-                AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
-                adb.setMessage(adbMessage);
-                adb.setCancelable(true);
-
-
-                adb.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    Request request = requestList.get(finalPosition);
-                    RiderRequestsController.deleteRequest(request);
-                    RiderRequestsController.deleteRequestFromElasticsearch(request);
-
-                    requestList.remove(request);
-                    requestsListView.setAdapter(requestAdapter);
-                    requestAdapter.notifyDataSetChanged();
-                    }
-                });
-                // Add Cancel button to exit the dialog box
-                adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {}
-                });
-                // Add More button to view request
-                adb.setPositiveButton("More", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-
-                    }
-                });
-                adb.show();*/
             }
         });
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);

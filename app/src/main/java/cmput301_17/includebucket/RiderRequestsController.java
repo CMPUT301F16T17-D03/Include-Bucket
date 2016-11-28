@@ -146,4 +146,8 @@ public class RiderRequestsController {
             throw new RuntimeException("Could not deserialize RiderRequests from RequestListFileManagaer");
         }
     }
+
+    public static void clearList() {
+        riderRequests = null;
+    }
 }
