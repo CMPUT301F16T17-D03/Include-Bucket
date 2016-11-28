@@ -149,6 +149,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         }
         else
         {
+            viewDriverButton.setText("Rate Driver");
             toastMsg = "Back to your requests!";
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);

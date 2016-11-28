@@ -1,11 +1,16 @@
 package cmput301_17.includebucket;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +29,27 @@ public class ViewDriverDataActivity extends MainMenuActivity {
     private TextView loginTextView, makeView, modelView, yearView;
     private Button acceptButton, emailButton, phoneButton;
     private UserAccount driver = new UserAccount();
+
+
+    public void createNotification(View view) {
+        NotificationManager notificationmanager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent notification = new Intent(this, RiderCurrentRequestsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,(int) System.currentTimeMillis(), notification, 0);
+
+
+        Notification mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.small_icon)
+                .setContentTitle("New Notifications")
+                .setContentText("Your Acceptance Has Been Accepted")
+                .setContentIntent(pendingIntent)
+                .build();
+        mBuilder.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationmanager.notify(1, mBuilder);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +105,8 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                     newRequest.clearDrivers();
 
                     Toast.makeText(ViewDriverDataActivity.this, "Driver Accepted", Toast.LENGTH_SHORT).show();
+                    createNotification(acceptButton);
+
                     finish();
                 }
             });

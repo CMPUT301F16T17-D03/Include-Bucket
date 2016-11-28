@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.Externalizable;
+import java.io.IOException;
 import java.sql.Driver;
 
 /**
@@ -46,7 +48,6 @@ public class MainMenuActivity extends Activity {
 
                 user = UserController.getUserAccount();
                 if (user != null) UserController.logUserOut();
-
                 finish();
             }
         });
@@ -88,7 +89,6 @@ public class MainMenuActivity extends Activity {
                 setResult(RESULT_OK);
 
                 Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
-                //intent.putExtra("User", user);
                 startActivity(intent);
             }
         });

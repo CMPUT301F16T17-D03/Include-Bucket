@@ -62,7 +62,7 @@
         android:background="#000000" />
 
     <Button
-        android:text="Open Requests"
+        android:text="View Requests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Browse"

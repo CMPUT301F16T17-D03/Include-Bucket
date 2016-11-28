@@ -68,7 +68,6 @@ public class LoginActivity extends MainMenuActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
@@ -94,7 +93,6 @@ public class LoginActivity extends MainMenuActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
@@ -169,9 +167,9 @@ public class LoginActivity extends MainMenuActivity {
                     {
                         user.setLoginStatus(Boolean.TRUE);
                         UserFileManager.getUserFileManager().saveUser(user);
-                        Log.i("Success", "User " + user.getUniqueUserName() + " was found.");
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
