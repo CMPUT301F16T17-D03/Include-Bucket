@@ -90,7 +90,6 @@ public class Request implements Serializable {
         this.pendingDrivers = pendingDrivers;
         this.driver = driver;
         this.requestStatus = RequestStatus.Open;
-
         listeners = new ArrayList<>();
     }
 

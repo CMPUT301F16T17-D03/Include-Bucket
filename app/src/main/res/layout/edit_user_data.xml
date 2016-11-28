@@ -40,7 +40,7 @@
         android:layout_below="@+id/editPhone"
         android:layout_alignParentStart="true"
         android:singleLine="true"
-        android:hint="Vehicle Make"
+        android:hint="Vehicle Make [Honda]"
         android:fontFamily="sans-serif-light"
         android:textSize="25dp" />
 
@@ -53,7 +53,7 @@
         android:layout_below="@+id/editVehicleMake"
         android:layout_alignParentStart="true"
         android:singleLine="true"
-        android:hint="Vehicle Model"
+        android:hint="Vehicle Model [Civic]"
         android:fontFamily="sans-serif-light"
         android:textSize="25dp" />
 
@@ -65,7 +65,7 @@
         android:layout_below="@+id/editVehicleModel"
         android:layout_alignParentStart="true"
         android:singleLine="true"
-        android:hint="MM/DD/YY Vehicle Year"
+        android:hint="Vehicle Year [1999]"
         android:fontFamily="sans-serif-light"
         android:textSize="25dp"
         android:inputType="date" />

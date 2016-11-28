@@ -55,6 +55,8 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         UserFileManager.initManager(this.getApplicationContext());
         RiderRequestsFileManager.initManager(this.getApplicationContext());
 
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
         requestsListView = (ListView) findViewById(R.id.requestsListView);
 
         /**
@@ -62,8 +64,6 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
          * Accessed: November 26, 2016
          * Author: binnyb
          */
-        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
         {
@@ -71,9 +71,22 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
         }
         else connected = Boolean.FALSE;
 
-
         if (connected)
         {
+            /**
+             * Creates requests offline successfully and stores them into server
+             * when online again, but for some reason it takes a while for it to load
+             * into the server. Sometimes it only shows up when another request is made again.
+             * Not sure if this is a server issue, or issue with the code. But it works.
+             *
+             * @see OfflineRequestQueue
+             * @see CreateRequestCommand
+             *
+             */
+            if (!OfflineRequestQueue.getRequestQueue().isEmpty())
+            {
+                OfflineRequestQueue.execute();
+            }
             RiderRequestsController.loadRequestsFromElasticSearch();
         }
 

@@ -8,6 +8,8 @@ import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.renderscript.Double2;
@@ -35,11 +37,12 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * NewRiderRequestActivity
  *
- * In this class, the user should be able to specify the start and end locations by typing in an
+ * This class allows the user to specify the start and end locations by typing in an
  * address or by clicking on the map (clicking on the map should automatically fill in the start
  * and end locations). These locations are values for instantiating a new Request.
  */
@@ -49,7 +52,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private EditText endEditText;
     private EditText priceEditText;
     private EditText storyEditText;
-
+    private Button saveButton;
     private Marker startMarker;
     private Marker endMarker;
     private GeoPoint startPoint;
@@ -63,18 +66,12 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
     private String price;
     private ArrayList<UserAccount> pendingDrivers;
     private Double roadLength;
-
     private UserAccount driver;
-
-
     private Context context;
-
-
     private UserAccount user;
-    private UserController userController;
-    private RiderRequestsController riderRequestsController;
     private RequestList requestList;
-
+    private ConnectivityManager connectivityManager;
+    private boolean connected;
 
     /**
      * This method gets permissions, deals with the map and handles button presses.
@@ -86,25 +83,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
 
-        UserFileManager.initManager(this.getApplicationContext());
-        RiderRequestsFileManager.initManager(this.getApplicationContext());
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        pendingDrivers = new ArrayList<>();
-
-        user = UserController.getUserAccount();
-        userController = new UserController();
-        riderRequestsController = new RiderRequestsController();
-
-        /**
-         * TODO : Fix this later.
-         *
-         * int permissionCheckCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-         * Toast.makeText(getApplicationContext(), "Coarse Location " +permissionCheckCoarseLocation, Toast.LENGTH_SHORT).show();
-         */
         startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
         endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
         priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
         storyEditText = (EditText) findViewById(R.id.riderStoryEditText);
+        saveButton = (Button) findViewById(R.id.saveButton);
+
+        UserFileManager.initManager(this.getApplicationContext());
+        RiderRequestsFileManager.initManager(this.getApplicationContext());
+
+        user = UserController.getUserAccount();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -120,12 +110,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                  */
 
             } else {
-
-                /**
-                 * No explanation needed, we can request the permission.
-                 */
-
-
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         1);
@@ -137,11 +121,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             }
         }
 
-        if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(
+                this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
+                != PackageManager.PERMISSION_GRANTED)
+        {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 /**
@@ -149,13 +133,11 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                  * this thread waiting for the user's response! After the user
                  * sees the explanation, try again to request the permission.
                  */
-            } else {
-
-                /*
-                 * No explanation needed, we can request the permission.
-                 */
-
-                ActivityCompat.requestPermissions(this,
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(
+                        this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         1);
                 /**
@@ -166,31 +148,25 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
             }
         }
 
-        //OpenStreetMapTileProviderConstants.setCachePath(new File("/sdcard/osmdroid2/").getAbsolutePath());
-
         startEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
-                if(hasFocus){} //User is typing, do nothing.
-                else{
-                    /**
-                     * User has stopped typing, update the marker and the map
-                     * This is caused by hitting return or by clicking off the edit text
-                     * TODO Should probably give suggestions as to exact address.
-                     * assume is in format of lat,long
-                     */
-                     dragger.onMarkerDragStart(startMarker);
+                if(!hasFocus)
+                {
+                    dragger.onMarkerDragStart(startMarker);
                     try {
                         AsyncTask<String, Void, GeoPoint> task = new GetGeoPointFromAddressTask(new GetGeoPointFromAddressTask.AsyncResponse(){
 
                             @Override
                             public void processFinish(GeoPoint output){
 
-                                //Here you will receive the result fired from async class
-                                //of onPostExecute(result) method.
-                                startMarker.setPosition(output);
-                                startPoint = output;
-                                dragger.onMarkerDragEnd(startMarker);
+                            /**
+                             * Here you will receive the result fired from async class
+                             * of onPostExecute(result) method.
+                             */
+                            startMarker.setPosition(output);
+                            startPoint = output;
+                            dragger.onMarkerDragEnd(startMarker);
 
                             }
                         }).execute(startEditText.getText().toString());
@@ -206,8 +182,8 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         endEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
-                if(hasFocus){} //User is typing, do nothing
-                else{
+                if(!hasFocus)
+                {
                     /**
                      * User has stopped typing, update the marker and the map
                      * This is caused by hitting return or by clicking off the edit text
@@ -216,27 +192,25 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                      */
                     dragger.onMarkerDragStart(endMarker);
                     try {
-                        AsyncTask<String, Void, GeoPoint> task = new GetGeoPointFromAddressTask(new GetGeoPointFromAddressTask.AsyncResponse(){
-
+                        AsyncTask<String, Void, GeoPoint> task = new GetGeoPointFromAddressTask(new GetGeoPointFromAddressTask.AsyncResponse() {
                             @Override
-                            public void processFinish(GeoPoint output){
-
-                                //Here you will receive the result fired from async class
-                                //of onPostExecute(result) method.
+                            public void processFinish(GeoPoint output) {
+                                /**
+                                 * Here you will receive the result fired from async class
+                                 * of onPostExecute(result) method.
+                                 */
                                 endMarker.setPosition(output);
                                 endPoint = output;
                                 dragger.onMarkerDragEnd(endMarker);
-
                             }
                         }).execute(endEditText.getText().toString());
-
-                    }
-                    catch(Exception e){
+                    } catch(Exception e) {
                         Log.i("Error","Failed to get a valid geolocation.");
                     }
                 }
             }
         });
+
         priceEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
@@ -255,19 +229,18 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                     catch(Exception e){
                         priceEditText.setText(formatter.format(roadLength).toString());
                     }
-
                 }
             }
         });
+
         /**
          * Save button that instantiates a new Request and creates a new index in Elasticsearch of
          * the type "request".
          */
-        Button saveButton = (Button) findViewById(R.id.saveButton);
+        pendingDrivers = new ArrayList<>();
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
 
                 String startAddress = startEditText.getText().toString();
                 String endAddress = endEditText.getText().toString();
@@ -284,19 +257,32 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
                 request.setStartLocation(startPoint);
                 request.setEndLocation(endPoint);
 
-                // Add the request to Elasticsearch
-                RiderRequestsController.addRequestToElasticsearch(request);
+                if (connected)
+                {
+                    /**
+                     * Add to Elasticsearch
+                     */
+                    RiderRequestsController.addRequestToElasticsearch(request);
 
-                // Add to the local list
-                RiderRequestsController.addRiderRequest(request);
+                    /**
+                     * Add to local list
+                     */
+                    RiderRequestsController.addRiderRequest(request);
+                }
+                else
+                {
+                    RiderRequestsController.addRiderRequest(request);
 
+                    CreateRequestCommand newRequestCommand = new CreateRequestCommand();
+                    newRequestCommand.createRequest(startPoint, endPoint, user, riderStory, pendingDrivers, driver);
+
+                    OfflineRequestQueue.addCommand(newRequestCommand);
+                }
                 finish();
             }
         });
 
-
-
-        /********************************************** MAPS STUFF ********************************************/
+        /**************************************** MAPS STUFF **************************************/
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
          */
@@ -355,8 +341,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         IMapController mapController = map.getController();
         mapController.setZoom(15);
 
-
-
         mapController.setCenter(startPoint);
         roadManager = new OSRMRoadManager(this);
         startMarker = new Marker(map);
@@ -395,18 +379,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
             }
         }).execute(waypoints);
-
     }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //RequestList requestList = RiderRequestsController.getRiderRequests();
-        //RiderRequestsController.saveRequestInLocalFile(requestList, getApplicationContext());
-    }
-
-
 
     /********************************************** MAPS GUI ***************************************/
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
