@@ -25,6 +25,7 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
+import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 
 /**
@@ -295,7 +296,7 @@ public class ElasticsearchRequestController {
             }
 
             //else search_string ="{\"query\":{\"filtered\":{\"query\":{\"match_all\":{}},\"filter\":{\"geo_distance\":{\"distance\" : \"5km\",\"startLocation\":\""+search_param[0]+"\"}}}}}";
-            else {search_string = "{\"from\": 0,\"size\": 10000,\"query\" : {\"match_all\" : {}},\"filter\" : {\"range\" : { \"location.mLatitude\" : {\"gte\":"+(location.getLatitude()-0.05)+", \"lte\":"+(location.getLatitude()+0.05)+"}}}, \"filter\" : {\"range\" : {\"location.mLongitude\" : {\"gte\":"+(location.getLongitude()-0.05)+",\"lte\":"+(location.getLongitude()+0.05/cos(location.getLatitude()))+"}}}}";}
+            else {search_string = "{\"from\": 0,\"size\": 10000,\"query\" : {\"match_all\" : {}},\"filter\" : {\"range\" : { \"location.mLatitude\" : {\"gte\":"+(location.getLatitude()-0.05)+", \"lte\":"+(location.getLatitude()+0.05)+"}}}, \"filter\" : {\"range\" : {\"location.mLongitude\" : {\"gte\":"+(location.getLongitude()-0.05)+",\"lte\":"+(location.getLongitude()+0.05/cos((location.getLatitude()*PI)/180))+"}}}}";}
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")
