@@ -94,6 +94,18 @@ public class Request implements Serializable {
         listeners = new ArrayList<>();
     }
 
+    public Request(GeoPoint loc1, GeoPoint loc2, UserAccount rider, String story, ArrayList<UserAccount> pendingDrivers, UserAccount driver, String id) {
+        this.requestID = id;
+        this.startLocation = loc1.toString();
+        this.endLocation = loc2.toString();
+        this.rider = rider;
+        this.riderStory = story;
+        this.pendingDrivers = pendingDrivers;
+        this.driver = driver;
+        this.requestStatus = RequestStatus.Open;
+        listeners = new ArrayList<>();
+    }
+
     private void notifyListeners() {
         for (Listener listener : getListeners()) {
             listener.update();

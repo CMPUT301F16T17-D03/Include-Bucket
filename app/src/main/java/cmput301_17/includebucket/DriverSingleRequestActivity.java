@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -93,9 +95,21 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
 
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() ==
+                NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() ==
+                        NetworkInfo.State.CONNECTED)
+        {
+            connected = true;
+        }
+        else connected = false;
+
         /*************************************** PERMISSIONS **************************************/
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED)
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION))
@@ -141,112 +155,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                  */
             }
         }
-        /******************************************************************************************/
-
-
-        if (connected)
-        {
-            DriverRequestsController.loadOpenRequestsFromElasticsearch();
-        }
-
-        if (request.getRequestStatus() == Request.RequestStatus.Open)
-        {
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    setResult(RESULT_OK);
-
-                    newRequest = request;
-
-                    newRequest.setRequestStatus(Request.RequestStatus.PendingDrivers);
-                    newRequest.setDriverAccepted(true);
-                    newRequest.addDriver(user);
-
-                    DriverRequestsController.deleteRequestFromElasticsearch(request);
-
-                    ElasticsearchRequestController.CreateRequest createRequest;
-                    createRequest = new ElasticsearchRequestController.CreateRequest();
-                    createRequest.execute(newRequest);
-
-                    request = newRequest;
-
-                    Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
-                    startActivity(intent);
-
-                    finish();
-                }
-            });
-        }
-        else if (request.getRequestStatus() == Request.RequestStatus.PendingDrivers)
-        {
-            ArrayList<UserAccount> drivers = new ArrayList<>(request.getDrivers());
-
-            boolean foundDriver = Boolean.FALSE;
-            for (UserAccount u : drivers) {
-                if (u.getUniqueUserName().equals(user.getUniqueUserName()))
-                {
-                    foundDriver = Boolean.TRUE;
-                }
-            }
-
-            if (foundDriver && browse)
-            {
-                acceptButton.setText("REQUESTS");
-                AlertDialog.Builder adb = new AlertDialog.Builder(DriverSingleRequestActivity.this);
-                adb.setMessage("You already accepted this request! Go to your Involved Requests to view details.");
-                adb.setCancelable(true);
-
-                adb.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {}
-                });
-                adb.show();
-
-                acceptButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        setResult(RESULT_OK);
-                        Intent intent = new Intent(DriverSingleRequestActivity.this, DriverBrowseRequestsActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            }
-            else
-            {
-                acceptButton.setText("REQUESTS");
-                acceptButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        setResult(RESULT_OK);
-                        Intent intent = new Intent(DriverSingleRequestActivity.this, DriverCurrentRequestsActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            }
-
-        }
-        else if (request.getRequestStatus() == Request.RequestStatus.Closed)
-        {
-            storyText.setText("This request is now closed.");
-            acceptButton.setText("REQUESTS");
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    setResult(RESULT_OK);
-                    finish();
-                }
-            });
-        }
-
-        riderDetailsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_OK);
-                Intent intent = new Intent(DriverSingleRequestActivity.this, ViewRiderDataActivity.class);
-                intent.putExtra("Request", request);
-                startActivity(intent);
-            }
-        });
-
-
         /****************************************** MAPS ******************************************/
         /**
          * Important! set your user agent to prevent getting banned from the osm servers
@@ -263,12 +171,15 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         IMapController mapController = map.getController();
         mapController.setZoom(15);
 
-        Request request = (Request) getIntent().getSerializableExtra("Request");
+        request = (Request) getIntent().getSerializableExtra("Request");
+
         startEditText.setText(request.getStartAddress());
-        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),Double.parseDouble(request.getStartLocation().split(",")[1])) ;
+        startPoint = new GeoPoint(Double.parseDouble(request.getStartLocation().split(",")[0]),
+                Double.parseDouble(request.getStartLocation().split(",")[1])) ;
 
         endEditText.setText(request.getEndAddress());
-        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),Double.parseDouble(request.getEndLocation().split(",")[1]));
+        endPoint = new GeoPoint(Double.parseDouble(request.getEndLocation().split(",")[0]),
+                Double.parseDouble(request.getEndLocation().split(",")[1]));
 
         Formatter formatter = new Formatter();
         String p = formatter.format("%.2f%n", request.getFare()).toString();
@@ -306,15 +217,137 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
         waypoints.add(endPoint);
-        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(map, roadManager, new BuildRoadTask.AsyncResponse(){
+        AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(
+                map, roadManager, new BuildRoadTask.AsyncResponse(){
             @Override
-            public void processFinish(Road output){
-            }
+            public void processFinish(Road output){}
         }).execute(waypoints);
-        //Road road = roadManager.getRoad(waypoints);
-        //AsyncTask<ArrayList<GeoPoint>, Void, Polyline> task = new BuildRoadTask(map, roadManager).execute(waypoints);
-        //Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-        //map.getOverlays().add(roadOverlay);
+        /******************************************************************************************/
+
+        if (request.getRequestStatus() == Request.RequestStatus.Open)
+        {
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+
+                    if (connected)
+                    {
+                        request.setRequestStatus(Request.RequestStatus.PendingDrivers);
+                        request.setDriverAccepted(true);
+                        request.addDriver(user);
+
+                        DriverRequestsController.deleteRequestFromElasticsearch(request);
+
+                        ElasticsearchRequestController.CreateRequest createRequest;
+                        createRequest = new ElasticsearchRequestController.CreateRequest();
+                        createRequest.execute(request);
+                    }
+                    else
+                    {
+                        String riderStory = request.getRiderStory();
+                        ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
+
+                        AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
+                        acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getRequestID());
+
+                        OfflineRequestQueue.addCommand(acceptRequestCommand);
+                        Log.i("\n\n\nRequest ID","" +request.getRequestID());
+                    }
+                    Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+
+        }
+        else if (request.getRequestStatus() == Request.RequestStatus.PendingDrivers)
+        {
+            ArrayList<UserAccount> drivers = new ArrayList<>(request.getDrivers());
+
+            boolean foundDriver = Boolean.FALSE;
+            for (UserAccount u : drivers) {
+                if (u.getUniqueUserName().equals(user.getUniqueUserName()))
+                {
+                    foundDriver = Boolean.TRUE;
+                }
+            }
+
+            if (foundDriver && browse)
+            {
+                acceptButton.setText("REQUESTS");
+                acceptButton.setGravity(Gravity.CENTER_HORIZONTAL);
+                AlertDialog.Builder adb = new AlertDialog.Builder(DriverSingleRequestActivity.this);
+                adb.setMessage("You already accepted this request! You can view this request in YOUR OFFERS.");
+                adb.setCancelable(true);
+
+                adb.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+                adb.show();
+
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+            }
+            else
+            {
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        if (connected)
+                        {
+                            request.setRequestStatus(Request.RequestStatus.PendingDrivers);
+                            request.setDriverAccepted(true);
+                            request.addDriver(user);
+
+                            DriverRequestsController.deleteRequestFromElasticsearch(request);
+
+                            ElasticsearchRequestController.CreateRequest createRequest;
+                            createRequest = new ElasticsearchRequestController.CreateRequest();
+                            createRequest.execute(request);
+                        }
+                        else
+                        {
+                            String riderStory = request.getRiderStory();
+                            ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
+
+                            AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
+                            acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getRequestID());
+
+                            OfflineRequestQueue.addCommand(acceptRequestCommand);
+
+                            Log.i("\n\n\nRequest ID","" +request.getRequestID());
+                        }
+                        Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+            }
+
+        }
+        else if (request.getRequestStatus() == Request.RequestStatus.Closed)
+        {
+            storyText.setText("This request is now closed.");
+            acceptButton.setText("REQUESTS");
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+        }
+
+        riderDetailsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                Intent intent = new Intent(DriverSingleRequestActivity.this, ViewRiderDataActivity.class);
+                intent.putExtra("Request", request);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

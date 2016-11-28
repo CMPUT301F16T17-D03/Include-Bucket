@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -83,11 +84,11 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
              * @see CreateRequestCommand
              *
              */
-            if (!OfflineRequestQueue.getRequestQueue().isEmpty())
-            {
-                OfflineRequestQueue.execute();
-            }
             RiderRequestsController.loadRequestsFromElasticSearch();
+        }
+        else
+        {
+            Toast.makeText(RiderCurrentRequestsActivity.this, "You are offline!", Toast.LENGTH_SHORT).show();
         }
 
         requests = RiderRequestsController.getRiderRequests().getRequests();
@@ -135,6 +136,14 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (connected)
+        {
+            if (!OfflineRequestQueue.getRequestQueue().isEmpty())
+            {
+                OfflineRequestQueue.execute();
+            }
+        }
 
         requestAdapter.notifyDataSetChanged();
 

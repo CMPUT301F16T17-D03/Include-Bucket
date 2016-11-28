@@ -83,8 +83,6 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_rider_request);
 
-        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         startEditText = (EditText) findViewById(R.id.NRRAStartEditText);
         endEditText = (EditText) findViewById(R.id.NRRAEndEditText);
         priceEditText = (EditText) findViewById(R.id.NRRAPriceEditText);
@@ -95,6 +93,17 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
         RiderRequestsFileManager.initManager(this.getApplicationContext());
 
         user = UserController.getUserAccount();
+
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() ==
+                NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() ==
+                        NetworkInfo.State.CONNECTED)
+        {
+            connected = true;
+        }
+        else connected = false;
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -259,14 +268,7 @@ public class NewRiderRequestActivity extends Activity implements MapEventsReceiv
 
                 if (connected)
                 {
-                    /**
-                     * Add to Elasticsearch
-                     */
                     RiderRequestsController.addRequestToElasticsearch(request);
-
-                    /**
-                     * Add to local list
-                     */
                     RiderRequestsController.addRiderRequest(request);
                 }
                 else

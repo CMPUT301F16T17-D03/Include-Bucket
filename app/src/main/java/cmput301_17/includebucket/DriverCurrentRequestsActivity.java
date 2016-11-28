@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.sql.Driver;
@@ -48,8 +49,10 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
          */
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() ==
+                NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() ==
+                        NetworkInfo.State.CONNECTED)
         {
             connected = Boolean.TRUE;
         }
@@ -57,7 +60,15 @@ public class DriverCurrentRequestsActivity extends MainMenuActivity {
 
         if (connected)
         {
-            DriverRequestsController.loadInvolvedRequestsFromElasticsearch();
+            if (!OfflineRequestQueue.getRequestQueue().isEmpty())
+            {
+                OfflineRequestQueue.execute();
+            }
+            DriverRequestsController.loadOpenRequestsFromElasticsearch();
+        }
+        else
+        {
+            Toast.makeText(DriverCurrentRequestsActivity.this, "You are offline!", Toast.LENGTH_SHORT).show();
         }
 
         requests = DriverRequestsController.getDriverRequests().getRequests();
