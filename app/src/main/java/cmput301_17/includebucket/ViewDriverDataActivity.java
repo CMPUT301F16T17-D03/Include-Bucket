@@ -113,15 +113,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
         }
         else
         {
-            acceptButton.setText("REQUESTS");
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    setResult(RESULT_OK);
-                    Intent intent = new Intent(ViewDriverDataActivity.this, RiderCurrentRequestsActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+            acceptButton.setVisibility(View.GONE);
         }
 
         emailButton.setOnClickListener(new View.OnClickListener() {
