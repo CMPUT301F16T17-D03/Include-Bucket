@@ -149,6 +149,46 @@ public class ElasticsearchRequestController {
     }
 
     /**
+     * This method retrieves all of the rider's requests in the database.
+     */
+    public static class GetRiderRequestsById extends AsyncTask<String, Void, RequestList> {
+        @Override
+        protected RequestList doInBackground(String... rider) {
+            verifySettings();
+
+            RequestList requests = new RequestList();
+
+            String search_string =
+                    "{\"from\": 0, \"size\": 10000," +
+                            "\"query\": { \"match\": {\"rider.uniqueUserName\" : \"" + rider[0] + "\"}}}";
+
+            Search search = new Search.Builder(search_string)
+                    .addIndex("cmput301f16t17")
+                    .addType("request")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded())
+                {
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundRequests);
+                    Log.i("Success", "Got the requests.");
+                }
+                else
+                {
+                    requests = new RequestList();
+                    Log.i("Error", rider[0] + " The search query did not match any requests in the database.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return requests;
+        }
+    }
+
+    /**
      * This method retrieves all of the driver's requests in the database.
      */
     public static class GetDriverRequests extends AsyncTask<UserAccount, Void, RequestList> {

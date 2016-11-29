@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.sql.Driver;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -142,8 +144,15 @@ public class LoginActivity extends MainMenuActivity {
                     }
                     else
                     {
-                        user.setLoginStatus(Boolean.TRUE);
-                        UserFileManager.getUserFileManager().saveUser(user);
+                        UserController.loadUserFromElasticSearch(userLogin.getText().toString());
+                        UserAccount saveUser = UserController.getUserAccount();
+                        saveUser.setLoginStatus(Boolean.TRUE);
+
+                        UserFileManager.getUserFileManager().saveUser(saveUser);
+
+                        RiderRequestsController.loadRequestsFromElasticSearch();
+                        DriverRequestsController.loadOpenRequestsFromElasticsearch();
+
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
                         finish();

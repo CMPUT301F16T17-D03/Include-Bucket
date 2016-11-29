@@ -68,6 +68,8 @@ public class UserFileManager {
         SharedPreferences settings = context.getSharedPreferences(prefFile, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
+        editor.clear();
+
         Gson gson = new Gson();
         String json = gson.toJson(u);
         editor.putString(userKey, json);
