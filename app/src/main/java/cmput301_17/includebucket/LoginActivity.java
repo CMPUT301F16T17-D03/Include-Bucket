@@ -142,9 +142,9 @@ public class LoginActivity extends MainMenuActivity {
                     }
                     else
                     {
-                        Log.i("USER SUCCESS"," " + user.getUniqueUserName());
                         user.setLoginStatus(Boolean.TRUE);
                         UserFileManager.getUserFileManager().saveUser(user);
+                        Thread.sleep(1000);
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
                         finish();
@@ -222,6 +222,7 @@ public class LoginActivity extends MainMenuActivity {
                         {
                             user.setLoginStatus(Boolean.TRUE);
                             UserFileManager.getUserFileManager().saveUser(user);
+                            Thread.sleep(1000);
                             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                             startActivity(intent);
                             finish();

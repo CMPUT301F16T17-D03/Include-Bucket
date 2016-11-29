@@ -30,7 +30,7 @@ public class LauncherActivity extends Activity {
         try {
             UserFileManager.getUserFileManager().saveUser(user);
         } catch (Exception e) {
-            Log.i("Fail", "Could not deserialize the UserAccount in UserFileManager");
+            throw new RuntimeException("Could not deserialize the UserAccount in UserFileManager");
         }
 
         Intent intent;

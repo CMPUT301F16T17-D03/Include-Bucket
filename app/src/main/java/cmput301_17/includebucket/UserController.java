@@ -31,12 +31,10 @@ public class UserController implements Serializable{
         if (userAccount == null) {
             try {
                 userAccount = UserFileManager.getUserFileManager().loadUser();
-                Log.i("what","This user is " + userAccount.getUniqueUserName());
                 userAccount.addListener(new Listener() {
                     @Override
                     public void update() {
                         saveUserAccountInLocalFile();
-
                     }
                 });
             } catch (IOException e) {
@@ -85,7 +83,6 @@ public class UserController implements Serializable{
         try {
             UserAccount user = retrieveUser.get();
             userAccount = user;
-            Log.i("SUCCESS","Got " + user.getUniqueUserName());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -105,14 +102,6 @@ public class UserController implements Serializable{
             throw new RuntimeException("Could not deserialize User from UserFileManagaer");
         }
     }
-
-    /**
-     * Add user ride request ID's to riderRequests list.
-     * @return
-     */
-    //public Context getContext() {return context;}
-
-    //public void setContext(Context context) {this.context = context;}
 
     /**
      * Logs user out

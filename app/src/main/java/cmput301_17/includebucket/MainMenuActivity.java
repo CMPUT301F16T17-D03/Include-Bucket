@@ -51,6 +51,7 @@ public class MainMenuActivity extends Activity {
                 if (user != null)
                 {
                     user.setLoginStatus(Boolean.FALSE);
+
                 }
 
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);

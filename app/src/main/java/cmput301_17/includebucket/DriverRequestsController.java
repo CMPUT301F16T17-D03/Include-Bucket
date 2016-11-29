@@ -106,7 +106,6 @@ public class DriverRequestsController {
         ElasticsearchRequestController.DeleteRequest deleteRequest;
         deleteRequest = new ElasticsearchRequestController.DeleteRequest();
         deleteRequest.execute(request);
-        Log.i("FAIL", "This is " + request.getRequestID());
     }
 
     /**
@@ -114,7 +113,6 @@ public class DriverRequestsController {
      */
     public static void loadOpenRequestsFromElasticsearch() {
 
-        // Get ALL the open requests from the server
         ElasticsearchRequestController.GetOpenRequests openRequests;
         openRequests = new ElasticsearchRequestController.GetOpenRequests();
         openRequests.execute("");
@@ -123,7 +121,6 @@ public class DriverRequestsController {
         try {
             requestList.getRequests().addAll(openRequests.get());
             driverRequests = requestList;
-            Log.i("SUCCESS","list size " + requestList.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -142,13 +139,10 @@ public class DriverRequestsController {
         driverList = new ElasticsearchRequestController.GetDriverRequests();
         driverList.execute(user);
 
-        Log.i("SUCCESS","Found " + user.getUniqueUserName());
-
         RequestList requestList = new RequestList();
         try {
             requestList.getRequests().addAll(driverList.get());
             driverRequests = requestList;
-            Log.i("SUCCESS","list size " + requestList.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -170,11 +164,6 @@ public class DriverRequestsController {
         try {
             requests.getRequests().addAll(requestList.get());
             driverRequests = requests;
-            if (requests.size()>0) {
-            Log.i("SUCCESS","keyword list size " + 0 + requests.get(0).getRiderStory());}
-            else{
-                Log.i("SUCCESS","No results found");
-            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -192,7 +181,6 @@ public class DriverRequestsController {
         try {
             requests.getRequests().addAll(requestList.get());
             driverRequests = requests;
-            //Log.i("SUCCESS","keyword list size " + requests.get(0).getRiderStory());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -210,11 +198,6 @@ public class DriverRequestsController {
         try {
             requests.getRequests().addAll(requestList.get());
             driverRequests = requests;
-            if (requests.size()>0) {
-                Log.i("SUCCESS","nearby list size " + 0 + requests.get(0).getStartLocation());}
-            else{
-                Log.i("SUCCESS","No nearby results found");
-            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -238,5 +221,4 @@ public class DriverRequestsController {
     public static void clearList() {
         driverRequests = null;
     }
-
 }

@@ -310,8 +310,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
      */
     private class OnMarkerDragDrawer implements Marker.OnMarkerDragListener {
         ArrayList<GeoPoint> mTrace;
-
-        //RoadManager roadManager;
         OnMarkerDragDrawer() {
             mTrace = new ArrayList<GeoPoint>(2);
             mTrace.add(startMarker.getPosition());
