@@ -41,9 +41,6 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
 
     private TextView startEditText, endEditText, priceEditText, storyText;
     private Button completeButton, viewDriverButton;
-    private ArrayList<UserAccount> driverList;
-    private ArrayAdapter<UserAccount> driverListAdapter;
-
     private Marker startMarker;
     private Marker endMarker;
     private GeoPoint startPoint;
@@ -64,10 +61,10 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         final Request request = (Request) getIntent().getSerializableExtra("Request");
 
         startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
-        endEditText = (TextView) findViewById(R.id.DSRAEndEditText);
+        endEditText   = (TextView) findViewById(R.id.DSRAEndEditText);
         priceEditText = (TextView) findViewById(R.id.DSRAPriceEditText);
-        storyText = (TextView) findViewById(R.id.DSRAstory);
-        completeButton = (Button) findViewById(R.id.completeRequestButton);
+        storyText     = (TextView) findViewById(R.id.DSRAstory);
+        completeButton   = (Button) findViewById(R.id.completeRequestButton);
         viewDriverButton = (Button) findViewById(R.id.viewDriverButton);
 
         /**
@@ -123,11 +120,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
         AsyncTask<ArrayList<GeoPoint>, Void, Road> task = new BuildRoadTask(
                 map, roadManager, new BuildRoadTask.AsyncResponse() {
             @Override
-            public void processFinish(Road output) {
-                //Here you will receive the result fired from async class
-                //of onPostExecute(result) method.
-            }
-        }).execute(waypoints);
+            public void processFinish(Road output) {}}).execute(waypoints);
 
         startEditText.setText(startAddress);
         endEditText.setText(endAddress);
@@ -172,12 +165,10 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
     }
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        //DO NOTHING FOR NOW:
         return false;
     }
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        //DO NOTHING FOR NOW:
         return false;
     }
 }

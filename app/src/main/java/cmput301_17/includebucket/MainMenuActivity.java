@@ -19,6 +19,7 @@ import java.sql.Driver;
 public class MainMenuActivity extends Activity {
 
     UserAccount user = new UserAccount();
+    UserAccount loginUser = new UserAccount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class MainMenuActivity extends Activity {
         RiderRequestsFileManager.initManager(this.getApplicationContext());
         DriverRequestsFileManager.initManager(this.getApplicationContext());
 
-        user = new UserAccount();
+        loginUser = (UserAccount) getIntent().getSerializableExtra("User");
 
         Button riderNewButton = (Button) findViewById(R.id.newRequest);
         riderNewButton.setOnClickListener(new View.OnClickListener() {
@@ -46,15 +47,14 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
 
-                user = UserController.getUserAccount();
-                //user.setLoginStatus(Boolean.FALSE);
+                UserAccount user = UserController.getUserAccount();
+                if (user != null)
+                {
+                    user.setLoginStatus(Boolean.FALSE);
+                }
 
-                UserController.logUserOut();
-                RiderRequestsController.clearList();
-                DriverRequestsController.clearList();
-
-
-                finish();
+                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
 

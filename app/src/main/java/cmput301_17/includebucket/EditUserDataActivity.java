@@ -15,7 +15,7 @@ import android.widget.EditText;
 public class EditUserDataActivity extends MainMenuActivity {
 
 
-    protected EditText userName, userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
+    protected EditText userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

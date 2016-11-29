@@ -34,18 +34,21 @@ public class LauncherActivity extends Activity {
         }
 
         Intent intent;
-        if (!user.getLoginStatus()){
+        if (user != null)
+        {
+            if (!user.getLoginStatus()){
+                intent = new Intent(LauncherActivity.this,LoginActivity.class);
+            }
+            else {
+                intent = new Intent(LauncherActivity.this,MainMenuActivity.class);
+            }
+            startActivity(intent);
+        }
+        else
+        {
             intent = new Intent(LauncherActivity.this,LoginActivity.class);
+            startActivity(intent);
         }
-        else {
-            intent = new Intent(LauncherActivity.this,MainMenuActivity.class);
-        }
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         finish();
     }
 }

@@ -234,15 +234,4 @@ public class LoginActivity extends MainMenuActivity {
             }
         });
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (userLogin.equals("")) UserController.logUserOut();
-    }
 }

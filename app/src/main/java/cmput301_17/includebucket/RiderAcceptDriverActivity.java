@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
     private ArrayAdapter<UserAccount> driverAdapter;
     final String adbMessage = "Click More button for details.";
     Request request = new Request();
+    private Button deleteButton;
 
     /**
      * This sets the data of the request on the screen
@@ -46,6 +48,8 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         priceTitle = (TextView) findViewById(R.id.priceTextView);
         driversTitle   = (TextView) findViewById(R.id.priceTextView);
         driverListView = (ListView) findViewById(R.id.pendingDriversListView);
+        deleteButton   = (Button) findViewById(R.id.deleteButton);
+
 
         start = (TextView) findViewById(R.id.DSRAStartEditText);
         end   = (TextView) findViewById(R.id.DSRAEndEditText);
@@ -56,10 +60,6 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
 
         story.setText(request.getRiderStory());
         end.setText(request.getEndAddress());
-
-        //Formatter priceFormatter = new Formatter();
-        //String p = priceFormatter.format("%.2f%n", request.getFare()).toString();
-        //price.setText("$"+p);
 
         if (request.getDrivers().size() == 0)
         {
@@ -76,6 +76,15 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         driverList.addAll(request.getDrivers());
         driverAdapter = new ArrayAdapter<UserAccount>(this, android.R.layout.simple_list_item_1, driverList);
         driverListView.setAdapter(driverAdapter);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                RiderRequestsController.deleteRequest(request);
+                RiderRequestsController.deleteRequestFromElasticsearch(request);
+                finish();
+            }
+        });
     }
 
     /**
