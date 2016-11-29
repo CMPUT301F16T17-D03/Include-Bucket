@@ -157,7 +157,7 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 Intent intent = new Intent(RiderSingleRequestActivity.this, ViewDriverDataActivity.class);
-                intent.putExtra("User", request.getDriver());
+                intent.putExtra("User", request.getChosenDriver());
                 intent.putExtra("Request", request);
                 startActivity(intent);
             }
