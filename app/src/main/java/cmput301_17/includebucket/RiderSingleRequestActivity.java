@@ -146,8 +146,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             completeButton.setText("DELETE");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    RiderRequestsController.deleteRequest(request);
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
+                    RiderRequestsController.deleteRequest(request);
                     finish();
                 }
             });

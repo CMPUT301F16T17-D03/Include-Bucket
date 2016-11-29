@@ -80,8 +80,8 @@ public class RiderAcceptDriverActivity extends MainMenuActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                RiderRequestsController.deleteRequest(request);
                 RiderRequestsController.deleteRequestFromElasticsearch(request);
+                RiderRequestsController.deleteRequest(request);
                 finish();
             }
         });
