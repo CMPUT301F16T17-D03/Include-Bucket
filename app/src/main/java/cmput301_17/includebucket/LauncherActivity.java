@@ -34,7 +34,7 @@ public class LauncherActivity extends Activity {
         }
 
         Intent intent;
-        if (user != null)
+        if (user.getLoginStatus() == Boolean.FALSE)
         {
             if (!user.getLoginStatus()){
                 intent = new Intent(LauncherActivity.this,LoginActivity.class);

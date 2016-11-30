@@ -76,8 +76,6 @@ public class ElasticsearchRequestController {
 
             SearchResult result;
 
-            //String query ="{\"from\": 0, \"size\": 10000," +
-                    //"\"query\": { \"match\": {\"riderAccepted\" : \"false\"}}}";
             String query =
                     "{\"query\": { \"bool\": { \"must\": [{\"term\":"+
                             "{\"riderAccepted\": \"false\"}}],\"mustNot\":[{\"term\": {\"rider.uniqueUserName\":\""
