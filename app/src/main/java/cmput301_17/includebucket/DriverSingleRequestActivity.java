@@ -259,37 +259,40 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                     }
                 });
             }
+            else if (foundDriver)
+            {
+                acceptButton.setText("REQUESTS");
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+            }
             else
             {
                 acceptButton.setText("ACCEPT");
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setResult(RESULT_OK);
-                        if (connected)
-                        {
-                            request.setRequestStatus(Request.RequestStatus.PendingDrivers);
-                            request.setDriverAccepted(true);
-                            request.addDriver(user);
+                        acceptButton.setText("REQUESTS");
+                        acceptButton.setGravity(Gravity.CENTER_HORIZONTAL);
+                        AlertDialog.Builder adb = new AlertDialog.Builder(DriverSingleRequestActivity.this);
+                        adb.setMessage("You already accepted this request! You can view this request in YOUR OFFERS.");
+                        adb.setCancelable(true);
 
-                            DriverRequestsController.deleteRequestFromElasticsearch(request);
+                        adb.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {}
+                        });
+                        adb.show();
 
-                            ElasticsearchRequestController.CreateRequest createRequest;
-                            createRequest = new ElasticsearchRequestController.CreateRequest();
-                            createRequest.execute(request);
-                        }
-                        else
-                        {
-                            String riderStory = request.getRiderStory();
-                            ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
-
-                            AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
-                            acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getStartAddress(), request.getEndAddress(), request.getFare(), request.getRequestID());
-
-                            OfflineRequestQueue.addCommand(acceptRequestCommand);
-                            Log.i("\n\n\nRequest ID","" +request.getRequestID());
-                        }
-                        Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
-                        finish();
+                        acceptButton.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
                     }
                 });
             }
