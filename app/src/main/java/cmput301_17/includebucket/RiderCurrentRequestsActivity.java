@@ -159,11 +159,13 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                     intent = new Intent(RiderCurrentRequestsActivity.this, RiderAcceptDriverActivity.class);
                     intent.putExtra("Request", request);
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     intent = new Intent(RiderCurrentRequestsActivity.this, RiderSingleRequestActivity.class);
                     intent.putExtra("Request", request);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

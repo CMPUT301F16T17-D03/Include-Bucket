@@ -49,6 +49,11 @@ public class RegisterActivity extends MainMenuActivity {
 
                 String textLogin  = userLogin.getText().toString();
 
+                if (userLogin.getText().toString().length() == 0)
+                {
+                    userLogin.setError("Username field required!");
+                }
+
                 /**
                  * Check first to see if the username is unique.
                  * Create user if Elasticsearch failed to find the username.
@@ -67,36 +72,33 @@ public class RegisterActivity extends MainMenuActivity {
                     }
                 } catch (Exception e) {
 
-                    String login = userLogin.getText().toString();
-                    String email = userEmail.getText().toString();
-                    String phone = userPhone.getText().toString();
+                    if (userLogin.getText().toString().length() != 0)
+                    {
+                        if (userEmail.getText().toString().length() == 0
+                            && userPhone.getText().toString().length() == 0)
+                        {
+                            Toast.makeText(RegisterActivity.this, "One of Email or Phone is required", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            String login = userLogin.getText().toString();
+                            String email = userEmail.getText().toString();
+                            String phone = userPhone.getText().toString();
 
-                    String make  = vehicleMake.getText().toString();
-                    String model = vehicleModel.getText().toString();
-                    String year  = vehicleYear.getText().toString();
+                            String make = vehicleMake.getText().toString();
+                            String model = vehicleModel.getText().toString();
+                            String year = vehicleYear.getText().toString();
 
-                    UserAccount user = new UserAccount(login, email, phone, make, model, year);
+                            UserAccount user = new UserAccount(login, email, phone, make, model, year);
 
-                    UserController.createUserInElasticSearch(user);
+                            UserController.createUserInElasticSearch(user);
 
-                    Log.i("Success","A user with Login: " + textLogin + " has been created.");
-
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    intent.putExtra("user_login", textLogin);
-                    startActivity(intent);
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            intent.putExtra("user_login", textLogin);
+                            startActivity(intent);
+                        }
+                    }
                 }
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
     }
 }

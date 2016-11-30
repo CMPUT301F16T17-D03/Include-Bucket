@@ -5,12 +5,14 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -121,14 +123,20 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                 setResult(RESULT_OK);
 
                 /**
-                 * code from http://stackoverflow.com/questions/9259856/displaying-the-to-address-prefilled-in-email-intent
-                 * accessed on November 26, 2016
-                 * user: goodm
+                 * Taken from: http://stackoverflow.com/questions/14604349/activitynotfoundexception-while-sending-email-from-the-application
+                 * Accessed November 28, 2016
+                 * Author: Sahil Mahajan Mj
                  */
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {driver.getEmail()});
-                startActivity(intent);
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail"));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(ViewDriverDataActivity.this, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -148,6 +148,8 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
                 public void onClick(View v) {
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
                     RiderRequestsController.deleteRequest(request);
+                    Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
+                    startActivity(intent);
                     finish();
                 }
             });
