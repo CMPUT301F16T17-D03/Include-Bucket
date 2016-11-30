@@ -261,10 +261,34 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             }
             else
             {
-                acceptButton.setText("REQUESTS");
+                acceptButton.setText("ACCEPT");
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setResult(RESULT_OK);
+                        if (connected)
+                        {
+                            request.setRequestStatus(Request.RequestStatus.PendingDrivers);
+                            request.setDriverAccepted(true);
+                            request.addDriver(user);
+
+                            DriverRequestsController.deleteRequestFromElasticsearch(request);
+
+                            ElasticsearchRequestController.CreateRequest createRequest;
+                            createRequest = new ElasticsearchRequestController.CreateRequest();
+                            createRequest.execute(request);
+                        }
+                        else
+                        {
+                            String riderStory = request.getRiderStory();
+                            ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
+
+                            AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
+                            acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getStartAddress(), request.getEndAddress(), request.getFare(), request.getRequestID());
+
+                            OfflineRequestQueue.addCommand(acceptRequestCommand);
+                            Log.i("\n\n\nRequest ID","" +request.getRequestID());
+                        }
+                        Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
