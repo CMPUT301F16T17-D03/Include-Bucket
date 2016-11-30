@@ -143,12 +143,12 @@ public class RiderSingleRequestActivity extends MainMenuActivity implements MapE
             toastMsg = "Back to your requests!";
             storyText.setText("You already accepted this request.");
             storyText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            completeButton.setText("COMPLETE");
+            completeButton.setText("COMPLETE & PAY");
             completeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     RiderRequestsController.deleteRequestFromElasticsearch(request);
                     RiderRequestsController.deleteRequest(request);
-                    Intent intent = new Intent(RiderSingleRequestActivity.this, RiderCurrentRequestsActivity.class);
+                    Intent intent = new Intent(RiderSingleRequestActivity.this, MainMenuActivity.class);
                     startActivity(intent);
                     finish();
                 }
