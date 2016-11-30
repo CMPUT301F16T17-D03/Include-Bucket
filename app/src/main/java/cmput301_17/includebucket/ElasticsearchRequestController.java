@@ -311,7 +311,7 @@ public class ElasticsearchRequestController {
             }
 
             //else search_string ="{\"query\":{\"filtered\":{\"query\":{\"match_all\":{}},\"filter\":{\"geo_distance\":{\"distance\" : \"5km\",\"startLocation\":\""+search_param[0]+"\"}}}}}";
-            else {search_string = "{\"from\": 0,\"size\": 10000,\"query\" : {\"match_all\" : {}},\"filter\" : {\"range\" : { \"location.mLatitude\" : {\"gte\":"+(location.getLatitude()-0.05)+", \"lte\":"+(location.getLatitude()+0.05)+"}}}, \"filter\" : {\"range\" : {\"location.mLongitude\" : {\"gte\":"+(location.getLongitude()-0.05)+",\"lte\":"+(location.getLongitude()+0.05/cos(location.getLatitude()))+"}}}}";}
+            else {search_string = "{\"from\": 0,\"size\": 10000,\"query\" : {\"match_all\" : {}},\"filter\" : {\"range\" : { \"location.mLatitude\" : {\"gte\":"+(location.getLatitude()-0.05)+", \"lte\":"+(location.getLatitude()+0.05)+"}}}, \"filter\" : {\"range\" : {\"location.mLongitude\" : {\"gte\":"+(location.getLongitude()-0.05)+",\"lte\":"+(location.getLongitude()+0.05)+"}}}}";}
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")
                     .addType("request")
