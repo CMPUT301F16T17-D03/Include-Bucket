@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.IOException;
+
 /**
  *
  * EditUserDataActivity
@@ -41,7 +43,6 @@ public class EditUserDataActivity extends MainMenuActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
-
                 editUser();
                 finish();
             }
@@ -80,10 +81,30 @@ public class EditUserDataActivity extends MainMenuActivity {
             year = vehicleYear.getText().toString();
         }
 
-        UserAccount user = new UserAccount(login, email, phone, make, model, year);
+        //UserAccount newUser = new UserAccount(user.getUniqueUserName(), user.getEmail(), user.getPhoneNumber(), user.getVehicleMake(), user.getVehicleModel(), user.getVehicleYear());
+
+        //UserAccount newUser = user;
+
+        user.setEmail(userEmail.getText().toString());
+        user.setPhoneNumber(userPhone.getText().toString());
+        user.setVehicleMake(vehicleMake.getText().toString());
+        user.setVehicleModel(vehicleModel.getText().toString());
+        user.setVehicleYear(vehicleYear.getText().toString());
+        //user.setUserId(user.getUserId());
+
+
+        //ElasticsearchUserController.DeleteUser deleteUser;
+        //deleteUser = new ElasticsearchUserController.DeleteUser();
+        //deleteUser.execute(user);
 
         ElasticsearchUserController.CreateUser editUser;
         editUser = new ElasticsearchUserController.CreateUser();
         editUser.execute(user);
+
+        try {
+            UserFileManager.getUserFileManager().saveUser(user);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not deserialize UserAccount with UserFileManager");
+        }
     }
 }

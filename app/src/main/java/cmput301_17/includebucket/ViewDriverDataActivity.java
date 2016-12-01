@@ -102,6 +102,7 @@ public class ViewDriverDataActivity extends MainMenuActivity {
                     createRequest.execute(newRequest);
 
                     newRequest.setRequestStatus(Request.RequestStatus.Closed);
+                    newRequest.setDriver(driver);
                     newRequest.setChosenDriver(driver);
                     newRequest.setRiderAccepted(true);
                     newRequest.clearDrivers();

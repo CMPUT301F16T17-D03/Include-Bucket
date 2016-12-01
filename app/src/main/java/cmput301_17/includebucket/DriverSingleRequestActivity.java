@@ -83,7 +83,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         request = (Request) getIntent().getSerializableExtra("Request");
         browse  = (boolean) getIntent().getExtras().getBoolean("BrowseActivity");
 
-        drivers = new ArrayList<UserAccount>();
+        drivers = new ArrayList<>();
         driver  = new UserAccount();
 
         startEditText = (TextView) findViewById(R.id.DSRAStartEditText);
@@ -187,9 +187,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             public void processFinish(Road output){
             }
         }).execute(waypoints);
-
         /******************************************************************************************/
-
 
         if (request.getRequestStatus() == Request.RequestStatus.Open)
         {
@@ -218,7 +216,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                         acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getStartAddress(), request.getEndAddress(), request.getFare(), request.getRequestID());
 
                         OfflineRequestQueue.addCommand(acceptRequestCommand);
-                        Log.i("\n\n\nRequest ID","" +request.getRequestID());
                     }
                     Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
                     finish();
@@ -275,24 +272,28 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setResult(RESULT_OK);
-                        acceptButton.setText("REQUESTS");
-                        acceptButton.setGravity(Gravity.CENTER_HORIZONTAL);
-                        AlertDialog.Builder adb = new AlertDialog.Builder(DriverSingleRequestActivity.this);
-                        adb.setMessage("You already accepted this request! You can view this request in YOUR OFFERS.");
-                        adb.setCancelable(true);
+                        if (connected)
+                        {
+                            request.addDriver(user);
 
-                        adb.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {}
-                        });
-                        adb.show();
+                            DriverRequestsController.deleteRequestFromElasticsearch(request);
 
-                        acceptButton.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                setResult(RESULT_OK);
-                                finish();
-                            }
-                        });
+                            ElasticsearchRequestController.CreateRequest createRequest;
+                            createRequest = new ElasticsearchRequestController.CreateRequest();
+                            createRequest.execute(request);
+                        }
+                        else
+                        {
+                            String riderStory = request.getRiderStory();
+                            ArrayList<UserAccount> pendingDrivers = new ArrayList<>(request.getDrivers());
+
+                            AcceptRequestCommand acceptRequestCommand = new AcceptRequestCommand();
+                            acceptRequestCommand.createAcceptRequest(startPoint, endPoint, request.getRider(), riderStory, pendingDrivers, user, request.getStartAddress(), request.getEndAddress(), request.getFare(), request.getRequestID());
+
+                            OfflineRequestQueue.addCommand(acceptRequestCommand);
+                        }
+                        Toast.makeText(DriverSingleRequestActivity.this, "Request Accepted", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
             }
@@ -341,7 +342,6 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
             mTrace = new ArrayList<GeoPoint>(2);
             mTrace.add(startMarker.getPosition());
             mTrace.add(endMarker.getPosition());
-
         }
 
         @Override

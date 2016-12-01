@@ -23,13 +23,11 @@ public class NotifyAcceptance extends Service {
     }
 
     public NotifyAcceptance()
-
     {
         NotificationManager notificationmanager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent notification = new Intent(this, RiderCurrentRequestsActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notification, 0);
-
 
         Notification mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(0)

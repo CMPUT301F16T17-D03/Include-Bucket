@@ -169,13 +169,35 @@ public class RiderCurrentRequestsActivity extends MainMenuActivity {
                 }
             }
         });
+
+        requestsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(RiderCurrentRequestsActivity.this);
+                adb.setMessage(adbMessage);
+                adb.setCancelable(true);
+
+                final int finalPosition = position;
+
+                adb.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Request request = requestList.get(finalPosition);
+                        RiderRequestsController.getRiderRequests().deleteRequest(request);
+                    }
+                });
+                adb.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+                adb.show();
+                return false;
+            }
+        });
+
         requestAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, requestList);
         requestsListView.setAdapter(requestAdapter);
         requestAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 }
