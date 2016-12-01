@@ -95,6 +95,8 @@ public class MainMenuActivity extends Activity {
 
                 Intent intent = new Intent(MainMenuActivity.this, EditUserDataActivity.class);
                 startActivity(intent);
+
+                finish();
             }
         });
     }

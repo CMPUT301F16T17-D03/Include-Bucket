@@ -235,6 +235,7 @@ public class ElasticsearchRequestController {
         protected RequestList doInBackground(String... search_param) {
             verifySettings();
 
+            UserAccount driver = UserController.getUserAccount();
             RequestList requests = new RequestList();
 
             String search_string;
@@ -243,8 +244,12 @@ public class ElasticsearchRequestController {
             {
                 search_string = "{\"from\": 0, \"size\": 10000}";
             }
-            else search_string = "{\"from\": 0, \"size\": 10000," +
-                    "\"query\": { \"match\": {\"riderStory\": \"" + search_param[0] + "\" }}}";
+            //else search_string = "{\"from\": 0, \"size\": 10000," +
+                    //"\"query\": { \"match\": {\"riderStory\": \"" + search_param[0] + "\" }}}";
+
+            else search_string = "{\"query\": { \"bool\": { \"must\": [{\"term\":"+
+                    "{\"riderStory\": \""+  search_param[0]  +"\"}}],\"mustNot\":[{\"term\": {\"rider.uniqueUserName\":\""
+                    + driver.getUniqueUserName() + "\"}}]}}}";
 
             Search search = new Search.Builder(search_string)
                     .addIndex("cmput301f16t17")

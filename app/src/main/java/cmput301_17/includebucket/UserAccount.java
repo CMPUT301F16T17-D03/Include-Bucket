@@ -18,6 +18,7 @@ public class UserAccount implements Serializable {
 
     @JestId
     private String userId;
+
     private String uniqueUserName, email, phoneNumber;
     private String vehicleMake, vehicleModel, vehicleYear;
     private Boolean isLoggedIn;
@@ -91,6 +92,10 @@ public class UserAccount implements Serializable {
 
     public String getUniqueUserName() {
         return uniqueUserName;
+    }
+
+    public void setUniqueUserName(String uniqueUserName) {
+        this.uniqueUserName = uniqueUserName;
     }
 
     /**

@@ -1,5 +1,6 @@
 package cmput301_17.includebucket;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ public class EditUserDataActivity extends MainMenuActivity {
 
 
     protected EditText userEmail, userPhone, vehicleMake, vehicleModel, vehicleYear;
+    private UserAccount user = UserController.getUserAccount();
+    private UserAccount newUser = new UserAccount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +28,6 @@ public class EditUserDataActivity extends MainMenuActivity {
         setContentView(R.layout.edit_user_data);
 
         UserFileManager.initManager(this.getApplicationContext());
-
-        UserAccount user = UserController.getUserAccount();
 
         userEmail = (EditText) findViewById(R.id.edit_email);
         userEmail.setText(user.getEmail());
@@ -44,9 +45,18 @@ public class EditUserDataActivity extends MainMenuActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 editUser();
+
+                Intent intent = new Intent(EditUserDataActivity.this, MainMenuActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
+    }
+
+    public void onBackPressed(){
+        Intent intent = new Intent(EditUserDataActivity.this, MainMenuActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void editUser() {
@@ -81,28 +91,18 @@ public class EditUserDataActivity extends MainMenuActivity {
             year = vehicleYear.getText().toString();
         }
 
-        //UserAccount newUser = new UserAccount(user.getUniqueUserName(), user.getEmail(), user.getPhoneNumber(), user.getVehicleMake(), user.getVehicleModel(), user.getVehicleYear());
+        newUser = new UserAccount(login, email, phone, make, model, year);
 
-        //UserAccount newUser = user;
-
-        user.setEmail(userEmail.getText().toString());
-        user.setPhoneNumber(userPhone.getText().toString());
-        user.setVehicleMake(vehicleMake.getText().toString());
-        user.setVehicleModel(vehicleModel.getText().toString());
-        user.setVehicleYear(vehicleYear.getText().toString());
-        //user.setUserId(user.getUserId());
-
-
-        //ElasticsearchUserController.DeleteUser deleteUser;
-        //deleteUser = new ElasticsearchUserController.DeleteUser();
-        //deleteUser.execute(user);
+        ElasticsearchUserController.DeleteUser deleteUser;
+        deleteUser = new ElasticsearchUserController.DeleteUser();
+        deleteUser.execute(user);
 
         ElasticsearchUserController.CreateUser editUser;
         editUser = new ElasticsearchUserController.CreateUser();
-        editUser.execute(user);
+        editUser.execute(newUser);
 
         try {
-            UserFileManager.getUserFileManager().saveUser(user);
+            UserFileManager.getUserFileManager().saveUser(newUser);
         } catch (IOException e) {
             throw new RuntimeException("Could not deserialize UserAccount with UserFileManager");
         }

@@ -301,7 +301,7 @@ public class DriverSingleRequestActivity extends Activity implements MapEventsRe
         }
         else if (request.getRequestStatus() == Request.RequestStatus.Closed)
         {
-            storyText.setText("This request is now closed.");
+            storyText.setText("This request is now closed.\n\nRider: " + request.getRider().getUniqueUserName() + " accepted\nDriver: " + request.getChosenDriver().getUniqueUserName()+"'s\nacceptance.");
             acceptButton.setText("REQUESTS");
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
